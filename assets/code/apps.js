@@ -68,7 +68,7 @@ var app = {
             const transfer = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/quick.png', 'setupi', transfer);
             tk.p('Quick Start', 'h2', transfer);
-            tk.p(`If you have used WebDesk or NovaOS-NG previously, you can migrate it's data to NovaOS. To do so, open settings, choose Backup, then Migrate and enter the code below.`, undefined, transfer);
+            tk.p(`If you have used WebDesk or NovaOS-NG previously, you can migrate it's data to this device. To do so, open settings, choose Backup, then Migrate and enter the code below.`, undefined, transfer);
             tk.p('--------', 'h2 deskid', transfer);
             tk.cb('b1', 'No thanks', () => ui.sw2(transfer, warn), transfer);
             transfer.id = "quickstartwdsetup";
@@ -91,7 +91,8 @@ var app = {
             //     const box = wm.cm();
             //     tk.p(`Your DeskID is <span class="deskid med">unknown</span>. You'll need to finish setup to use this ID.`, undefined, box);
             //     tk.cb('b1 rb', 'Got it', undefined, box);
-            // }, warn); tk.cb('b1', 'Got it', function () { ui.sw2(warn, user) }, warn);
+            // }, warn); 
+            tk.cb('b1', 'Got it', function () { ui.sw2(warn, user) }, warn);
             // user menu
             const user = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/user.svg', 'setupi', user);
