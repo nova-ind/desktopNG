@@ -60,21 +60,22 @@ var app = {
             // first menu
             const first = tk.c('div', main, 'setb');
             tk.img('./assets/img/setup/first.svg', 'setupi', first);
-            tk.p('Welcome to WebDesk!', 'h2', first);
-            tk.cb('b1', `Guest`, () => wd.desktop('Guest', gen(8)), first);
-            tk.cb('b1', `Let's go`, () => ui.sw2(first, transfer), first);
+            tk.p('Welcome to NovaOS Deskop Next-Gen!', 'h2', first);
+            tk.p('NovaOS is proudly powered by WebDesk!', 'h3', first);
+            tk.cb('b1', `Login as Guest`, () => wd.desktop('Guest', gen(8)), first);
+            tk.cb('b1', `Begin Setup`, () => ui.sw2(first, transfer), first);
             // migrate menu
             const transfer = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/quick.png', 'setupi', transfer);
             tk.p('Quick Start', 'h2', transfer);
-            tk.p('To copy your data, open Backup -> Migrate on the other WebDesk, and enter the code below. This works for the old beta too.', undefined, transfer);
+            tk.p(`If you have used WebDesk or NovaOS-NG previously, you can migrate it's data to NovaOS. To do so, open settings, choose Backup, then Migrate and enter the code below.`, undefined, transfer);
             tk.p('--------', 'h2 deskid', transfer);
             tk.cb('b1', 'No thanks', () => ui.sw2(transfer, warn), transfer);
             transfer.id = "quickstartwdsetup";
             // copying menu
             const copy = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/restore.svg', 'setupi', copy);
-            tk.p('Restoring from other WebDesk', 'h2', copy);
+            tk.p('Restoring from other Device', 'h2', copy);
             tk.p('This might take a while depending on settings and file size.', undefined, copy);
             tk.p('Starting...', 'restpg', copy);
             tk.cb('b1', 'Cancel', function () { fs.erase('reboot'); }, copy);
@@ -82,28 +83,29 @@ var app = {
             // warn menu
             const warn = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/noround.png', 'setupi', warn);
-            tk.p(`WebDesk Online services`, 'h2', warn);
-            tk.p('WebDesk makes an ID called a DeskID for you. Others can use this ID to send you files or call you.', undefined, warn);
-            tk.p('To recieve calls and files from others, WebDesk needs to be open. When not in use, WebDesk uses less resources', undefined, warn);
-            tk.cb('b1', `What's my DeskID?`, function () {
-                const box = wm.cm();
-                tk.p(`Your DeskID is <span class="deskid med">unknown</span>. You'll need to finish setup to use this ID.`, undefined, box);
-                tk.cb('b1 rb', 'Got it', undefined, box);
-            }, warn); tk.cb('b1', 'Got it', function () { ui.sw2(warn, user) }, warn);
+            tk.p(`Online services`, 'h2', warn);
+            tk.p('NovaOS makes an ID called a DeskID for you. Others using WebDesk, NovaOS-NG or compatible tools can use this ID to send you files or call you.', undefined, warn);
+            tk.p('To recieve calls and files from others, NovaOS needs to be open. When not in use, NovaOS uses less resources', undefined, warn);
+            tk.p('You can find your DeskID upon completion of setup.', undefined, warn);
+            // tk.cb('b1', `What's my DeskID?`, function () {
+            //     const box = wm.cm();
+            //     tk.p(`Your DeskID is <span class="deskid med">unknown</span>. You'll need to finish setup to use this ID.`, undefined, box);
+            //     tk.cb('b1 rb', 'Got it', undefined, box);
+            // }, warn); tk.cb('b1', 'Got it', function () { ui.sw2(warn, user) }, warn);
             // user menu
             const user = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/user.svg', 'setupi', user);
-            tk.p('User & Permissions', 'h2', user);
-            tk.p(`Set up a user for WebDesk to store all your things in, and also set up WebDesk's permissions. Data is stored on your device only.`, undefined, user);
+            tk.p('About You', 'h2', user);
+            tk.p(`Set up a user for NovaOS to store all of your stuff in, and set up permissions. By default, your data is stored on-device, soon you will be able to opt-in to cloud sync..`, undefined, user);
             const input = tk.c('input', user, 'i1');
-            input.placeholder = "Enter a name to use with WebDesk/it's services";
+            input.placeholder = "Pick a username.";
             tk.cb('b1', 'Done!', function () {wd.finishsetup(input.value, user, sum)}, user);
             // summary
             const sum = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/check.svg', 'setupi', sum);
-            tk.p('All done!', 'h2', sum);
-            tk.p('Have fun! Make sure to check Settings for more options.', undefined, sum);
-            tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Finish setup', function () { wd.reboot(); }, sum);
+            tk.p('Setup is complete.', 'h2', sum);
+            tk.p('Keep in mind, novaOS is still in early public alpha.', undefined, sum);
+            tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Complete setup', function () { wd.reboot(); }, sum);
             sum.id = "setupdone";
         }
     },
@@ -147,7 +149,7 @@ var app = {
         name: 'About',
         init: async function () {
             const win = tk.mbw('About', '300px', 'auto', true, undefined, undefined);
-            tk.c(`WebDesk`, 'h2', win.main);
+            tk.c(`NovaOS:`, 'h2', win.main);
             tk.c(`Version: ${abt.ver}`, undefined, win.main);
             tk.c(`Latest update: ${abt.lastmod}`, undefined, win.main);
         }
