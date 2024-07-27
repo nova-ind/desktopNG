@@ -28,6 +28,9 @@
     z-index: -2;
     height: 100%;
     background: linear-gradient(180deg, var(--bg2), var(--bg1));
+    background-image: url(./img/wall.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 @font-face {

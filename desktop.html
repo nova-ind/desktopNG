@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="shortcut icon" href="./assets/img/favicon.png">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
-    <title>WebDesk</title>
+    <title>NovaOS NG</title>
 </head>
 <script>
     var abt = {
@@ -33,8 +33,8 @@
 
 <body>
     <div id="background"></div>
-    <div class="circle"></div>
-    <div class="circle2"></div>
+<!--    <div class="circle"></div>
+    <div class="circle2"></div> -->
     <div id="setuparea">
     </div>
     <div id="notif"></div>
@@ -76,6 +76,10 @@
                 wd.light();
             }
             ui.crtheme(color);
+            if(!color){
+                fs.write('/user/info/color', '#C68A00');
+                ui.crtheme('#C68A00');
+            }
         } else {
             const id = gen(8);
             await ptp.go(id);
