@@ -26,6 +26,7 @@ var app = {
             tk.p('UI Theme', undefined, appearPane);
             tk.cb('b1 b2', 'Dark mode', function () {
                 fs.del('/user/info/lightdarkpref');
+                sys.autodarkacc = false;
                 wd.dark();
             }, appearPane);
             tk.cb('b1 b2', 'Auto (based off color picker)', async function () {
@@ -34,8 +35,19 @@ var app = {
                 ui.crtheme(killyourselfapplesheep);
                 sys.autodarkacc = true;
             }, appearPane);
+            tk.cb('b1 b2', 'Clear mode (Light Text)', function () {
+                fs.del('/user/info/lightdarkpref');
+                sys.autodarkacc = false;
+                wd.clearm2();
+            }, appearPane);
+            tk.cb('b1 b2', 'Clear mode (Dark Text)', function () {
+                fs.del('/user/info/lightdarkpref');
+                sys.autodarkacc = false;
+                wd.clearm();
+            }, appearPane);
             tk.cb('b1 b2', 'Light mode', function () {
                 fs.del('/user/info/lightdarkpref');
+                sys.autodarkacc = false;
                 wd.light();
             }, appearPane);
             tk.p('Other', undefined, appearPane);

@@ -95,7 +95,7 @@ var wd = {
                             console.log('<i> This app can run normally!');
                             const btn = tk.cb('b1', app[key].name, app[key].init.bind(app[key]), el.sm);
                             btn.addEventListener('click', function () {
-                                el.sm.remove();
+                                ui.dest(el.sm, 150);
                                 el.sm = undefined;
                             });
                         }
