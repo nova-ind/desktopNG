@@ -167,6 +167,7 @@ var wd = {
         ui.cv('ui3', 'rgba(var(--accent) 0.2)');
         ui.cv('font', '#fff');
         fs.write('/user/info/lightdark', 'clear2');
+    }
 }
 
 setInterval(wd.clock, 1000);
