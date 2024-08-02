@@ -205,4 +205,4 @@ var app = {
             }, okiedokie);
             wd.win();
         }
-};
+}
