@@ -49,7 +49,7 @@ var app = {
     },
     setup: {
         runs: false,
-        init: function () {
+        init: async function () {
             const main = tk.c('div', document.getElementById('setuparea'), 'setupbox');
             // create setup menubar
             const bar = tk.c('div', main, 'setupbar');
@@ -100,7 +100,7 @@ var app = {
             tk.p(`Set up a user for NovaOS to store all of your stuff in, and set up permissions. By default, your data is stored on-device, soon you will be able to opt-in to cloud sync..`, undefined, user);
             const input = tk.c('input', user, 'i1');
             input.placeholder = "Pick a username.";
-            tk.cb('b1', 'Done!', function () {wd.finishsetup(input.value, user, sum)}, user);
+            tk.cb('b1', 'Done!', function () { wd.finishsetup(input.value, user, sum) }, user);
             // summary
             const sum = tk.c('div', main, 'setb hide');
             tk.img('./assets/img/setup/check.svg', 'setupi', sum);
@@ -108,6 +108,10 @@ var app = {
             tk.p('Keep in mind, novaOS is still in early public alpha.', undefined, sum);
             tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Complete setup', function () { wd.reboot(); }, sum);
             sum.id = "setupdone";
+            var docFolder = await fs.ls("/user/Documents")
+            if (docFolder.items.length == 0) {
+                fs.write("/user/Documents/.", '');
+            }
         }
     },
     files: {
@@ -131,11 +135,18 @@ var app = {
                         navto('/' + newPath + "/");
                     }, breadcrumbs);
                 });
-
+                var createFolder = document.createElement('button');
+                createFolder.innerText = "New Folder";
+                createFolder.addEventListener('click', async function () {
+                    fs.write(`${path}${prompt("enter folder name here", "New Folder")}/.`, '');
+                })
+                breadcrumbs.appendChild(createFolder);
                 const thing = await fs.ls(path);
                 thing.items.forEach(function (thing) {
                     if (thing.type === "folder") {
                         tk.cb('flist width', "Folder: " + thing.name, () => navto(thing.path + "/"), items);
+                    } else if (thing.name.startsWith('.')) {
+                        void (0)
                     } else {
                         tk.cb('flist width', "File: " + thing.name, async function () { const yeah = await fs.read(thing.path); wm.wal(yeah); }, items);
                     }
@@ -150,9 +161,13 @@ var app = {
         name: 'About',
         init: async function () {
             const win = tk.mbw('About', '300px', 'auto', true, undefined, undefined);
-            tk.c(`NovaOS:`, 'h2', win.main);
-            tk.c(`Version: ${abt.ver}`, undefined, win.main);
-            tk.c(`Latest update: ${abt.lastmod}`, undefined, win.main);
+            var aboutTxt = tk.c('div', win.main);
+            aboutTxt.innerHTML = `
+            <h2>NovaOS</h1>
+            <p>NovaOS is a free, open-source operating system designed for the web. It is built on WebDesk, a web-based desktop environment.</p>
+            <p>Version: ${abt.ver}</p>
+            <p>Latest update: ${abt.lastmod}</p>
+            `
         }
     },
     browser: {
@@ -173,14 +188,14 @@ var app = {
                 ui.sw2(currenttab, tab);
                 currenttab = tab;
                 const tabbtn = tk.cb('b4', 'meower.xyz', function () {
-                   ui.sw2(currenttab, tab);
-                   currenttab = tab;
-                   currentbtn = tabtitle;
+                    ui.sw2(currenttab, tab);
+                    currenttab = tab;
+                    currentbtn = tabtitle;
                 }, btnnest);
                 const tabtitle = tk.c('span', tabbtn);
                 currentbtn = tabtitle;
                 const closetab = tk.cb('browserclosetab', 'X', function () {
-                   ui.dest(tabbtn); ui.dest(currenttab);
+                    ui.dest(tabbtn); ui.dest(currenttab);
                 }, tabbtn);
             }, btnnest);
             const okiedokie = tk.c('div', tabs, 'browsertitle')
@@ -200,10 +215,108 @@ var app = {
             const search = tk.c('input', okiedokie, 'i1 browserbutton');
             search.placeholder = "Enter URL";
             const go = tk.cb('b4 browserbutton', 'Go!', function () {
-               currenttab.src = search.value;
-               currentbtn.innerText = search.value;
+                currenttab.src = search.value;
+                currentbtn.innerText = search.value;
             }, okiedokie);
             wd.win();
+        }
+    },
+    docai: {
+        runs: true,
+        name: 'DocAI',
+        init: async function () {
+            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined);
+            var div = tk.c('div', win.main);
+            // div.innerText = "DocAI is not yet available in this version of NovaOS.";
+            div.innerHTML = `
+            <h2>DocAI</h2>
+            <i>Your personal AI.</i><br>
+            <b>DocAI <u>NEVER HALLUCINATES</u></b><br>
+            <input class="i1" id="question" placeholder="Ask your documents!">
+            <button disabled="true" id="ask" class="b1">Answer</button>
+            <span id="loading">Model is loading...</span>
+            <h3>Answers:</h3>
+            <div id="answers"></div>
+            `
+            var askBtn = document.getElementById('ask');
+            var question = document.getElementById('question');
+            qna.load().then(async function (model) {
+                console.log("Model loaded")
+                document.querySelector("#loading").innerHTML = "";
+                askBtn.removeAttribute('disabled');
+                // Find the answers
+                askBtn.addEventListener('click', async function () {
+                    window.ans = []
+                    var resp = await fs.ls('/user/Documents/');
+                    console.log(resp)
+                    var documents = resp.items;
+                    console.log(documents)
+                    var contentsForAi = ""
+                    var contentsDisplay = []
+                    documents.forEach(
+                        async function (v, i) {
+                            var fc = await fs.read(v.path)
+                            contentsForAi = contentsForAi + fc + "\n\n";
+                            contentsDisplay.push(v.path + ": \n" + fc + "\n\n");
+                        }
+                    )
+                    document.querySelector("#answers").innerHTML = "<p>Thinking...</p>";
+                    console.log(question.value)
+                    async function processDocuments(documents) {
+                        let ans = [];
+
+                        for (const v of documents) {
+                            try {
+                                var fc = await fs.read(v.path);
+                                if (fc.length > 10) {
+                                    console.log(fc);
+                                    const answers = await model.findAnswers(question.value, fc);
+                                    answers.forEach((a, i) => {
+                                        a.path = v.path;
+                                        ans.push(answers[i]);
+
+                                    })
+                                    console.log(answers);
+                                }
+                            } catch (error) {
+                                console.error('Error processing document:', error);
+                            }
+                        }
+
+                        console.log("Processing done uwu");
+
+                        // Sort answers by highest to lowest score
+                        console.log(ans);
+                        ans = ans.sort((a, b) => b.score - a.score);
+                        console.log(ans);
+
+                        // Display answers
+                        var undefineds = 0
+                        var count = 0 
+                        document.querySelector("#answers").innerHTML = "";
+                        ans.forEach(a => {
+                            if (a !== undefined && count < 3) {
+                                console.log(a);
+                                var p = document.createElement('p');
+                                p.innerHTML = `${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`;
+                                document.querySelector("#answers").appendChild(p);
+                                count++;
+                            } else{
+                                undefineds++
+                            }
+                        });
+                        if (undefineds == ans.length) {
+                            document.querySelector("#answers").innerHTML = `No answers found.`;
+                        }
+                    }
+
+                    // Call the function with the documents array
+                    processDocuments(documents);
+
+
+                });
+
+            });
         }
     }
 }

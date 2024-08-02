@@ -3,12 +3,17 @@
 
 <head>
     <link rel="stylesheet" href="./assets/style.css">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="shortcut icon" href="./assets/img/favicon.png">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
     <title>NovaOS NG</title>
+    <!-- Make sure your page supports utf-8 characterset. -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Load TensorFlow.js. This is required to use the qna model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <!-- Load the qna model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/qna"> </script>
 </head>
 <script>
     var abt = {
@@ -34,7 +39,7 @@
 
 <body>
     <div id="background"></div>
-<!--    <div class="circle"></div>
+    <!--    <div class="circle"></div>
     <div class="circle2"></div> -->
     <div id="setuparea">
     </div>
@@ -65,7 +70,7 @@
             await wd.desktop(name, deskid, 'wait');
             await ptp.go(deskid);
             sys.setupd = true;
-            
+
             if (darkpref === "auto") {
                 sys.autodarkacc = true;
             } else {
@@ -81,7 +86,7 @@
                 wd.light();
             }
             ui.crtheme(color);
-            if(!color){
+            if (!color) {
                 fs.write('/user/info/color', '#C68A00');
                 ui.crtheme('#C68A00');
             }
@@ -117,7 +122,7 @@
             let filesArray = [...files];
             filesArray.forEach(file => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const contents = e.target.result;
                     fs.write(`/user/files/${file.name}`, contents);
                 };
