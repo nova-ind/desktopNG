@@ -63,14 +63,14 @@ setTimeout(function () {
             var apps = 0
             for (var key in app) {if (app[key].hasOwnProperty("onstartup")) {apps++}}
             console.log(apps)
-            document.querySelector("#currentComponent").max = apps;
+            // document.querySelector("#currentComponent").max = apps;
             var counter = 0;
             for (var key in app) {
                 if (app[key].hasOwnProperty("onstartup")) {
                     document.querySelector("#currentComponentText").innerText = `Current App/Component: ${app[key].name}`;
                     await app[key].onstartup(); // this is where each compontent is called
                     counter++;
-                    document.querySelector("#currentComponent").value = counter;
+                    // document.querySelector("#currentComponent").value = counter;
                 }
             }
             document.querySelector(".splashscreen").remove();

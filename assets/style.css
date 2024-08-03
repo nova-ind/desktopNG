@@ -18,7 +18,9 @@
     --fz2: 12px;
     --inv: 0;
 }
-
+*{
+    transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.05s;
+}
 #background {
     position: fixed;
     left: 0;
@@ -61,6 +63,7 @@ body {
     font-family: 'Poppins', Arial;
     text-align: center;
     font-size: var(--fz1);
+    overflow: hidden;
 }
 
 .bold {
@@ -595,7 +598,7 @@ p {
     animation: tb 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     backdrop-filter: blur(var(--bl2));
     -webkit-backdrop-filter: blur(var(--bl2));
-    z-index: 3;
+    z-index: 303369;
     overflow-x: auto;
     white-space: nowrap;
 }
@@ -685,7 +688,7 @@ p {
     bottom: 0;
     top: 0;
     background-color: var(--bg1);
-    z-index: 9999;
+    z-index: 303375;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -701,4 +704,7 @@ p {
 .splashscreen *{
     margin-block-start: 0px;
     margin-block-end: 0px;
+}
+.tbmenu{
+    z-index: 9002451;
 }

@@ -330,22 +330,80 @@ var app = {
                         console.log(ans);
                         ans = ans.sort((a, b) => b.score - a.score);
                         console.log(ans);
-
+                        var grpd = ans.reduce((acc, obj) => {
+                            var key = obj.path;
+                            if (!acc[key]) {
+                                acc[key] = [];
+                            }
+                            acc[key].push(obj);
+                            return acc;
+                        }, {});
+                        var grouped = []
+                        for(key in grpd){
+                            grouped.push({path: key, answers: grpd[key]})
+                        }
+                        console.log(grouped);
                         // Display answers
+                        window.answersFormatted = []
+                        grouped.forEach(async (ans, i) => {
+                            var lowestStartIndex = 0;
+                            var highestEndIndex = 0;
+                            var isFirstLoop = true;
+                            console.log(ans);
+                            ans.answers.forEach((a, i) => {
+                                console.log(a);
+                                if (isFirstLoop) {
+                                    lowestStartIndex = a.startIndex;
+                                    highestEndIndex = a.endIndex;
+                                    isFirstLoop = false;
+                                } else {
+                                    if (a.startIndex < lowestStartIndex) {
+                                        lowestStartIndex = a.startIndex;
+                                    }
+                                    if (a.endIndex > highestEndIndex) {
+                                        highestEndIndex = a.endIndex;
+                                    }
+                                }
+                            });
+                            console.log(
+                                lowestStartIndex,
+                                highestEndIndex,
+                                isFirstLoop
+                            )
+                            var txtFile = await fs.read(ans.path);
+                            console.log(txtFile)
+                            answersFormatted.push({text: txtFile.substring(lowestStartIndex - 5, highestEndIndex + 5), score: ans.answers[0].score, path: ans.path});
+                            console.log(answersFormatted)
+                        });
                         var undefineds = 0
                         var count = 0
-                        document.querySelector("#answers").innerHTML = "";
-                        ans.forEach(a => {
-                            if (a !== undefined && count < 3) {
-                                console.log(a);
-                                var p = document.createElement('p');
-                                p.innerHTML = `${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`;
-                                document.querySelector("#answers").appendChild(p);
-                                count++;
-                            } else {
-                                undefineds++
-                            }
-                        });
+                        setTimeout(function(){
+                            document.querySelector("#answers").innerHTML = "";
+                            answersFormatted.forEach(a => {
+                                console.log(a)
+                                if (a !== undefined && count < 3) {
+                                    console.log(a);
+                                    var p = document.createElement('p');
+                                    p.innerHTML = `${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`;
+                                    console.log(`${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`);
+                                    document.querySelector("#answers").appendChild(p);
+                                    count++;
+                                } else {
+                                    undefineds++
+                                }
+                            });
+                        }, 1000)
+                        // ans.forEach(a => {
+                        //     if (a !== undefined && count < 3) {
+                        //         console.log(a);
+                        //         var p = document.createElement('p');
+                        //         p.innerHTML = `${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`;
+                        //         document.querySelector("#answers").appendChild(p);
+                        //         count++;
+                        //     } else {
+                        //         undefineds++
+                        //     }
+                        // });
                         if (undefineds == ans.length) {
                             document.querySelector("#answers").innerHTML = `No answers found.`;
                         }
