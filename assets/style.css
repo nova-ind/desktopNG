@@ -677,3 +677,28 @@ p {
     border-radius: 9px;
     font-family: 'PoppinsB', Arial;
 }
+
+.splashscreen {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: var(--bg1);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'PoppinsB', Arial;
+    font-size: 30px;
+    color: var(--font);
+}
+.splashscreen img {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+}
+.splashscreen *{
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}

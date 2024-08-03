@@ -44,6 +44,22 @@
     <div id="setuparea">
     </div>
     <div id="notif"></div>
+    <div class="splashscreen">
+        <div class="splashscreen-content">
+            <div class="splashscreen-logo">
+                <img src="./assets/img/favicon.png" alt="NovaOS NG">
+            </div>
+            <div class="splashscreen-text">
+                <h1>NovaOS</h1>
+                <h3>Loading</h3>
+                <progress id="currentComponent" max="100" value="70"></progress>
+                <br>
+                <small id="currentComponentText"></small>      
+                <p>Version 0.0.9</p>
+                <button onclick="document.querySelector('.splashscreen').remove()" class="b1">Skip (not reccomended)</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

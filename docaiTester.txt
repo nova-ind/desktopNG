@@ -1,0 +1,95 @@
+fs.write("/user/Documents/SoraWikipedia.txt",`OpenAI Sora
+Sora is an upcoming generative artificial intelligence model developed by OpenAI, that specializes in text-to-video generation. The model generates short video clips corresponding to prompts from users. Sora can also extend existing short videos. As of August 2024 it is unreleased and not yet available to the public.[1]
+
+History
+Several other text-to-video generating models had been created prior to Sora, including Meta's Make-A-Video, Runway's Gen-2, and Google's Lumiere, the last of which, as of February 2024, is also still in its research phase.[2] OpenAI, the company behind Sora, had released DALL·E 3, the third of its DALL-E text-to-image models, in September 2023.[3]
+
+The team that developed Sora named it after the Japanese word for sky to signify its "limitless creative potential".[4] On February 15, 2024, OpenAI first previewed Sora by releasing multiple clips of high-definition videos that it created, including an SUV driving down a mountain road, an animation of a "short fluffy monster" next to a candle, two people walking through Tokyo in the snow, and fake historical footage of the California gold rush, and stated that it was able to generate videos up to one minute long.[2] The company then shared a technical report, which highlighted the methods used to train the model.[5][6] OpenAI CEO Sam Altman also posted a series of tweets, responding to Twitter users' prompts with Sora-generated videos of the prompts.
+
+OpenAI has stated that it plans to make Sora available to the public but that it would not be soon; it has not specified when.[2][1] The company provided limited access to a small "red team", including experts in misinformation and bias, to perform adversarial testing on the model.[3] The company also shared Sora with a small group of creative professionals, including video makers and artists, to seek feedback on its usefulness in creative fields.[7]
+`)
+fs.write("/user/Documents/Steak.txt",`
+Steak
+A steak is a thick cut of meat generally sliced across the muscle fibers, sometimes including a bone. It is normally grilled or fried. Steak can be diced, cooked in sauce, such as in steak and kidney pie, or minced and formed into patties, such as hamburgers.
+
+Steaks are cut from animals including cattle, bison, buffalo, camel, goat, horse, kangaroo,[1][2] sheep, ostrich, pigs, turkey, and deer, as well as various types of fish, especially salmon and large fish such as swordfish, shark, and marlin. For some meats, such as pork, lamb and mutton, chevon, and veal, these cuts are often referred to as chops. Some cured meat, such as gammon, is commonly served as steak.
+
+Grilled portobello mushroom may be called mushroom steak, and similarly for other vegetarian dishes.[3] Imitation steak is a food product that is formed into a steak shape from various pieces of meat. Grilled fruits such as watermelon have been used as vegetarian steak alternatives.
+
+Exceptions, in which the meat is sliced parallel to the fibers, include the skirt steak cut from the plate, the flank steak cut from the abdominal muscles, and the silverfinger steak cut from the loin and including three rib bones. In a larger sense, fish steaks, ground meat steaks, pork steak, and many more varieties of steak are known.
+`)
+fs.write("/user/Documents/nostalgia.txt",`
+Sure! Imagine you have a favorite toy or a fun day at the park that you really enjoyed. Nostalgia is like a happy feeling you get when you think back to those good times. It's like remembering how fun it was to play with that toy or how much you loved that day at the park, and it makes you smile inside. It's like a warm hug from your memories!
+`)
+fs.write("/user/Documents/CrowdStrikeLMAO.txt",`
+The CrowdStrike Bootloop Incident
+Will this affect me?
+Most people won’t be affected by this on personal machines, however your work windows machines maybe. It won’t affect people using Mac or Linux.
+
+What caused this?
+Not much has come to light so far but it seems a bad update to CrowdStrike’s Kernel Level Driver (referred to KLD from here out) had a broken update published where the every byte of the driver’s .sys file was replaced with the hex number00.
+
+Most importantly this was not Microsoft’s fault and was not a part of a windows update.
+CrowdStrike’s KLD “Falkon” protects:
+298 fortune 500 companies
+538 fortune 1000 companies
+43 US States
+
+Matter of fact, people in the US state of Alaska, Ohio and others were unable to call 911 as their systems ran Windows, and had CrowdStrike’s KLD “Falkon” installed.
+
+What else was affected:
+Windows 365 Cloud PCs, apps and services
+Delta Airlines, United Airlines and American Airline
+German hospitals
+Live tv broadcasts in the UK, Australia and other countries were affected
+ABC Radio being unable to play music
+Airport check-in systems
+Banks and payment systems
+Supermarkets, petrol stations, etc
+Government departments
+Universities
+Law firms
+Mines
+And many more companies
+ABC Australia continued to broadcast, however without teleprompters or on-screen graphics.
+
+`)
+fs.write("/user/Documents/tesla.txt",`
+Nikola Tesla (10 July 1856 – 7 January 1943) was a Serbian-American inventor, electrical engineer, mechanical engineer, and futurist best known for his contributions to the design of the modern alternating current (AC) electricity supply system.
+
+Born and raised in the Austrian Empire, Tesla studied engineering and physics in the 1870s without receiving a degree. He gained practical experience in the early 1880s working in telephony and at Continental Edison in the new electric power industry. He emigrated to the United States in 1884 and became a naturalized citizen. He worked briefly at the Edison Machine Works in New York City before starting his own ventures. With the help of partners, Tesla established laboratories and companies in New York to develop a range of electrical and mechanical devices. His AC induction motor and related polyphase AC patents, licensed by Westinghouse Electric in 1888, earned him considerable money and became the cornerstone of the polyphase system marketed by the company.
+
+Tesla conducted experiments with mechanical oscillators, electrical discharge tubes, and early X-ray imaging. He also built a wireless-controlled boat, one of the first exhibited. Known for his showmanship, Tesla demonstrated his inventions to celebrities and wealthy patrons and was noted for his public lectures. Throughout the 1890s, he pursued ideas for wireless lighting and worldwide wireless electric power distribution through high-voltage, high-frequency experiments in New York and Colorado Springs. In 1893, he discussed the possibility of wireless communication with his devices. He attempted to implement these ideas in the unfinished Wardenclyffe Tower project, an intercontinental wireless communication and power transmitter, but ran out of funding before completion.
+
+In the 1910s and 1920s, Tesla experimented with various inventions with varying success. Having spent most of his money, he lived in a series of New York hotels and left behind unpaid bills. He died in New York City in January 1943. Tesla's work fell into relative obscurity until 1960 when the SI unit of magnetic flux density was named the tesla in his honor. Interest in Tesla has surged since the 1990s.
+`)
+fs.write("/user/Documents/silly.txt",`
+hey, welcome to my website!
+
+here you'll find all of my links, projects, etc that I feel like sharing
+
+everything's in the navbar above
+`)
+fs.write("/user/Documents/bryn.txt",`
+Name: Bryn
+
+Gender: Non-Binary
+
+Pronouns: They/Them, she/her or anything that is NOT 'he'
+
+Sexuality: Pansexual & Polyamorous
+
+Birthday: January 2008
+
+Star sign: Aquarius!
+
+Hobbies: Technology, art, hiking, furry
+
+Fox Therian
+
+Autistic
+
+I'm a sleep deprived fox who clicks buttons and make computers work when I'm bored :P
+
+
+`)

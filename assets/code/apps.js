@@ -233,11 +233,42 @@ var app = {
             wd.win();
         }
     },
+    docaiModel: {
+        runs: false,
+        name: 'DocAI ML Models',
+        onstartup: async function() {
+            try {
+                const model = await qna.load();
+                console.log("Model loaded");
+                window.docAImodel = model;
+            } catch (error) {
+                console.error("Failed to load model", error);
+            }
+        },
+    },
+    txter:{
+        runs: true,
+        name: 'txter editor',
+        init: async function () {
+            const win = tk.mbw('txter', 'fit-content', 'fit-content', true, undefined, undefined);
+            const txtarea = tk.c('textarea', win.main, 'i1');
+            const bruh = tk.c('br', win.main);
+            txtarea.style.height = 'calc(82vh - 120px)';
+            txtarea.style.width = '300px';
+            const savebtn = tk.cb('b1', 'Save', async function () {
+                await fs.write(`${prompt("Enter a path to save file as", "/user/Documents/txter.txt")}`, txtarea.value);
+                wm.wal('Saved!');
+            }, win.main);
+            const loadbtn = tk.cb('b1', 'Load', async function () {
+                txtarea.value = await fs.read(`${prompt("Enter a path to load a file from", "/user/Documents/txter.txt")}`);
+            }, win.main);
+        }
+    },
     docai: {
         runs: true,
         name: 'DocAI',
         init: async function () {
-            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined);
+            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, "docai");
             var div = tk.c('div', win.main);
             // div.innerText = "DocAI is not yet available in this version of NovaOS.";
             div.innerHTML = `
@@ -245,16 +276,14 @@ var app = {
             <i>Your personal AI.</i><br>
             <b>DocAI <u>NEVER HALLUCINATES</u></b><br>
             <input class="i1" id="question" placeholder="Ask your documents!">
-            <button disabled="true" id="ask" class="b1">Answer</button>
-            <span id="loading">Model is loading...</span>
+            <button id="ask" class="b1">Answer</button>
             <h3>Answers:</h3>
             <div id="answers"></div>
             `
             var askBtn = document.getElementById('ask');
             var question = document.getElementById('question');
-            qna.load().then(async function (model) {
-                console.log("Model loaded")
-                document.querySelector("#loading").innerHTML = "";
+            if(window.docAImodel){
+                var model = window.docAImodel
                 askBtn.removeAttribute('disabled');
                 // Find the answers
                 askBtn.addEventListener('click', async function () {
@@ -304,7 +333,7 @@ var app = {
 
                         // Display answers
                         var undefineds = 0
-                        var count = 0 
+                        var count = 0
                         document.querySelector("#answers").innerHTML = "";
                         ans.forEach(a => {
                             if (a !== undefined && count < 3) {
@@ -313,7 +342,7 @@ var app = {
                                 p.innerHTML = `${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`;
                                 document.querySelector("#answers").appendChild(p);
                                 count++;
-                            } else{
+                            } else {
                                 undefineds++
                             }
                         });
@@ -327,8 +356,18 @@ var app = {
 
 
                 });
-
-            });
-        }
+            } else {
+                alert("You skipped loading the DocAI model on boot. Please wait.")
+                document.querySelector("#docai").remove();
+                document.querySelector("#docaitbn").remove();
+                const load = tk.mbw('DocAI Model Loader', '500px', 'auto', true, undefined, undefined, "docaiml");
+                var div = tk.c('p', load.main);
+                div.innerHTML = `DocAI is loading the models...<br><progress></progress>`;
+                await app.docaiModel.onstartup();
+                document.querySelector("#docaiml").remove()
+                document.querySelector("#docaimltbn").remove()
+                app.docai.init();
+            }
+            }
     }
 }

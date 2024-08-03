@@ -217,11 +217,14 @@ var tk = {
     a: function (ele1, ele2) {
         ele1.appendChild(ele2);
     },
-    mbw: function (title, wid, hei, full, min, quit) {
+    mbw: function (title, wid, hei, full, min, quit, id) {
         var windowDiv = document.createElement('div');
         windowDiv.classList.add('window');
         windowDiv.style.width = wid;
         windowDiv.style.height = hei;
+        if(id){
+            windowDiv.id = id;
+        }
         var titlebarDiv = document.createElement('div');
         titlebarDiv.classList.add('d');
         titlebarDiv.classList.add('tb');
@@ -230,6 +233,9 @@ var tk = {
         var closeButton = document.createElement('div');
         closeButton.classList.add('winb');
         const tbn = tk.cb('b1', title, () => ui.show(windowDiv, 100), el.tr);
+        if(id){
+            tbn.id = id + "tbn";
+        }
         if (quit === undefined) {
             closeButton.classList.add('red');
             closeButton.addEventListener('mousedown', function () {
