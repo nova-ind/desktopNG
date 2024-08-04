@@ -22,7 +22,12 @@ var app = {
             bg1.addEventListener('input', function () {
                 ui.crtheme(event.target.value);
             });
-            new JSColor(bg1, undefined);
+            const bgc = tk.c('input', appearPane, 'i1');
+            bgc.type = 'color';
+            bgc.addEventListener('change', function () {
+                ui.crtheme(event.target.value);
+                bg1.value = event.target.value;
+            });
             tk.p('UI Theme', undefined, appearPane);
             tk.cb('b1 b2', 'Dark mode', function () {
                 fs.del('/user/info/lightdarkpref');
@@ -243,6 +248,7 @@ var app = {
                 window.docAImodel = model;
             } catch (error) {
                 console.error("Failed to load model", error);
+                return error;
             }
         },
     },
@@ -310,26 +316,21 @@ var app = {
                             try {
                                 var fc = await fs.read(v.path);
                                 if (fc.length > 10) {
-                                    console.log(fc);
                                     const answers = await model.findAnswers(question.value, fc);
                                     answers.forEach((a, i) => {
                                         a.path = v.path;
                                         ans.push(answers[i]);
 
                                     })
-                                    console.log(answers);
                                 }
                             } catch (error) {
                                 console.error('Error processing document:', error);
                             }
                         }
 
-                        console.log("Processing done uwu");
 
                         // Sort answers by highest to lowest score
-                        console.log(ans);
                         ans = ans.sort((a, b) => b.score - a.score);
-                        console.log(ans);
                         var grpd = ans.reduce((acc, obj) => {
                             var key = obj.path;
                             if (!acc[key]) {
@@ -349,9 +350,7 @@ var app = {
                             var lowestStartIndex = 0;
                             var highestEndIndex = 0;
                             var isFirstLoop = true;
-                            console.log(ans);
                             ans.answers.forEach((a, i) => {
-                                console.log(a);
                                 if (isFirstLoop) {
                                     lowestStartIndex = a.startIndex;
                                     highestEndIndex = a.endIndex;
@@ -365,24 +364,19 @@ var app = {
                                     }
                                 }
                             });
-                            console.log(
-                                lowestStartIndex,
-                                highestEndIndex,
-                                isFirstLoop
-                            )
                             var txtFile = await fs.read(ans.path);
-                            console.log(txtFile)
-                            answersFormatted.push({text: txtFile.substring(lowestStartIndex - 5, highestEndIndex + 5), score: ans.answers[0].score, path: ans.path});
-                            console.log(answersFormatted)
+                            var sentenceEnd = txtFile.substr(highestEndIndex).split(".")[0]
+                            var lineEnd = txtFile.substr(highestEndIndex).split(".")[0]
+                            var bestOutput = sentenceEnd.length < lineEnd.length ? sentenceEnd : lineEnd;
+                            // highestEndIndex = lowestStartIndex+Math.min(txtFile.substr(highestEndIndex).indexOf("."), txtFile.substr(highestEndIndex).indexOf("\n"))
+                            answersFormatted.push({text: txtFile.substring(lowestStartIndex, highestEndIndex)+bestOutput, score: ans.answers[0].score, path: ans.path});
                         });
                         var undefineds = 0
                         var count = 0
                         setTimeout(function(){
                             document.querySelector("#answers").innerHTML = "";
                             answersFormatted.forEach(a => {
-                                console.log(a)
                                 if (a !== undefined && count < 3) {
-                                    console.log(a);
                                     var p = document.createElement('p');
                                     p.innerHTML = `${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`;
                                     console.log(`${a.text}<br><small>(score: ${Math.round(a.score)}; found in: ${a.path})</small>`);
@@ -415,13 +409,19 @@ var app = {
 
                 });
             } else {
-                alert("You skipped loading the DocAI model on boot. Please wait.")
                 document.querySelector("#docai").remove();
                 document.querySelector("#docaitbn").remove();
                 const load = tk.mbw('DocAI Model Loader', '500px', 'auto', true, undefined, undefined, "docaiml");
+                wm.wal("You skipped loading the DocAI model on boot. Please wait.")
                 var div = tk.c('p', load.main);
                 div.innerHTML = `DocAI is loading the models...<br><progress></progress>`;
-                await app.docaiModel.onstartup();
+                try {
+                    await app.docaiModel.onstartup();
+                } catch (error) {
+                    document.querySelector("#docaiml").remove()
+                    document.querySelector("#docaimltbn").remove()
+                    app.docai.init();
+                }
                 document.querySelector("#docaiml").remove()
                 document.querySelector("#docaimltbn").remove()
                 app.docai.init();

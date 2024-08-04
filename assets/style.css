@@ -19,7 +19,7 @@
     --inv: 0;
 }
 *{
-    transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.05s;
+    /* transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.05s; */
 }
 #background {
     position: fixed;
