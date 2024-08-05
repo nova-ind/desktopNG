@@ -50,6 +50,15 @@ var ui = {
                 $(dr1).fadeIn(210);
             }
         }
+        console.log(dr1)
+        if(dr1.classList.contains("winf") && dr1.classList.contains("window")){
+            dr1.classList.remove("winf");
+        } else {
+            document.querySelectorAll(".winf").forEach(function (item) {
+                item.classList.remove("winf");
+            })
+            dr1.classList.add("winf");
+        }
     },
     showfi: function (dr1, anim) {
         if (dr1) {
@@ -220,6 +229,7 @@ var tk = {
     mbw: function (title, wid, hei, full, min, quit, id) {
         var windowDiv = document.createElement('div');
         windowDiv.classList.add('window');
+        windowDiv.classList.add('winf');
         windowDiv.style.width = wid;
         windowDiv.style.height = hei;
         if(id){

@@ -38,10 +38,35 @@
 </script>
 
 <body>
+    <div class="topbar"><div class="title"><button class="b1 time" onclick="wd.controls.toggle()">14:07:10</button></div></div>
     <div id="background"></div>
     <!--    <div class="circle"></div>
     <div class="circle2"></div> -->
     <div id="setuparea">
+    </div>
+    <div style="display: none;" id="contcent" class="contcent">
+        <p class="h3">Control Center</p>
+        <p class="lockdown">Your DeskID is <span class="mcode bold">----</span></p>
+        <span class="ckbx" onclick="console.log(this.childNodes[1].checked =  this.childNodes[1].checked == true ? false : true)">
+            <input type="checkbox" name="Do Not Disturb" class="b1">
+            Do not disturb
+        </span>     
+        <span class="ckbx" onclick="console.log(this.childNodes[1].checked =  this.childNodes[1].checked == true ? false : true)">
+            <input type="checkbox" name="Do Not Disturb" class="b1">
+            Network Services
+        </span>
+        <select name="" id="" default="a">
+            <option value="a" selected>Display mode</option>
+            <option value="">Display mode</option>
+            <option value="">Display mode</option>
+            <option value="">Display mode</option>
+            <option value="">Display mode</option>
+        </select>
+        <p class="med" style="margin-top: 3px; margin-bottom: 3px">Notifications (select to delete)</p>
+        <div id="notifold">
+            <div class="notif2" id="defnotif">No notifications yet.</div>
+        </div>
+        <button id="cccb" class="b1" style="margin-top: 7px; width: 60%;" onclick="wd.controls.toggle()">Close</button>
     </div>
     <div id="notif"></div>
     <div class="splashscreen">

@@ -85,6 +85,9 @@ var wd = {
         ui.dest(tk.g('setuparea'));
         function startmenu() {
             if (el.sm == undefined) {
+                if (document.querySelector(".contcent")) {
+                    $(".contcent").fadeOut(150, function () { });
+                }
                 el.sm = tk.c('div', document.body, 'tbmenu');
                 const btm = el.taskbar.getBoundingClientRect();
                 el.sm.style.bottom = btm.height + btm.x + 4 + "px";
@@ -112,9 +115,13 @@ var wd = {
             el.taskbar = tk.c('div', document.body, 'taskbar');
             const lefttb = tk.c('div', el.taskbar, 'tnav');
             const titletb = tk.c('div', el.taskbar, 'title');
-            const start = tk.cb('b1', 'Apps', () => startmenu(), lefttb);
+            const start = tk.cb('b1 start', '', () => startmenu(), el.taskbar);
+            const smtxt = tk.c("span", start, "smtxt");
+            smtxt.innerText = "Apps";
+            const smico = tk.c("span", start, "smico");
+            smico.innerText = "🏠";
             el.tr = tk.c('div', lefttb);
-            tk.cb('b1 time', '--:--', () => wm.notif(`In progress`, `Control Center`), titletb);
+            tk.cb('b1 time', '--:--', () => wd.controls.toggle(), titletb);
         }
         if (waitopt === "wait") {
             setTimeout(function () { desktopgo(); }, 400);
@@ -169,6 +176,22 @@ var wd = {
         ui.cv('ui3', 'rgba(var(--accent) 0.2)');
         ui.cv('font', '#fff');
         fs.write('/user/info/lightdark', 'clear2');
+    },
+    controls: {
+        toggle: function () {
+            // document.querySelector(".taskbar > .tnav > .b1").onclick = startmenu
+            var cc = document.querySelector("#contcent")
+            // if(cc.computedStyleMap().get("display").value === "none" || cc.style.display === "none"){
+            if (cc.style.display === "none") {
+                cc.style.display = "block";
+                if (document.querySelector(".tbmenu")) {
+                    ui.dest(document.querySelector(".tbmenu"), 150);
+                }
+            }
+            else {
+                cc.style.display = "none";
+            }
+        }
     }
 }
 
