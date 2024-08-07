@@ -282,7 +282,7 @@ var app = {
         name: 'DocAI',
         icon: './assets/img/systemIcons/noicon.svg',
         init: async function (query = "") {
-            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, undefined, "docai");
+            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, undefined);
             var div = tk.c('div', win.main);
             // div.innerText = "DocAI is not yet available in this version of NovaOS.";
             div.innerHTML = `
