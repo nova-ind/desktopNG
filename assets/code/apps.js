@@ -252,6 +252,20 @@ var app = {
             }
         },
     },
+    // sysAi: {
+    //     runs: false,
+    //     name: 'NovaOS System AI Models',
+    //     onstartup: async function() {
+    //         try {
+    //             const model = await use.load();
+    //             console.log("Model loaded");
+    //             window.novaAImodel= model;
+    //         } catch (error) {
+    //             app.sysAi.onstartup();
+    //             console.error("Failed to load model", error);
+    //         }
+    //     },
+    // },
     txter:{
         runs: true,
         name: 'txter editor',
@@ -273,7 +287,7 @@ var app = {
     docai: {
         runs: true,
         name: 'DocAI',
-        init: async function () {
+        init: async function (query = "") {
             const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, "docai");
             var div = tk.c('div', win.main);
             // div.innerText = "DocAI is not yet available in this version of NovaOS.";
@@ -281,7 +295,7 @@ var app = {
             <h2>DocAI</h2>
             <i>Your personal AI.</i><br>
             <b>DocAI <u>NEVER HALLUCINATES</u></b><br>
-            <input class="i1" id="question" placeholder="Ask your documents!">
+            <input class="i1" id="question" placeholder="Ask your documents!" value="${query}">
             <button id="ask" class="b1">Answer</button>
             <h3>Answers:</h3>
             <div id="answers"></div>
@@ -291,8 +305,7 @@ var app = {
             if(window.docAImodel){
                 var model = window.docAImodel
                 askBtn.removeAttribute('disabled');
-                // Find the answers
-                askBtn.addEventListener('click', async function () {
+                async function ask() {
                     window.ans = []
                     var resp = await fs.ls('/user/Documents/');
                     console.log(resp)
@@ -407,7 +420,10 @@ var app = {
                     processDocuments(documents);
 
 
-                });
+                }
+                if(query !== ""){ask()}
+                // Find the answers
+                askBtn.addEventListener('click', ask);
             } else {
                 document.querySelector("#docai").remove();
                 document.querySelector("#docaitbn").remove();

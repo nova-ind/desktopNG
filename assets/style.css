@@ -641,6 +641,7 @@ p {
     z-index: 303369;
     overflow-x: auto;
     white-space: nowrap;
+    overflow: hidden;
 }
 
 
@@ -838,6 +839,7 @@ select:active {
     overflow-x: auto;
     white-space: nowrap;
     bottom: unset !important;
+    overflow: hidden;
 
 }
 .topbar *{
@@ -946,6 +948,7 @@ select:active {
     margin-left: 60px;
     overflow: scroll;
     border-radius: var(--rad2);
+    margin-bottom: -10px;
 }
 .smico{
     display: none;

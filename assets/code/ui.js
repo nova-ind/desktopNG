@@ -286,5 +286,18 @@ var tk = {
         document.body.appendChild(windowDiv);
         wd.win(); $(windowDiv).fadeIn(130); ui.center(windowDiv);
         return { win: windowDiv, main: contentDiv, tbn, title: titlebarDiv };
+    },
+    mkel: function(element, classes, innerHtml, parent){
+        const el = document.createElement(element);
+        if(typeof classes === "string"){
+            el.classList.add(classes);
+        } else{
+            classes.forEach(function (item) {
+                el.classList.add(item);
+            });
+        }
+        el.innerHTML = innerHtml;
+        parent.appendChild(el);
+        return el;
     }
 }

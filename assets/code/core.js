@@ -83,6 +83,26 @@ var wd = {
     },
     desktop: function (name, deskid, waitopt) {
         ui.dest(tk.g('setuparea'));
+        function smApps(apps = app) {
+            document.querySelectorAll(".appItem").forEach(function (e) {
+                e.remove();
+            });
+            for (var key in apps) {
+                if (apps.hasOwnProperty(key)) {
+                    if (apps[key].hasOwnProperty("runs") && apps[key].runs === true) {
+                        console.log(`<i> ${apps[key].name} is launchable!`);
+                        const btn = tk.cb('b1', apps[key].name, apps[key].init.bind(apps[key]), el.sm);
+                        btn.classList.add("appItem");
+                        btn.addEventListener('click', function () {
+                            ui.dest(el.sm, 150);
+                            el.sm = undefined;
+                        });
+                    } else {
+                        console.log(`<i> ${apps[key].name} is not launchable! :(`);
+                    }
+                }
+            }
+        }
         function startmenu() {
             if (el.sm == undefined) {
                 if (document.querySelector(".contcent")) {
@@ -92,20 +112,65 @@ var wd = {
                 const btm = el.taskbar.getBoundingClientRect();
                 el.sm.style.bottom = btm.height + btm.x + 4 + "px";
                 tk.p(`Hello, ${name}!`, 'h2', el.sm);
-                for (var key in app) {
-                    if (app.hasOwnProperty(key)) {
-                        if (app[key].hasOwnProperty("runs") && app[key].runs === true) {
-                            console.log(`<i> ${app[key].name} is launchable!`);
-                            const btn = tk.cb('b1', app[key].name, app[key].init.bind(app[key]), el.sm);
-                            btn.addEventListener('click', function () {
-                                ui.dest(el.sm, 150);
-                                el.sm = undefined;
-                            });
-                        } else {
-                            console.log(`<i> ${app[key].name} is not launchable! :(`);
+                console.log(el.sm)
+                var searchbar = tk.mkel('input', ['i1'], '', el.sm);
+                searchbar.placeholder = "Search for anything...";
+                searchbar.addEventListener('input', async function (event) {
+                    var results = {};
+                    var search = event.target.value.trim();
+                    var searchAsWords = search.split(" ");
+                    var appIds = Object.keys(app);
+                    appIds.forEach(function (appId, index) {
+                        appIds[index] = appId.toLowerCase();
+                    })
+                    searchAsWords.forEach(srch => {
+                        if (appIds.includes(srch.toLowerCase())) {
+                            results[srch] = app[srch];
+                        };
+                    });
+                    // search by app names
+                    searchAsWords.forEach(srch => {
+                        for (var key in app) {
+                            console.log(app[key])
+                            if (app.hasOwnProperty(key) && app[key].hasOwnProperty("name")) {
+                                console.log(app[key].name)
+                                if (app[key].name.toLowerCase().includes(srch.toLowerCase())) {
+                                    results[key] = app[key];
+                                }
+                            }
                         }
+                    });
+                    console.log(results)
+                    smApps(results)
+                    if (document.querySelector(".aiResponse") == null) { var aiResponse = tk.c('p', el.sm, 'aiResponse') };
+                    document.querySelector(".aiResponse").innerText = "";
+
+                    // const  = {
+                    //     queries: [search],
+                    //     responses: [
+                    //         `Your system colour is set to ${await fs.read('/user/info/color')}.`,
+                    //         `Your system colour scheme is set to ${await fs.read('/user/info/lightdark') || "default"}.`,
+                    //         `Your name is ${await fs.read('/user/info/name') || "unset, somehow (how did you get here without triggering setup lmaoo)"}.`,
+                    //     ]
+                    // };
+                    if((search.includes("what") && search.includes("your") && search.includes("name")) || (search.includes("who") && search.includes("you")) || (search.includes("ai") && search.includes("you"))){
+                        document.querySelector(".aiResponse").innerText = "I'm NovaAI! (not really ai lmao im just some if loops uwu)";
+                    } else if (search.includes("what") && search.includes("my") && search.includes("name")) {
+                        document.querySelector(".aiResponse").innerText = `Your name is ${await fs.read('/user/info/name') || "unset, somehow (how did you get here without triggering setup lmaoo)"}!`;
+                    } else if (search.includes("what") && (search.includes("color") || search.includes("colour"))&& (search.includes("theme") || search.includes("accent"))) {
+                        document.querySelector(".aiResponse").innerText = `Your system colour is set to ${await fs.read('/user/info/color') || "unknown"}.`;
+                    } else if (search.includes("what") && (search.includes("color") || search.includes("colour")) && (search.includes("scheme") || search.includes("mode"))) {
+                        document.querySelector(".aiResponse").innerText = `Your system colour mode is set to ${await fs.read('/user/info/lightdark') || "default"}.`;
+                    } else if (search.includes("what") && (search.includes("time") || search.includes("clock") || search.includes("hour") || search.includes("minute"))) {
+                        document.querySelector(".aiResponse").innerHTML = `It is currently <div class="time">${wd.clock() || "Unknown"}</div>`;
+                    } else if (app.hasOwnProperty("docai")) {
+                        document.querySelector(".aiResponse").innerHTML = `No results found.<br> Would you like to <button class="b1" onclick="app.docai.init('${search}')">Search for it with DocAI?</button>`;
                     }
-                }
+                    else{
+                        document.querySelector(".aiResponse").innerText = "No results found, and DocAI is not found on your system!";
+                    }
+                });
+                smApps(app)
             } else {
                 ui.dest(el.sm, 150);
                 el.sm = undefined;
@@ -142,6 +207,7 @@ var wd = {
         for (let i = 0; i < elements.length; i++) {
             elements[i].innerText = formattedTime;
         }
+        return formattedTime;
     },
     finishsetup: function (name, div1, div2) {
         ui.sw2(div1, div2); ui.masschange('name', name); fs.write('/user/info/name', name);
