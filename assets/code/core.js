@@ -92,6 +92,9 @@ var wd = {
                     if (apps[key].hasOwnProperty("runs") && apps[key].runs === true) {
                         console.log(`<i> ${apps[key].name} is launchable!`);
                         const btn = tk.cb('b1', apps[key].name, apps[key].init.bind(apps[key]), el.sm);
+                        btn.innerHTML = `
+                        <img src='${apps[key].icon}' class='appIcon'/>
+                        <span class='appName'>${apps[key].name}</span>`
                         btn.classList.add("appItem");
                         btn.addEventListener('click', function () {
                             ui.dest(el.sm, 150);

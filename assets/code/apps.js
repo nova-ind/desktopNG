@@ -2,8 +2,9 @@ var app = {
     settings: {
         runs: true,
         name: 'Settings',
+        icon: './assets/img/systemIcons/settings.svg',
         init: async function () {
-            const main = tk.mbw('Settings', '300px', 'auto', true, undefined, undefined);
+            const main = tk.mbw('Settings', '300px', 'auto', true, undefined, undefined, undefined, './assets/img/systemIcons/settings.svg');
             const generalPane = tk.c('div', main.main, 'hide');
             const appearPane = tk.c('div', main.main, 'hide');
             const mainPane = tk.c('div', main.main);
@@ -76,7 +77,7 @@ var app = {
             tk.cb('b4 time', 'what', undefined, title);
             // first menu
             const first = tk.c('div', main, 'setb');
-            tk.img('./assets/img/setup/first.svg', 'setupi', first);
+            tk.img('./assets/img/systemIcons/os.svg', 'setupi', first);
             tk.p('Welcome to NovaOS Deskop Next-Gen!', 'h2', first);
             tk.p('NovaOS is proudly powered by WebDesk!', 'h3', first);
             tk.cb('b1', `Login as Guest`, () => wd.desktop('Guest', gen(8)), first);
@@ -99,7 +100,7 @@ var app = {
             copy.id = "quickstartwdgoing";
             // warn menu
             const warn = tk.c('div', main, 'setb hide');
-            tk.img('./assets/img/noround.png', 'setupi', warn);
+            tk.img('./assets/img/systemIcons/os.svg', 'setupi', warn);
             tk.p(`Online services`, 'h2', warn);
             tk.p('NovaOS makes an ID called a DeskID for you. Others using WebDesk, NovaOS-NG or compatible tools can use this ID to send you files or call you.', undefined, warn);
             tk.p('To recieve calls and files from others, NovaOS needs to be open. When not in use, NovaOS uses less resources', undefined, warn);
@@ -134,8 +135,9 @@ var app = {
     files: {
         runs: true,
         name: 'Files',
+        icon: './assets/img/systemIcons/files.svg',
         init: async function () {
-            const win = tk.mbw(`Files`, '340px', 'auto', true, undefined, undefined);
+            const win = tk.mbw(`Files`, '340px', 'auto', true, undefined, undefined, undefined, './assets/img/systemIcons/files.svg');
             const breadcrumbs = tk.c('div', win.main);
             const items = tk.c('div', win.main);
             async function navto(path) {
@@ -176,10 +178,12 @@ var app = {
     about: {
         runs: true,
         name: 'About',
+        icon: './assets/img/systemIcons/os.svg',
         init: async function () {
-            const win = tk.mbw('About', '300px', 'auto', true, undefined, undefined);
+            const win = tk.mbw('About', '300px', 'auto', true, undefined, undefined, undefined, './assets/img/systemIcons/os.svg');
             var aboutTxt = tk.c('div', win.main);
             aboutTxt.innerHTML = `
+            <img height="100px" src="./assets/img/systemIcons/os.svg">
             <h2>NovaOS</h1>
             <p>NovaOS is a free, open-source operating system designed for the web. It is built on WebDesk, a web-based desktop environment.</p>
             <p>Version: ${abt.ver}</p>
@@ -190,8 +194,9 @@ var app = {
     browser: {
         runs: true,
         name: 'Browser',
+        icon: './assets/img/systemIcons/networking.svg',
         init: async function () {
-            const win = tk.mbw('Browser', '80vw', '82vh', true, undefined, undefined);
+            const win = tk.mbw('Browser', '80vw', '82vh', true, undefined, undefined, undefined, './assets/img/systemIcons/networking.svg');
             ui.dest(win.title, 0);
             const tabs = tk.c('div', win.main, 'tabbar d');
             let currenttab = tk.c('div', win.main, 'hide');
@@ -201,10 +206,10 @@ var app = {
             const btnnest = tk.c('div', tabs, 'tnav');
             const addbtn = tk.cb('b4 browserbutton', '+', function () {
                 const tab = tk.c('embed', win.main, 'browsertab');
-                tab.src = "https://meower.xyz";
+                tab.src = "https://corsproxy.io/?https%3A%2F%2Fnovafurry.win";
                 ui.sw2(currenttab, tab);
                 currenttab = tab;
-                const tabbtn = tk.cb('b4', 'meower.xyz', function () {
+                const tabbtn = tk.cb('b4', 'novafurry.win', function () {
                     ui.sw2(currenttab, tab);
                     currenttab = tab;
                     currentbtn = tabtitle;
@@ -232,8 +237,9 @@ var app = {
             const search = tk.c('input', okiedokie, 'i1 browserbutton');
             search.placeholder = "Enter URL";
             const go = tk.cb('b4 browserbutton', 'Go!', function () {
-                currenttab.src = search.value;
-                currentbtn.innerText = search.value;
+                currenttab.src = `https://corsproxy.io/?${search.value.startsWith('http') ? encodeURIComponent(search.value) : 'https://' + encodeURIComponent(search.value)}`;
+                console.log(`https://corsproxy.io/?${search.value.startsWith('http') ? encodeURIComponent(search.value) : 'https://' + encodeURIComponent(search.value)}`);
+                currentbtn.innerHTML = search.value;
             }, okiedokie);
             wd.win();
         }
@@ -252,23 +258,10 @@ var app = {
             }
         },
     },
-    // sysAi: {
-    //     runs: false,
-    //     name: 'NovaOS System AI Models',
-    //     onstartup: async function() {
-    //         try {
-    //             const model = await use.load();
-    //             console.log("Model loaded");
-    //             window.novaAImodel= model;
-    //         } catch (error) {
-    //             app.sysAi.onstartup();
-    //             console.error("Failed to load model", error);
-    //         }
-    //     },
-    // },
     txter:{
         runs: true,
         name: 'txter editor',
+        icon: './assets/img/systemIcons/noicon.svg',
         init: async function () {
             const win = tk.mbw('txter', 'fit-content', 'fit-content', true, undefined, undefined);
             const txtarea = tk.c('textarea', win.main, 'i1');
@@ -287,8 +280,9 @@ var app = {
     docai: {
         runs: true,
         name: 'DocAI',
+        icon: './assets/img/systemIcons/noicon.svg',
         init: async function (query = "") {
-            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, "docai");
+            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, undefined, "docai");
             var div = tk.c('div', win.main);
             // div.innerText = "DocAI is not yet available in this version of NovaOS.";
             div.innerHTML = `
@@ -427,7 +421,7 @@ var app = {
             } else {
                 document.querySelector("#docai").remove();
                 document.querySelector("#docaitbn").remove();
-                const load = tk.mbw('DocAI Model Loader', '500px', 'auto', true, undefined, undefined, "docaiml");
+                const load = tk.mbw('DocAI Model Loader', '500px', 'auto', true, undefined, undefined, undefined, "docaiml");
                 wm.wal("You skipped loading the DocAI model on boot. Please wait.")
                 var div = tk.c('p', load.main);
                 div.innerHTML = `DocAI is loading the models...<br><progress></progress>`;

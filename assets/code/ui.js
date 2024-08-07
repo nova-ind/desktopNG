@@ -216,7 +216,9 @@ var tk = {
         button.className = classn;
         button.innerText = name;
         if (func) {
-            button.addEventListener('click', func);
+            button.addEventListener('click', function(){
+                func()
+            });
         }
         if (ele) {
             ele.appendChild(button);
@@ -226,7 +228,7 @@ var tk = {
     a: function (ele1, ele2) {
         ele1.appendChild(ele2);
     },
-    mbw: function (title, wid, hei, full, min, quit, id) {
+    mbw: function (title, wid, hei, full, min, quit, id, icon = './assets/img/systemIcons/noicon.svg') {
         var windowDiv = document.createElement('div');
         windowDiv.classList.add('window');
         windowDiv.classList.add('winf');
@@ -243,6 +245,7 @@ var tk = {
         var closeButton = document.createElement('div');
         closeButton.classList.add('winb');
         const tbn = tk.cb('b1', title, () => ui.show(windowDiv, 100), el.tr);
+        tbn.innerHTML = `<img src="${icon}" height=24 class="icon"/> <span class="label">${title}</span>`;
         if(id){
             tbn.id = id + "tbn";
         }
@@ -277,7 +280,7 @@ var tk = {
         titlebarDiv.appendChild(winbtns);
         var titleDiv = document.createElement('div');
         titleDiv.classList.add('title');
-        titleDiv.innerHTML = title;
+        titleDiv.innerHTML = `<img src="${icon}" height=24 class="icon"/> <span class="label">${title}</span>`;
         titlebarDiv.appendChild(titleDiv);
         windowDiv.appendChild(titlebarDiv);
         var contentDiv = document.createElement('div');
