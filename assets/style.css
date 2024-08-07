@@ -252,6 +252,7 @@ p {
     display: flex;
     flex-grow: 1;
     align-items: center;
+    margin-bottom: -10px;
 }
 
 .title {
@@ -261,7 +262,9 @@ p {
     text-overflow: ellipsis;
     margin-left: 2px;
 }
-
+.taskbar, .topbar{
+    overflow-y:hidden;
+}
 .winb {
     width: 14px;
     height: 14px;
@@ -946,4 +949,7 @@ select:active {
 }
 .smico{
     display: none;
+}
+.winf:has(.d){
+    z-index: 99999999999 !important;
 }
