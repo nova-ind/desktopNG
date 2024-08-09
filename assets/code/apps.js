@@ -244,17 +244,18 @@ var app = {
             wd.win();
         }
     },
-    docaiModel: {
+    sysqna: {
         runs: false,
-        name: 'DocAI ML Models',
+        name: 'System QNA ML Models',
         onstartup: async function() {
             try {
                 const model = await qna.load();
                 console.log("Model loaded");
                 window.docAImodel = model;
+                return "Sysqna model loaded";
             } catch (error) {
                 console.error("Failed to load model", error);
-                return error;
+                return "Failed to load model";
             }
         },
     },
@@ -421,12 +422,12 @@ var app = {
             } else {
                 document.querySelector("#docai").remove();
                 document.querySelector("#docaitbn").remove();
-                const load = tk.mbw('DocAI Model Loader', '500px', 'auto', true, undefined, undefined, undefined, "docaiml");
-                wm.wal("You skipped loading the DocAI model on boot. Please wait.")
+                const load = tk.mbw('DocAi Model Loader', '500px', 'auto', true, undefined, undefined, undefined, "docaiml");
+                wm.wal("The sysqna model failed to load on boot. Please wait.")
                 var div = tk.c('p', load.main);
-                div.innerHTML = `DocAI is loading the models...<br><progress></progress>`;
+                div.innerHTML = `DocAI is reloading the model...<br><progress></progress>`;
                 try {
-                    await app.docaiModel.onstartup();
+                    await app.sysqna.onstartup();
                 } catch (error) {
                     document.querySelector("#docaiml").remove()
                     document.querySelector("#docaimltbn").remove()

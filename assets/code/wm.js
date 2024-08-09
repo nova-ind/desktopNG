@@ -35,24 +35,43 @@ var wm = {
         element.style.top = `${topPosition}px`;
     },
 
-    notif: function (message, name, onclick) {
-        const note = document.createElement('div');
-        note.classList = "notif";
-        note.innerHTML = `${name} - ${message}`;
-        const id = gen(7);
-        note.id = id;
+    notif: function (name, cont, mode) {
+        const div = tk.c('div', document.getElementById('notif'), 'notif');
+        tk.p(name, 'bold', div);
+        tk.p(cont, undefined, div);
+        $(div).fadeIn(80);
+        div.addEventListener('click', function () { div.remove() });
         const note2 = document.createElement('div');
-        note2.classList = "notif2";
+        note2.classList = "notif";
         const id2 = gen(7);
         note2.id = id2;
-        note2.innerText = `${name} - ${message}`;
-        document.getElementById('notif').appendChild(note);
-        document.getElementById('notifold').appendChild(note2);
-        ui.play('./assets/other/webdrop.ogg');
-        note.addEventListener('click', function () { ui.dest(note, 140); });
+        note2.innerHTML = `<b>${name}</b>
+<br>
+${cont}`;
+        if(localStorage.getItem("doNotDisturb") !== "true") {
+            ui.play('./assets/audio/notif.mp3');
+            document.getElementById('desktopNotificationsArea').appendChild(note2);
+        }
         note2.addEventListener('click', function () { ui.dest(note2, 140); });
-        setTimeout(function () { ui.dest(id, 200); }, 20000);
-        dest('defnotif');
+        setTimeout(() => {
+            ui.dest("#"+note2.id, 140);
+        }, 5000);
+    },
+    
+    notifSys: function (name, cont, mode) {
+        const note2 = document.createElement('div');
+        note2.classList = "notif";
+        const id2 = gen(7);
+        note2.id = id2;
+        note2.innerHTML = `<b>${name}</b>
+<br>
+${cont}`;
+        if(localStorage.getItem("doNotDisturb") !== "true") {ui.play('./assets/audio/notif.mp3')};
+        document.getElementById('desktopNotificationsArea').appendChild(note2);
+        note2.addEventListener('click', function () { ui.dest(note2, 140); });
+        setTimeout(() => {
+            ui.dest("#"+note2.id, 140);
+        }, 5000);
     },
     cm: function () {
         const div = document.createElement('div');
@@ -95,11 +114,11 @@ var wm = {
         showf(window, 0);
     },
 
-    notif: function (name, cont, mode) {
-        const div = tk.c('div', document.getElementById('notif'), 'notif');
-        tk.p(name, 'bold', div);
-        tk.p(cont, undefined, div);
-        $(div).fadeIn(80);
-        div.addEventListener('click', function () { div.remove() });
-    }
+    // notif: function (name, cont, mode) {
+        // const div = tk.c('div', document.getElementById('notif'), 'notif');
+        // tk.p(name, 'bold', div);
+        // tk.p(cont, undefined, div);
+        // $(div).fadeIn(80);
+        // div.addEventListener('click', function () { div.remove() });
+    // }
 }

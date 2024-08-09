@@ -11,11 +11,11 @@
     <!-- Make sure your page supports utf-8 characterset. -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Load TensorFlow.js. This is required to use the qna model. -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <script src="./assets/lib/tf.js"> </script>
     <!-- Load the qna model. -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/qna"> </script>
+    <script src="./assets/models/qna.model"> </script>
     <!-- Load the Universal Sentence Encoder. This is required to use the novaOS AI. -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
+    <script src="./assets/lib/use.js"></script>
 </head>
 <script>
     var abt = {
@@ -41,7 +41,16 @@
 
 <body>
     <div class="topbar"><div class="title"><button class="b1 time" onclick="wd.controls.toggle()">14:07:10</button></div></div>
-    <div id="background"></div>
+    <div id="background">
+        <h1>To-Do:</h1>
+        <ul>
+            <li><s>Implement Do Not Disturb</s></li>
+            <li>Make display mode switcher in QS work</li>
+            <li>Networking stuff</li>
+            <li><s>Add notifications list to the QS</s></li>
+
+        </ul>
+    </div>
     <!--    <div class="circle"></div>
     <div class="circle2"></div> -->
     <div id="setuparea">
@@ -49,12 +58,10 @@
     <div style="display: none;" id="contcent" class="contcent">
         <p class="h3">Control Center</p>
         <p class="lockdown">Your DeskID is <span class="mcode bold">----</span></p>
-        <span class="ckbx" onclick="console.log(this.childNodes[1].checked =  this.childNodes[1].checked == true ? false : true)">
-            <input type="checkbox" name="Do Not Disturb" class="b1">
+        <span class="ckbx" id="dnd" onclick='localStorage.setItem("doNotDisturb", localStorage.getItem("doNotDisturb") == "false");if(localStorage.getItem("doNotDisturb") == "false") this.classList.remove("on"); else this.classList.add("on")'>
             Do not disturb
         </span>     
-        <span class="ckbx" onclick="console.log(this.childNodes[1].checked =  this.childNodes[1].checked == true ? false : true)">
-            <input type="checkbox" name="Do Not Disturb" class="b1">
+        <span class="ckbx" id="netw" onclick='localStorage.setItem("networking", localStorage.getItem("networking") == "false");if(localStorage.getItem("networking") == "false") this.classList.remove("on"); else this.classList.add("on")'>
             Network Services
         </span>
         <select name="" id="" default="a">
@@ -65,13 +72,15 @@
             <option value="">Display mode</option>
         </select>
         <p class="med" style="margin-top: 3px; margin-bottom: 3px">Notifications (select to delete)</p>
-        <div id="notifold">
-            <div class="notif2" id="defnotif">No notifications yet.</div>
+        <div id="notif">
+            <!-- <div class="notif2" id="defnotif">No notifications yet.</div> -->
         </div>
         <button id="cccb" class="b1" style="margin-top: 7px; width: 60%;" onclick="wd.controls.toggle()">Close</button>
     </div>
-    <div id="notif"></div>
-    <div class="splashscreen">
+    <div id="desktopNotificationsArea">
+        
+    </div>
+    <!-- <div class="splashscreen">
         <div class="splashscreen-content">
             <div class="splashscreen-logo">
                 <img src="./assets/img/systemIcons/os.svg" alt="NovaOS NG">
@@ -85,7 +94,7 @@
                 <button onclick="document.querySelector('.splashscreen').remove()" class="b1">Skip (not reccomended)</button>
             </div>
         </div>
-    </div>
+    </div> -->
 </body>
 
 </html>
@@ -177,5 +186,15 @@
                 }
             });
         }
+    }
+    if(localStorage.getItem("networking") == "false") {
+        document.querySelector("#netw").classList.remove("on");
+    } else {
+        document.querySelector("#netw").classList.add("on")
+    }
+    if(localStorage.getItem("doNotDisturb") == "false") {
+        document.querySelector("#dnd").classList.remove("on");
+    } else {
+        document.querySelector("#dnd").classList.add("on")
     }
 </script>

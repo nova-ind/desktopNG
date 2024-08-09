@@ -39,7 +39,7 @@ var ui = {
     },
     play: function (filename) {
         const audio = new Audio(filename);
-        audio.volume = nvol;
+        audio.volume = 1;
         audio.play();
     },
     show: function (dr1, anim) {
@@ -72,9 +72,9 @@ var ui = {
     dest: function (dr1, anim) {
         if (dr1) {
             if (anim) {
-                $(dr1).fadeOut(anim, function () { dr1.remove(); });
+                $(dr1).fadeOut(anim, function () { $(dr1).remove(); });
             } else {
-                $(dr1).fadeOut(170, function () { dr1.remove(); });
+                $(dr1).fadeOut(170, function () { $(dr1).remove(); });
             }
         }
     },

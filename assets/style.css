@@ -356,13 +356,13 @@ p {
     border: 1px solid transparent;
 }
 
-.b1:hover {
+.b1:hover, .b1.on, .ckbx.on {
     background-color: rgba(var(--acc), 0.4);
     border: 1px solid rgba(var(--acc), 0.6);
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 20px 4px;
 }
 
-.b1:active {
+.b1:active, .b1.on:hover, .ckbx.on:hover {
     transform: scale(0.88);
     background-color: rgba(var(--acc), 0.20);
 }
@@ -560,6 +560,12 @@ p {
 }
 
 #notif {
+    max-height: 40vh;
+    height: 40vh;
+    overflow-y: scroll;
+}
+
+#desktopNotificationsArea{
     position: fixed;
     top: 10px;
     right: 10px;

@@ -54,11 +54,6 @@ var fs = {
 };
 setTimeout(function () {
     fs.ls("/user/info/name").then(async (namefile) => {
-        console.log(namefile);
-        if (namefile.items.length == 0) {
-            document.querySelector(".splashscreen").remove();
-        }
-        else {
             // get count of items in app json object
             var apps = 0
             for (var key in app) {if (app[key].hasOwnProperty("onstartup")) {apps++}}
@@ -67,13 +62,11 @@ setTimeout(function () {
             var counter = 0;
             for (var key in app) {
                 if (app[key].hasOwnProperty("onstartup")) {
-                    document.querySelector("#currentComponentText").innerText = `Current App/Component: ${app[key].name}`;
-                    await app[key].onstartup(); // this is where each compontent is called
+                    wm.notifSys("Services", `Loading ${app[key].name || key}`, 5000);
+                    var appResponse = await app[key].onstartup(); // this is where each compontent is called
+                    wm.notifSys("Services", `${app[key].name || key} says:<br>"${appResponse}"`, 5000);
                     counter++;
-                    // document.querySelector("#currentComponent").value = counter;
                 }
             }
-            document.querySelector(".splashscreen").remove();
-        }
-    });
+        });
 }, 1000)
