@@ -138,12 +138,14 @@ var app = {
         name: 'Files',
         icon: './assets/img/systemIcons/files.svg',
         init: async function () {
-            const win = tk.mbw(`Files`, '340px', 'auto', true, true, true);
+            const win = tk.mbw(`Files`, '340px', 'auto', true, true, true, undefined, app.files.icon);
             win.main.classList.add("fileman")
-            const mainPane = tk.c('div', win.main)
-            const navBar = tk.c('div', mainPane)
+            const lowerZone = tk.c('div', win.main)
+            lowerZone.classList.add("lowerZone")
+            const mainPane = tk.c('div', lowerZone)
+            const navBar = tk.c('div', win.main)
             navBar.classList.add("navbar")
-            const navPane = tk.c('div', win.main)
+            const navPane = tk.c('div', lowerZone)
             navPane.classList.add("navpane")
             const fm = tk.c('div', mainPane)
             fm.classList.add("fm")
@@ -153,45 +155,55 @@ var app = {
             const mkFolder = tk.cb('b1', '➕', function () {}, navBar);
             const breadcrumbs = tk.c('div', navBar);
             breadcrumbs.classList.add("bc");
-            breadcrumbs.classList.add("b1");
             const items = tk.c('div', fm);
             const navPaneDrives = tk.c('ul', navPane)
             const osDrive = tk.c("li", navPaneDrives)
-            osDrive.innerText = "/ Root"
-            async function navto(path, fs = "idb") {
+            osDrive.classList.add("flist", "width", "drive")
+            osDrive.innerText = "OPFS (NovaOS)"
+            const classicDrive = tk.c("li", navPaneDrives)
+            classicDrive.classList.add("flist", "width", "drive")
+            classicDrive.innerText = "IDBFS (Classic)"
+            async function navto(path, filesystem = "opfs") {
                 mkFolder.onclick = async function () {
-                    fs.write(`${path}${prompt("enter folder name here", "New Folder")}/.`, '');
-                    navto(path)
+                    if(filesystem == 'opfs'){
+                        fs.mkdir(`${path}${prompt("enter folder name here", "New Folder")}/.`, 'opfs');
+                    }
+                    else{
+                        fs.write(`${path}${prompt("enter folder name here", "New Folder")}/.`, '', 'idbfs');
+                    };
+                    navto(path, filesystem)
                 }
                 items.innerHTML = "";
                 breadcrumbs.innerHTML = "";
                 let crumbs = path.split('/').filter(Boolean);
                 let currentp = '/';
-                tk.cb('flist', 'Root', () => navto('/'), breadcrumbs);
+                tk.cb('flist', 'Root', () => navto('/', filesystem), breadcrumbs);
                 crumbs.forEach((crumb, index) => {
                     currentp += crumb + '/';
                     tk.cb('flists', '/', undefined, breadcrumbs);
                     tk.cb('flist', crumb, () => {
                         let newPath = crumbs.slice(0, index + 1).join('/');
-                        navto('/' + newPath + "/");
+                        navto('/' + newPath + "/", filesystem);
                     }, breadcrumbs);
                 });
-                const thing = await fs.ls(path, fs);
+                const thing = await fs.ls(path, filesystem);
                 thing.items.forEach(function (thing) {
-                    if (thing.type === "folder") {
-                        tk.cb('flist width', "Folder: " + thing.name, () => navto(thing.path + "/"), items);
+                    if (thing.type === "folder" || thing.type === "directory") {
+                        tk.cb('flist width', "📁 " + thing.name, () => navto(thing.path + "/", filesystem), items);
                     } else if (thing.name.startsWith('.')) {
                         void (0)
                     } else {
-                        tk.cb('flist width', "File: " + thing.name, async function () { const yeah = await fs.read(thing.path); wm.wal(yeah); }, items);
+                        tk.cb('flist width', "📄 " + thing.name, async function () { const yeah = await fs.read(thing.path); wm.wal(yeah); }, items);
                     }
                 });
             }
             osDrive.addEventListener("click", await function (){
-                navto("/", "idbfs")
+                navto("/", "opfs")
             })
-
-            navto('/');
+            classicDrive.addEventListener("click", await function (){
+                navto("/", "idbfs")
+            });
+            navto('/', 'opfs');
         }
     },
     about: {

@@ -1,3 +1,255 @@
+var opfsRoot;
+navigator.storage.getDirectory().then(function (dir) {
+    opfsRoot = dir;
+    foxyfs.init()
+})
+var foxyfs = {
+    getFileHandle: async function (path1) {
+        var path = path1.split("/")
+        var nameofFile = path[path.length - 1]
+        path[path.length - 1] = '';
+        path = path.filter(function (el) {
+            return el != '';
+        });
+        var content = {};
+        console.log(path, nameofFile)
+        if (path.length == 0) {
+            var dirHandle = await opfsRoot.getFileHandle(nameofFile)
+            content[nameofFile] = dirHandle
+        }
+        else if (path.length > 1) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+
+            for (var item of path) {
+                if (item == path[0]) {
+
+                } else {
+                    dirHandle = await dirHandle.getDirectoryHandle(item)
+                }
+            }
+            var content = {};
+            for await (let [name, handle] of dirHandle.entries()) {
+                content[name] = handle
+            }
+        } else if (path.length == 1) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+
+            var content = {};
+            for await (let [name, handle] of dirHandle.entries()) {
+                content[name] = handle
+            }
+        }
+        return content[nameofFile]
+    },
+    getDirHandle: async function (path1) {
+        var path = path1.split("/")
+        var nameofFile = path[path.length - 1]
+        path[path.length - 1] = '';
+        path = path.filter(function (el) {
+            return el != '';
+        });
+        var content = {};
+        if (path.length == 0) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(nameofFile);
+        }
+        else if (path.length > 1) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+
+            for (var item of path) {
+                if (item == path[0]) {
+
+                } else {
+                    dirHandle = await dirHandle.getDirectoryHandle(item)
+                }
+            }
+        } else if (path.length == 1) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+        }
+        return dirHandle
+    },
+    init: async function () {
+        var directoryHandle = await opfsRoot.getDirectoryHandle('sys', { create: true });
+        directoryHandle = await opfsRoot.getDirectoryHandle('user', { create: true });
+    },
+    ls: async function (dir) {
+        try {
+            var path = dir.split("/")
+            path = path.filter(function (el) {
+                return el != '';
+            });
+            if (path.length == 0) {
+                var content = [];
+                for await (let [name, handle] of opfsRoot.entries()) {
+                    content.push({ name: name, type: handle.kind, path: dir + name })
+                }
+                return { items: content };
+            }
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+            if (path.length > 1) {
+                for (var item of path) {
+                    if (item == path[0]) {
+
+                    } else {
+                        dirHandle = await dirHandle.getDirectoryHandle(item)
+                    }
+                }
+                var content = [];
+                for await (let [name, handle] of dirHandle.entries()) {
+                    content.push({ name: name, type: handle.kind, path: dir + name })
+                }
+                return { items: content };
+            } else if (path.length == 1) {
+                var content = [];
+                for await (let [name, handle] of dirHandle.entries()) {
+                    content.push({ name: name, type: handle.kind, path: dir + name })
+                }
+                return { items: content };
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    },
+    mkdir: async function (location, name) {
+        try {
+            if (location == '' || location == "/") {
+            return await opfsRoot.getDirectoryHandle(name, { create: true });
+        } else {
+            var path = location.split("/")
+            path = path.filter(function (el) {
+                return el != '';
+            });
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0])
+            for (var item of path) {
+                if (item == path[0]) {
+
+                } else {
+                    dirHandle = await dirHandle.getDirectoryHandle(item)
+                }
+            }
+            return await dirHandle.getDirectoryHandle(name, { create: true })
+        }
+        } catch (error) {
+            console.log(error)
+        }
+        
+    },
+    touch: async function (location, name) {
+        if (location == '' || location == "/") {
+            return await opfsRoot.getFileHandle(name, { create: true });
+        } else {
+            var path = location.split("/")
+            path = path.filter(function (el) {
+                return el != '';
+            });
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0])
+            for (var item of path) {
+                if (item == path[0]) {
+
+                } else {
+                    dirHandle = await dirHandle.getDirectoryHandle(item)
+                }
+            }
+            return await dirHandle.getFileHandle(name, { create: true })
+        }
+    },
+    typeof: async function (path1) {
+        var path = path1.split("/")
+        var nameofFile = path[path.length - 1]
+        path[path.length - 1] = '';
+        path = path.filter(function (el) {
+            return el != '';
+        });
+        var content = {};
+        if (path.length == 0) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(nameofFile);
+            content[nameofFile] = dirHandle.kind
+        }
+        else if (path.length > 1) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+
+            for (var item of path) {
+                if (item == path[0]) {
+
+                } else {
+                    dirHandle = await dirHandle.getDirectoryHandle(item)
+                }
+            }
+            var content = {};
+            for await (let [name, handle] of dirHandle.entries()) {
+                content[name] = handle.kind
+            }
+        } else if (path.length == 1) {
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+
+            var content = {};
+            for await (let [name, handle] of dirHandle.entries()) {
+                content[name] = handle.kind
+            }
+        }
+        return content[nameofFile]
+    },
+    read: async function (path) {
+        try {
+            var h = await foxyfs.getFileHandle(path)
+            var file = await h.getFile()
+            return await file.text()
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    write: async function (path, content) {
+        var h = await foxyfs.getFileHandle(path)
+        var stream = await h.createWritable()
+        stream.write(content)
+        stream.close()
+        return h;
+    },
+    rmfile: async function (path) {
+        var h = await foxyfs.getFileHandle(path)
+        h.remove()
+    },
+    rmdir: async function (path) {
+        var h = await foxyfs.getDirHandle(path)
+        var returnVal = "it no worky :(";
+        try {
+            h.remove({ recursive: false })
+            returnVal = "Successful"
+        } catch {
+
+            h.remove({ recursive: true })
+            returnVal = "Successful, but had to work recursivly"
+
+        }
+        return returnVal;
+    },
+    rm: async function (path) {
+        var h = await foxyfs.getDirHandle(path)
+        var returnVal = "it no worky :(";
+        try {
+            var h = await foxyfs.getFileHandle(path)
+            h.remove()
+            returnVal = "baller, its a file"
+        } catch (error) {
+            try {
+                var h = await foxyfs.getDirHandle(path)
+                try {
+                    h.remove({ recursive: false })
+                    returnVal = "Successful, no recurse"
+                } catch {
+
+                    h.remove({ recursive: true })
+                    returnVal = "Successful, but had to work recursivly"
+
+                }
+            } catch (error) {
+                returnVal = "not baller, it doesnt work."
+            }
+        }
+        return returnVal;
+    }
+}
+
 let db;
 const request = indexedDB.open("WebDeskDB", 2);
 
@@ -24,6 +276,8 @@ self.onmessage = function (event) {
     const { type, operation, params, opt, requestId } = event.data;
     if (type === 'fs') {
         idbop(operation, params, opt, requestId);
+    } else if (type === 'opfs') {
+        opfsop(operation, params, opt, requestId);
     }
 };
 
@@ -68,6 +322,76 @@ function idbop(operation, params, opt, requestId) {
             }).catch(error => {
                 self.postMessage({ type: 'error', data: error, requestId });
             });
+            break;
+        default:
+            self.postMessage({ type: 'error', data: 'Unknown operation', requestId });
+    }
+}
+async function opfsop(operation, params, opt, requestId) {
+    console.log(operation, params, opt)
+    const opfsRoot = await navigator.storage.getDirectory();
+    switch (operation) {
+        case 'read':
+            try {
+                var content = await foxyfs.read(params)
+                console.log(content)
+                self.postMessage({ type: 'result', data: content, requestId });
+            } catch (error) {
+                self.postMessage({ type: 'error', data: error, requestId });
+
+            }
+            break;
+        case 'write':
+            try {
+                var path = params.split("/")
+                delete path[path.length - 1]
+                var location = path.join("/")
+                var name = params.split("/")[params.split("/").length - 1]
+                console.log(name, location,path)
+                await foxyfs.touch(location, name)
+                var content = await foxyfs.write(params, opt)
+                self.postMessage({ type: 'result', data: content, requestId });
+            } catch (error) {
+                self.postMessage({ type: 'error', data: error, requestId });
+
+            }
+            break;
+
+        case 'delete':
+            foxyfs.rm(params).then(result => {
+                self.postMessage({ type: 'result', data: result, requestId });
+            }).catch(error => {
+                self.postMessage({ type: 'error', data: error, requestId });
+            });
+            break;
+        case 'erase':
+            opfsRoot.remove()
+            break;
+        case 'list':
+            fs2.list(params);
+            break;
+        case 'ls':
+            try {
+                var dirs = await foxyfs.ls(params)
+                self.postMessage({ type: 'result', data: dirs, requestId });
+            } catch (error) {
+                self.postMessage({ type: 'error', data: error, requestId });
+
+            }
+            break;
+        case 'mkdir':
+            try {
+                var path = params.split("/")
+                delete path[path.length - 1]
+                var location = path.join("/")
+                var name = params.split("/")[params.split("/").length - 1]
+                console.log(name, location,path)
+                var dirs = await foxyfs.mkdir(location,name)
+                self.postMessage({ type: 'result', data: dirs, requestId });
+            } catch (error) {
+                self.postMessage({ type: 'error', data: error, requestId });
+
+            }
             break;
         default:
             self.postMessage({ type: 'error', data: 'Unknown operation', requestId });
@@ -142,16 +466,16 @@ var fs2 = {
             const transaction = db.transaction(['main'], 'readonly');
             const objectStore = transaction.objectStore('main');
             const items = new Map();
-    
+
             objectStore.openCursor().onsuccess = function (event) {
                 const cursor = event.target.result;
                 if (cursor) {
                     if (cursor.key.startsWith(path)) {
                         const relativePath = cursor.key.substring(path.length);
                         const parts = relativePath.split('/');
-    
+
                         if (parts.length > 1) {
-                            items.set(parts[0], { path: path + parts[0], name: parts[0], type: 'folder'});
+                            items.set(parts[0], { path: path + parts[0], name: parts[0], type: 'folder' });
                         } else {
                             items.set(relativePath, { path: cursor.key, name: relativePath, type: 'file' });
                         }
@@ -161,10 +485,10 @@ var fs2 = {
                     resolve({ items: Array.from(items.values()) });
                 }
             };
-    
+
             objectStore.openCursor().onerror = function (event) {
                 reject(event.target.error);
             };
         });
-    }    
+    }
 };

@@ -25,6 +25,9 @@ var fs = {
     send: function (message, transferList) {
         wfs.postMessage(message, transferList);
     },
+    sendopfs: function (message, transferList) {
+        wfs.postMessage(message, transferList);
+    },
     askwfs: function (operation, params, opt) {
         const requestId = requestIdCounter++;
         return new Promise((resolve, reject) => {
@@ -36,21 +39,62 @@ var fs = {
             }
         });
     },
-    read: function (path) {
-        return this.askwfs('read', path);
+    askwfsOPFS: function (operation, params, opt) {
+        const requestId = requestIdCounter++;
+        return new Promise((resolve, reject) => {
+            pendingRequests[requestId] = { resolve, reject };
+            if (operation === 'write' && opt instanceof ArrayBuffer) {
+                fs.sendopfs({ type: 'opfs', operation, params, opt, requestId }, [p2]);
+            } else {
+                fs.sendopfs({ type: 'opfs', operation, params, opt, requestId });
+            }
+        });
     },
-    write: function (path, data) {
-        return this.askwfs('write', path, data);
+    read: function (path, filesystem = "opfs") {
+        if(filesystem == "opfs") {
+            return this.askwfsOPFS('read', path);
+        }
+        else if(filesystem == "idbfs") {
+                return this.askwfs('read', path);
+        }
     },
-    del: function (path) {
-        return this.askwfs('delete', path);
+    write: function (path, data, filesystem = "opfs") {
+        if(filesystem == "opfs") {
+            return this.askwfsOPFS('write', path, data);
+        }
+        else if(filesystem == "idbfs") {
+            return this.askwfs('write', path, data);
+        }
     },
-    erase: function (path) {
-        return this.askwfs('erase', path);
+    del: function (path, filesystem = "opfs") {
+        if(filesystem == "opfs") {
+            return this.askwfsOPFS('delete', path);
+        }
+        else if(filesystem == "idbfs") {
+            return this.askwfs('delete', path);
+        }
     },
-    ls: function (path, fs = "idbfs") {
-        return this.askwfs('ls', path);
+    erase: function (filesystem = "idbfs") {
+        if(filesystem == "opfs") {
+            return this.askwfsOPFS('erase', path);
+        } else if(filesystem == "idbfs") {
+            return this.askwfs('erase', path);
+        }
     },
+    ls: function (path, filesystem = "opfs") {
+        if(filesystem == "opfs") {
+            return this.askwfsOPFS('ls', path);
+        } else if(filesystem == "idbfs") {
+            return this.askwfs('ls', path);
+        }
+    },
+    mkdir: function (path, filesystem = "opfs") {
+        if(filesystem == "opfs") {
+            return this.askwfsOPFS('mkdir', path);
+        } else if(filesystem == "idbfs") {
+            fs.write("/user/Documents/.", '', "idbfs");
+        }
+    }
 };
 setTimeout(function () {
     fs.ls("/user/info/name").then(async (namefile) => {

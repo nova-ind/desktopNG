@@ -705,31 +705,55 @@ p {
 .flist {
     background-color: transparent;
     font: var(--font);
-    padding: 4px;
     border: none;
+    padding: 4px;
     border-radius: 9px;
     font-family: 'PoppinsB', Arial;
+    display: inline;
 }
 
 .flist:hover {
-    background-color: var(--ui2);
+    background-color: rgba(var(--acc), 0.3);
 }
-
+.flist.drive {
+    padding: 6px 8px;
+    margin: 1px;
+    width: calc(100% - 2px);
+    display: inline-block;
+}
 .width {
     width: 100%;
     box-sizing: border-box;
     font-family: 'Poppins', Arial !important;
+    text-align: left;
 }
 
 .flists {
     background-color: transparent;
     font: var(--font);
-    padding: 1px;
+    padding:2px;
     border: none;
     border-radius: 9px;
     font-family: 'PoppinsB', Arial;
 }
+.bc{
+    padding:0px;
+    text-align: left;
+    background-color: rgba(var(--acc), 0.3);
+    border-radius: var(--rad2);
+    font-size: var(--fz1);
+    margin: 1px;
+    transition: 0.08s ease-in-out;
+    cursor: pointer;
+    border: 1px solid transparent;
+    width: 100%;
+}
 
+.flist, .flists{
+    /* padding-inline: 0px; */
+    /* padding-block: 0px; */
+    height: 100%;
+}
 .splashscreen {
     position: fixed;
     left: 0;
@@ -980,12 +1004,13 @@ select:active {
     grid-area:nav;
 }
 .navbar > .bc{
-    width:100%;
 }
 .navpane ul, .navpane li {
     list-style: none;
     text-align: left;
     padding-inline-start: 0px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
 }
 .navpane{
     height:100%;
@@ -997,8 +1022,8 @@ select:active {
     resize: horizontal;
     display: block;
     overflow: hidden;
-    min-width: 8em;
-    max-width: 14em;
+    min-width: 80px;
+    max-width: 500px;
 }
 .fm{
     /* position:absolute; */
@@ -1008,7 +1033,7 @@ select:active {
     height:calc(100%);
     grid-area:main;
 }
-.content.fileman{
+.content.fileman .lowerZone{
     display: flex;
     flex-direction: row-reverse;
     flex-wrap: nowrap;
@@ -1017,6 +1042,10 @@ select:active {
     align-content: center;
     height: calc(100% - 65px);
     overflow: hidden;
+}
+.content.fileman{
+    display: flex;
+    flex-direction: column-reverse;
 }
 .content.fileman > *{
     max-height: calc(100%);

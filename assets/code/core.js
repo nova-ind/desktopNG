@@ -213,7 +213,10 @@ var wd = {
         return formattedTime;
     },
     finishsetup: function (name, div1, div2) {
-        ui.sw2(div1, div2); ui.masschange('name', name); fs.write('/user/info/name', name);
+        ui.sw2(div1, div2); ui.masschange('name', name); 
+        fs.mkdir('/user')
+        fs.mkdir('/user/info')
+        fs.write('/user/info/name', name);
     },
     reboot: function () {
         window.location.reload();

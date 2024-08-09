@@ -111,8 +111,13 @@
 <script src="./assets/code/apps.js"></script>
 <script>
     async function boot() {
-        const sd = await fs.read('/user/info/name');
-        if (sd) {
+        var sd = "balh"
+        try{
+            sd = await fs.read('/user/info/name');
+        } catch{
+
+        }
+        if (sd !== "balh") {
             const name = await fs.read('/user/info/name');
             const deskid = await fs.read('/system/deskid');
             const darkpref = await fs.read('/user/info/lightdarkpref');
@@ -145,7 +150,8 @@
         } else {
             const id = gen(8);
             await ptp.go(id);
-            await fs.write('/system/deskid', id);
+            await fs.mkdir('/system', "opfs");
+            await fs.write('/system/deskid', id, "opfs");
             app.setup.init();
             sys.setupd = false;
         }
