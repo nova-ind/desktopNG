@@ -293,9 +293,9 @@ var app = {
     txter:{
         runs: true,
         name: 'txter editor',
-        icon: './assets/img/systemIcons/noicon.svg',
+        icon: './assets/img/systemIcons/txter.svg',
         init: async function () {
-            const win = tk.mbw('txter', 'fit-content', 'fit-content', true, undefined, undefined);
+            const win = tk.mbw('txter', 'fit-content', 'fit-content', true, true, true, undefined, './assets/img/systemIcons/txter.svg');
             const txtarea = tk.c('textarea', win.main, 'i1');
             const bruh = tk.c('br', win.main);
             txtarea.style.height = 'calc(82vh - 120px)';
@@ -312,9 +312,9 @@ var app = {
     docai: {
         runs: true,
         name: 'DocAI',
-        icon: './assets/img/systemIcons/noicon.svg',
+        icon: './assets/img/systemIcons/Docai.svg',
         init: async function (query = "") {
-            const win = tk.mbw('DocAI', '500px', 'auto', true, undefined, undefined, undefined);
+            const win = tk.mbw('DocAI', '500px', 'auto', false, true, true, undefined, './assets/img/systemIcons/Docai.svg');
             var div = tk.c('div', win.main);
             // div.innerText = "DocAI is not yet available in this version of NovaOS.";
             div.innerHTML = `
