@@ -249,7 +249,7 @@ var tk = {
         if(id){
             tbn.id = id + "tbn";
         }
-        if (quit === undefined) {
+        if (quit === true) {
             closeButton.classList.add('red');
             closeButton.addEventListener('mousedown', function () {
                 ui.dest(windowDiv, 100);
@@ -259,7 +259,7 @@ var tk = {
 
         var minimizeButton = document.createElement('div');
         minimizeButton.classList.add('winb');
-        if (min === undefined) {
+        if (min === true) {
             minimizeButton.classList.add('yel');
             minimizeButton.addEventListener('mousedown', function () {
                 ui.hide(windowDiv, 100);
@@ -267,7 +267,7 @@ var tk = {
         }
         var maximizeButton = document.createElement('div');
         maximizeButton.classList.add('winb');
-        if (full === undefined) {
+        if (full === true) {
             maximizeButton.classList.add('gre');
             maximizeButton.addEventListener('mousedown', function () {
                 max(windowDiv.id);

@@ -4,7 +4,7 @@ var app = {
         name: 'Settings',
         icon: './assets/img/systemIcons/settings.svg',
         init: async function () {
-            const main = tk.mbw('Settings', '300px', 'auto', true, undefined, undefined, undefined, './assets/img/systemIcons/settings.svg');
+            const main = tk.mbw('Settings', '300px', 'auto', true, true, true);
             const generalPane = tk.c('div', main.main, 'hide');
             const appearPane = tk.c('div', main.main, 'hide');
             const mainPane = tk.c('div', main.main);
@@ -68,7 +68,8 @@ var app = {
     setup: {
         runs: false,
         init: async function () {
-            const main = tk.c('div', document.getElementById('setuparea'), 'setupbox');
+            const setupWin = tk.mbw('Setup', '300px', '300px', true,true,true)
+            const main = tk.c('div', setupWin.main, 'setupbox');
             // create setup menubar
             const bar = tk.c('div', main, 'setupbar');
             const tnav = tk.c('div', bar, 'tnav');
@@ -137,10 +138,31 @@ var app = {
         name: 'Files',
         icon: './assets/img/systemIcons/files.svg',
         init: async function () {
-            const win = tk.mbw(`Files`, '340px', 'auto', true, undefined, undefined, undefined, './assets/img/systemIcons/files.svg');
-            const breadcrumbs = tk.c('div', win.main);
-            const items = tk.c('div', win.main);
-            async function navto(path) {
+            const win = tk.mbw(`Files`, '340px', 'auto', true, true, true);
+            win.main.classList.add("fileman")
+            const mainPane = tk.c('div', win.main)
+            const navBar = tk.c('div', mainPane)
+            navBar.classList.add("navbar")
+            const navPane = tk.c('div', win.main)
+            navPane.classList.add("navpane")
+            const fm = tk.c('div', mainPane)
+            fm.classList.add("fm")
+            const backButton = tk.cb('b1', '◀️', function () {}, navBar);
+            const fwdButton = tk.cb('b1', '▶️', function () {}, navBar);
+            const reButton = tk.cb('b1', '🔁', function () {}, navBar);
+            const mkFolder = tk.cb('b1', '➕', function () {}, navBar);
+            const breadcrumbs = tk.c('div', navBar);
+            breadcrumbs.classList.add("bc");
+            breadcrumbs.classList.add("b1");
+            const items = tk.c('div', fm);
+            const navPaneDrives = tk.c('ul', navPane)
+            const osDrive = tk.c("li", navPaneDrives)
+            osDrive.innerText = "/ Root"
+            async function navto(path, fs = "idb") {
+                mkFolder.onclick = async function () {
+                    fs.write(`${path}${prompt("enter folder name here", "New Folder")}/.`, '');
+                    navto(path)
+                }
                 items.innerHTML = "";
                 breadcrumbs.innerHTML = "";
                 let crumbs = path.split('/').filter(Boolean);
@@ -154,13 +176,7 @@ var app = {
                         navto('/' + newPath + "/");
                     }, breadcrumbs);
                 });
-                var createFolder = document.createElement('button');
-                createFolder.innerText = "New Folder";
-                createFolder.addEventListener('click', async function () {
-                    fs.write(`${path}${prompt("enter folder name here", "New Folder")}/.`, '');
-                })
-                breadcrumbs.appendChild(createFolder);
-                const thing = await fs.ls(path);
+                const thing = await fs.ls(path, fs);
                 thing.items.forEach(function (thing) {
                     if (thing.type === "folder") {
                         tk.cb('flist width', "Folder: " + thing.name, () => navto(thing.path + "/"), items);
@@ -171,6 +187,9 @@ var app = {
                     }
                 });
             }
+            osDrive.addEventListener("click", await function (){
+                navto("/", "idbfs")
+            })
 
             navto('/');
         }
@@ -180,7 +199,7 @@ var app = {
         name: 'About',
         icon: './assets/img/systemIcons/os.svg',
         init: async function () {
-            const win = tk.mbw('About', '300px', 'auto', true, undefined, undefined, undefined, './assets/img/systemIcons/os.svg');
+            const win = tk.mbw('About', '300px', 'auto', false, true, true);
             var aboutTxt = tk.c('div', win.main);
             aboutTxt.innerHTML = `
             <img height="100px" src="./assets/img/systemIcons/os.svg">
@@ -196,7 +215,7 @@ var app = {
         name: 'Browser',
         icon: './assets/img/systemIcons/networking.svg',
         init: async function () {
-            const win = tk.mbw('Browser', '80vw', '82vh', true, undefined, undefined, undefined, './assets/img/systemIcons/networking.svg');
+            const win = tk.mbw('Browser', '80vw', '82vh', false, true, true);
             ui.dest(win.title, 0);
             const tabs = tk.c('div', win.main, 'tabbar d');
             let currenttab = tk.c('div', win.main, 'hide');
@@ -246,8 +265,8 @@ var app = {
     },
     sysqna: {
         runs: false,
-        name: 'System QNA ML Models',
-        onstartup: async function() {
+        name: 'DocAI ML Models',
+        onstartupp: async function() {
             try {
                 const model = await qna.load();
                 console.log("Model loaded");

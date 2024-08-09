@@ -48,7 +48,7 @@ var fs = {
     erase: function (path) {
         return this.askwfs('erase', path);
     },
-    ls: function (path) {
+    ls: function (path, fs = "idbfs") {
         return this.askwfs('ls', path);
     },
 };
