@@ -1040,12 +1040,13 @@ select:active {
     justify-content: flex-end;
     align-items: flex-start;
     align-content: center;
-    height: calc(100% - 65px);
+    height: calc(100%);
     overflow: hidden;
 }
 .content.fileman{
     display: flex;
     flex-direction: column-reverse;
+    height: calc(100% - 65px);
 }
 .content.fileman > *{
     max-height: calc(100%);

@@ -4,7 +4,7 @@ var app = {
         name: 'Settings',
         icon: './assets/img/systemIcons/settings.svg',
         init: async function () {
-            const main = tk.mbw('Settings', '300px', 'auto', true, true, true);
+            const main = tk.mbw('Settings', '300px', 'auto', true, true, true, undefined, './assets/img/systemIcons/settings.svg');
             const generalPane = tk.c('div', main.main, 'hide');
             const appearPane = tk.c('div', main.main, 'hide');
             const mainPane = tk.c('div', main.main);
@@ -138,6 +138,9 @@ var app = {
         name: 'Files',
         icon: './assets/img/systemIcons/files.svg',
         init: async function () {
+            var history = []
+            var forwardHistory = []
+            var currentHistoryIndex = "notNavigated"
             const win = tk.mbw(`Files`, '340px', 'auto', true, true, true, undefined, app.files.icon);
             win.main.classList.add("fileman")
             const lowerZone = tk.c('div', win.main)
@@ -164,6 +167,47 @@ var app = {
             classicDrive.classList.add("flist", "width", "drive")
             classicDrive.innerText = "IDBFS (Classic)"
             async function navto(path, filesystem = "opfs") {
+                if(history.length == 0){
+                    history.push({path: path, filesystem: filesystem})
+                    currentHistoryIndex = history.length - 1
+                }
+                if(history[history.length - 1].path !== path || history[history.length - 1].filesystem !== filesystem){
+                    history.push({path: path, filesystem: filesystem})
+                    currentHistoryIndex = history.length - 1
+                }
+
+                // if(history.length == 0){
+                //     history.push({path: path, filesystem: filesystem})
+                //     currentHistoryIndex = 0
+                //     console.log(history[history.length - 1].path !== path, history[history.length - 1].filesystem !== filesystem)
+                // }
+                // else if(history[history.length - 1].path !== path && history[history.length - 1].filesystem !== filesystem){
+                //     history.push({path: path, filesystem: filesystem})
+                //     currentHistoryIndex = history.length - 1
+
+                // }
+                console.log(history)
+                reButton.onclick = async function () {navto(path, filesystem)}
+                backButton.onclick = async function () {
+                    console.log(history,forwardHistory,currentHistoryIndex)
+                    if (history.length > 1) {
+                        currentHistoryIndex = history.length - 2;
+                        forwardHistory.push(history.pop())
+                        console.log(forwardHistory)
+                        const last = history[currentHistoryIndex]
+                        navto(last.path, last.filesystem)
+                    }
+                }
+                fwdButton.onclick = async function () {
+                    console.log("Scheiße", history,forwardHistory,currentHistoryIndex)
+                    if (forwardHistory.length > 0) {
+                        currentHistoryIndex+=1;
+                        const next = forwardHistory[forwardHistory.length - 1]  
+                        history.push(forwardHistory.pop())
+                        console.log(next, "hasOwnProperty")
+                        if(next !== undefined){navto(next.path, next.filesystem)}
+                    }
+                }
                 mkFolder.onclick = async function () {
                     if(filesystem == 'opfs'){
                         fs.mkdir(`${path}${prompt("enter folder name here", "New Folder")}/.`, 'opfs');
@@ -203,6 +247,7 @@ var app = {
             classicDrive.addEventListener("click", await function (){
                 navto("/", "idbfs")
             });
+
             navto('/', 'opfs');
         }
     },
@@ -471,3 +516,5 @@ var app = {
             }
     }
 }
+
+app.files.init()
