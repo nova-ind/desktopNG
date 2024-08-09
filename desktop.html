@@ -112,12 +112,9 @@
 <script>
     async function boot() {
         var sd = "balh"
-        try{
-            sd = await fs.read('/user/info/name');
-        } catch{
-
-        }
-        if (sd !== "balh") {
+        sd = await fs.read('/user/info/name');
+        console.log("baah", sd);
+        if (sd !== undefined) {
             const name = await fs.read('/user/info/name');
             const deskid = await fs.read('/system/deskid');
             const darkpref = await fs.read('/user/info/lightdarkpref');

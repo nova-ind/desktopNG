@@ -199,7 +199,7 @@ var foxyfs = {
         }
     },
     write: async function (path, content) {
-        var h = await foxyfs.getFileHandle(path)
+        var h = await foxyfs.getFileHandle(path, { create: true })
         var stream = await h.createWritable()
         stream.write(content)
         stream.close()

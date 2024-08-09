@@ -128,7 +128,7 @@ var app = {
             tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Complete setup', function () { wd.reboot(); }, sum);
             sum.id = "setupdone";
             var docFolder = await fs.ls("/user/Documents")
-            if (docFolder.items.length == 0) {
+            if (docFolder == undefined) {
                 fs.write("/user/Documents/.", '');
             }
         }
