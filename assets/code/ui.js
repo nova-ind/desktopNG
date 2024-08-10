@@ -1,12 +1,33 @@
+/**
+ * NovaOS's UI tools (not toolkit, just UI tools)
+ * @namespace
+*/
 var ui = {
+    /**
+     * Changes a CSS variable value.
+     * @param {string} varName - The name of the CSS variable to change.
+     * @param {string} varValue - The value to set the CSS variable to.
+     */
     cv: function (varName, varValue) {
         const root = document.documentElement;
         root.style.setProperty(`--${varName}`, `${varValue}`);
     },
+    /**
+     * Changes the theme of the UI.
+     * @param {string} background1 - The primary background color.
+     * @param {string} background2 - The secondary background color.
+     * @param {string} shade1 - The primary shade color.
+     * @param {string} shade2 - The secondary shade color.
+     * @param {string} accent - The accent color.
+        */
     theme: function (background1, background2, shade1, shade2, accent) {
         ui.cv('bg1', background1); ui.cv('bg2', background2); ui.cv('sh1', shade1); ui.cv('sh2', shade2);
         ui.cv('accent', accent);
     },
+    /**
+     * Changes the theme of the UI to a color.
+     * @param {string} hex - The hex color to set the theme to.
+     */
     crtheme: async function (hex) {
         const a = ui.hextool(hex, 20)
         ui.theme(ui.hextool(hex, 10), a, ui.hextool(hex, 30), ui.hextool(hex, 40), ui.hextorgb(hex));
@@ -20,14 +41,30 @@ var ui = {
             }
         }
     },
+    /**
+     * Fades between two elements.
+     * @param {string} d1 - The ID of the first element.
+     * @param {string} d2 - The ID of the second element.
+        */
     sw: function (d1, d2) {
         const dr1 = document.getElementById(d1);
         const dr2 = document.getElementById(d2);
         $(dr1).fadeOut(160, function () { $(dr2).fadeIn(160); });
     },
+    /**
+     * Fades between two elements.
+     * @param {String} d1 - A reference to an existing element, in JQUERY format
+        * @param {String} d2 - A reference to an existing element, in JQUERY format
+    */
     sw2: function (d1, d2) {
         $(d1).fadeOut(160, function () { $(d2).fadeIn(160); });
     },
+    /**
+     * Hides an element.
+     * @param {String} dr1 - A reference to an existing element, in JQUERY format
+     * @param {Number} [anim=210] - The duration of the animation in milliseconds.
+     * @returns {void}
+     */
     hide: function (dr1, anim) {
         if (dr1) {
             if (anim) {
@@ -37,11 +74,23 @@ var ui = {
             }
         }
     },
-    play: function (filename) {
+    /**
+     * Plays an audio file from an HTTP server.
+     * @param {String} filename - The path to the audio file.
+     * @param {Number} [volume=1] - The volume to play the audio at.
+     * @returns {void}
+        */
+    play: function (filename, volume = 1) {
         const audio = new Audio(filename);
-        audio.volume = 1;
+        audio.volume = volume;
         audio.play();
     },
+    /**
+     * Shows an element.
+     * @param {String} dr1 - A reference to an existing element, in JQUERY format
+     * @param {Number} [anim=210] - The duration of the animation in milliseconds.
+     * @returns {void}
+        */
     show: function (dr1, anim) {
         if (dr1) {
             if (anim) {
@@ -60,7 +109,13 @@ var ui = {
             dr1.classList.add("winf");
         }
     },
-    showfi: function (dr1, anim) {
+    /**
+     * Fades in an an element with a custom animation duration.
+     * @param {String} dr1 - A reference to an existing element, in JQUERY format
+     * @param {Number} [anim=170] - The duration of the animation in milliseconds.
+     * @returns {void}
+     */
+    showfi: function (dr1, anim=170) {
         if (dr1) {
             if (anim) {
                 $(dr1).fadeIn(anim).css("display", "inline-block");
@@ -69,6 +124,11 @@ var ui = {
             }
         }
     },
+    /**
+     * Fades out an element with a custom animation duration.
+     * @param {String} dr1 - A reference to an existing element, in JQUERY format
+     * @param {Number} [anim=170] - The duration of the animation in milliseconds.
+     */
     dest: function (dr1, anim) {
         if (dr1) {
             if (anim) {
@@ -78,6 +138,12 @@ var ui = {
             }
         }
     },
+    /**
+     * Toggles the visibility of an element.
+     * @param {String} elementId - The ID of the element to toggle.
+     * @param {Number} [time3=210] - The duration of the animation in milliseconds.
+     * @returns {void}
+     */
     toggle: function (elementId, time3) {
         var element = document.getElementById(elementId);
         if (element) {
@@ -88,24 +154,41 @@ var ui = {
             }
         }
     },
+    /**
+     * Hides an element with a custom animation duration.
+     * @param {String} className - The Classname of the element to hide.
+     */
     hidecls: function (className) {
         var elements = document.getElementsByClassName(className);
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.display = 'none';
         }
     },
+    /**
+     * Shows an element with a custom animation duration.
+     * @param {String} className - The Classname of the element to show.
+     */
     showcls: function (className) {
         var elements = document.getElementsByClassName(className);
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.display = 'inline';
         }
     },
+    /**
+     * Mass changes the text content of elements with a specific class.
+     * @param {String} classn - The class of the elements to change.
+     * @param {String} val - The value to set the text content to.
+     */
     masschange: function (classn, val) {
         const usernameElements = document.getElementsByClassName(classn);
         for (let i = 0; i < usernameElements.length; i++) {
             usernameElements[i].textContent = val;
         }
     },
+    /**
+     * Centers an element on the screen.
+     * @param {HTMLElement} element - The element to center.
+     */
     center: function (element) {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -114,6 +197,12 @@ var ui = {
         element.style.left = `${(screenWidth - elementWidth) / 2}px`;
         element.style.top = `${(screenHeight - elementHeight) / 2}px`;
     },
+    /**
+     * Adjusts brightness of a HEX Colour by a specific percent value
+     * @param {String} hex 
+     * @param {Number} percent 
+     * @returns {String} Adjusted HEX Colour
+     */
     hextool: function (hex, percent) {
         if (hex.startsWith('#')) {
             hex = hex.slice(1);
@@ -142,6 +231,11 @@ var ui = {
 
         return `#${r}${g}${b}`;
     },
+    /**
+     * Determines if a HEX Colour is dark or light
+     * @param {String} hex
+     * @returns {Boolean} True if the colour is dark, false if the colour is light
+     */
     hexdark: function (hex) {
         hex = hex.replace(/^#/, '');
 
@@ -153,6 +247,11 @@ var ui = {
         let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
         return luminance < 128;
     },
+    /**
+     * Converts a HEX Colour to RGB
+     * @param {String} hex
+     * @returns {String} RGB Colour
+     */
     hextorgb: function (hex) {
         hex = hex.replace(/^#/, '');
         let bigint = parseInt(hex, 16);
