@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "jsdoc": "^4.0.3",
+    "tidy-jsdoc": "^1.4.1"
+  },
+  "dependencies": {
+    "taffydb": "^2.7.3"
+  }
+}

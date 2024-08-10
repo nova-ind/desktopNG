@@ -1,6 +1,17 @@
+/**
+ * @namespace
+ */
 var wm = {
-    wal: function (content, btn1, name, opt) {
-        const win = tk.mbw('Erase Confirmation', '300px', 'auto', undefined, undefined, undefined);
+    /**
+     * Show an alert box
+     * @param {string} content - The content of the alert box.
+     * @param {function} btn1 - The function to run when the button is clicked.
+     * @param {string} name - The name of the button.
+     * @param {boolean} [allowClose=true] - Whether the alert box can be closed.
+     * @returns {void}
+     */
+    wal: function (content, btn1, name, allowClose = true) {
+        const win = tk.mbw('Alert', '300px', 'auto', undefined, undefined, undefined);
         win.win.querySelector('.tb').remove();
         win.main.className = "d";
         wd.win();
@@ -10,7 +21,7 @@ var wm = {
         const thing2 = document.createElement('div');
         win.main.appendChild(thing);
         win.main.appendChild(thing2);
-        if (opt !== "noclose") {
+        if (opt) {
             tk.cb('b1', 'Close', function () { ui.dest(win.win, 100); ui.dest(win.tbn, 100); }, thing2);
         }
 
@@ -34,8 +45,13 @@ var wm = {
         element.style.left = `${leftPosition}px`;
         element.style.top = `${topPosition}px`;
     },
-
-    notif: function (name, cont, mode) {
+    /**
+     * Send a notificaation
+     * @param {string} name - The name of the notification.
+     * @param {string} cont - The content of the notification.
+     * @returns {void}
+     */
+    notif: function (name, cont) {
         const div = tk.c('div', document.getElementById('notif'), 'notif');
         tk.p(name, 'bold', div);
         tk.p(cont, undefined, div);
@@ -80,19 +96,28 @@ ${cont}`;
         div.addEventListener('click', () => ui.dest(div));
         return div;
     },
+    /**
+     * Close a window by ID
+     * @param {string} id - The ID of the window to close.
+     * @returns {void}
+     */
     close: function (id) {
         const div = document.getElementById(id);
         if (div) {
             hidef(id);
-            const fuck = "btn_" + id;
-            if (document.getElementById(fuck)) {
-                dest(fuck);
+            const win = "btn_" + id;
+            if (document.getElementById(win)) {
+                dest(win);
             }
         } else {
-            log(`<!> Error closing window. Window: ${div} - Button: ${document.getElementById(fuck)}`);
+            log(`<!> Error closing window. Window: ${div} - Button: ${document.getElementById(win)}`);
         }
     },
-
+    /**
+     * Maximize a window by ID
+     * @param {string} id - The ID of the window to maximize.
+     * @returns {void}
+     */
     max: function (id) {
         const wid = document.getElementById(id);
         if (wid) {
@@ -105,7 +130,11 @@ ${cont}`;
             }
         }
     },
-
+    /**
+     * Minimize/Unminimise a window by ID
+     * @param {string} id - The ID of the window to minimize.
+     * @returns {void}
+     */
     mini: function (window) {
         hidef(window, 120);
     },

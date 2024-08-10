@@ -261,8 +261,18 @@ var ui = {
         return `${r}, ${g}, ${b}`;
     }
 }
-
+/**
+ * NovaOS's basic UI Toolkit
+ * @namespace
+ */
 var tk = {
+    /**
+     * Create an element with a specific type, class, and parent element.
+     * @param {String} type HTML Tag Name
+     * @param {HTMLElement} ele - Parent element 
+     * @param {Array} classn - Array of classes to apply to the element 
+     * @returns {HTMLElement} The created element
+     */
     c: function (type, ele, classn) {
         const ok = document.createElement(type);
         if (ele) {
@@ -273,21 +283,45 @@ var tk = {
         }
         return ok;
     },
+    /**
+     * Gets and returns an element by ID
+     * @param {String} element - The element ID
+     * @returns {HTMLElement} The element
+     */
     g: function (element) {
         return document.getElementById(element);
     },
+    /**
+     * Sets the innerText of an element
+     * @param {HTMLElement} ele - The element 
+     * @param {String} text - The text to set
+     */
     t: function (ele, text) {
         ele.innerHTML = text;
     },
+    /**
+     * Creates a paragraph element with a specific class and parent element.
+     * @param {String} contents - The text content of the paragraph.
+     * @param {String} classn - The class of the paragraph.
+     * @param {HTMLElement} div - The parent element.
+     * @returns {HTMLElement} The created paragraph element.
+     */
     p: function (contents, classn, div) {
-        const fuck = document.createElement('p');
-        fuck.innerHTML = contents;
+        const p = document.createElement('p');
+        p.innerHTML = contents;
         if (classn) {
-            fuck.classList = classn;
+            p.classList = classn;
         }
-        div.appendChild(fuck);
-        return fuck;
+        div.appendChild(p);
+        return p;
     },
+    /**
+     * Creates an image element with a specific source, class, and parent
+     * @param {String} src - The source of the image.
+     * @param {String} classn - The class of the image.
+     * @param {HTMLElement} div - The parent
+     * @returns {HTMLElement} The created image element.
+     */
     img: function (src, classn, div) {
         const fuck = document.createElement('img');
         fuck.src = src;
@@ -297,6 +331,11 @@ var tk = {
         div.appendChild(fuck);
         return fuck;
     },
+    /**
+     * Creates a CSS Import
+     * @param {String} href - Link to import css from
+     * @returns {void}
+     */
     css: function (href) {
         const existingLink = Array.from(document.getElementsByTagName('link')).find(
             link => link.rel === 'stylesheet' && link.href === href
@@ -310,6 +349,14 @@ var tk = {
             document.head.appendChild(link);
         }
     },
+    /**
+     * Creates a button element
+     * @param {String} classn - A class to add to the element
+     * @param {String} name - Text Content for the element
+     * @param {Function} func - Function to run on button click 
+     * @param {HTMLElement} ele - Parent element for button 
+     * @returns {HTMLElement} The created button
+     */
     cb: function (classn, name, func, ele) {
         const button = document.createElement('button');
         button.className = classn;
@@ -324,9 +371,27 @@ var tk = {
         }
         return button;
     },
+    /**
+     * Appends one element to another
+     * @param {HTMLElement} ele1 - The parent element
+     * @param {HTMLElement} ele2 - The child element
+     * @returns {void}
+     */
     a: function (ele1, ele2) {
         ele1.appendChild(ele2);
     },
+    /**
+     * Creates a window
+     * @param {String} title - The title of the window
+     * @param {Number} wid - The width of the window
+     * @param {Number} hei - The height of the window
+     * @param {Boolean} full - Whether the window can be maximized
+     * @param {Boolean} min - Whether the window can be minimized
+     * @param {Boolean} quit - Whether the window can be closed
+     * @param {String} id - The ID of the window
+     * @param {String} [icon='./assets/img/systemIcons/noicon.svg'] - The icon of the window
+     * @returns {Object} The created window
+     */
     mbw: function (title, wid, hei, full, min, quit, id, icon = './assets/img/systemIcons/noicon.svg') {
         var windowDiv = document.createElement('div');
         windowDiv.classList.add('window');
@@ -389,6 +454,14 @@ var tk = {
         wd.win(); $(windowDiv).fadeIn(130); ui.center(windowDiv);
         return { win: windowDiv, main: contentDiv, tbn, title: titlebarDiv };
     },
+    /**
+     * Creates an element with a specific type, class, and parent
+     * @param {String} element - The HTML element tagname
+     * @param {Array} classes - Array of classes to add
+     * @param {String} innerHtml - HTML Content
+     * @param {HTMLElement} parent - Parent element 
+     * @returns {HTMLElement} The created element
+     */
     mkel: function(element, classes, innerHtml, parent){
         const el = document.createElement(element);
         if(typeof classes === "string"){
