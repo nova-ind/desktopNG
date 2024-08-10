@@ -127,10 +127,7 @@ var app = {
             tk.p('Keep in mind, novaOS is still in early public alpha.', undefined, sum);
             tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Complete setup', function () { wd.reboot(); }, sum);
             sum.id = "setupdone";
-            var docFolder = await fs.ls("/user/Documents")
-            if (docFolder == undefined) {
-                fs.write("/user/Documents/.", '');
-            }
+            fs.mkdir('/user/Documents/', 'opfs');
         }
     },
     files: {
@@ -323,7 +320,7 @@ var app = {
     sysqna: {
         runs: false,
         name: 'DocAI ML Models',
-        onstartupp: async function() {
+        onstartup: async function() {
             try {
                 const model = await qna.load();
                 console.log("Model loaded");
@@ -357,6 +354,7 @@ var app = {
     docai: {
         runs: true,
         name: 'DocAI',
+        requiresServices: ["sysqna"],
         icon: './assets/img/systemIcons/Docai.svg',
         init: async function (query = "") {
             const win = tk.mbw('DocAI', '500px', 'auto', false, true, true, undefined, './assets/img/systemIcons/Docai.svg');
@@ -378,7 +376,7 @@ var app = {
                 askBtn.removeAttribute('disabled');
                 async function ask() {
                     window.ans = []
-                    var resp = await fs.ls('/user/Documents/');
+                    var resp = await fs.ls('/user/Documents/')
                     console.log(resp)
                     var documents = resp.items;
                     console.log(documents)

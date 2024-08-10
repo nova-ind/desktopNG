@@ -91,14 +91,26 @@ var wd = {
                 if (apps.hasOwnProperty(key)) {
                     if (apps[key].hasOwnProperty("runs") && apps[key].runs === true) {
                         console.log(`<i> ${apps[key].name} is launchable!`);
-                        const btn = tk.cb('b1', apps[key].name, apps[key].init.bind(apps[key]), el.sm);
+                        const btn = tk.cb('b1', apps[key].name, function(){}, el.sm);
                         btn.innerHTML = `
                         <img src='${apps[key].icon}' class='appIcon'/>
                         <span class='appName'>${apps[key].name}</span>`
                         btn.classList.add("appItem");
                         btn.addEventListener('click', function () {
-                            ui.dest(el.sm, 150);
-                            el.sm = undefined;
+                            if(apps[key].hasOwnProperty("requiresServices")){
+                                apps[key].requiresServices.forEach(service => {
+                                    if(!window.servicesStarted.includes(service)){
+                                        console.log(`Service ${service} not started!`);
+                                        wm.wal(`The app ${apps[key].name} requires the service ${service} to be started. It wil not launch until ${service} is started.`, "error");
+                                        return;
+                                    } else {
+                                        console.log(`Service ${service} started!`);
+                                        ui.dest(el.sm, 150);
+                                        el.sm = undefined;
+                                        apps[key].init();
+                                    }
+                                });
+                            }
                         });
                     } else {
                         console.log(`<i> ${apps[key].name} is not launchable! :(`);

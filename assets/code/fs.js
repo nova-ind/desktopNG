@@ -20,7 +20,11 @@ wfs.onmessage = function (event) {
 
 const pendingRequests = {};
 let requestIdCounter = 0;
-
+/**
+ * A file system utility object for performing read, write, delete, erase, list, and make directory operations
+ * on either OPFS (Origin Private File System) or IDBFS (IndexedDB File System).
+ * @namespace
+ */
 var fs = {
     send: function (message, transferList) {
         wfs.postMessage(message, transferList);
@@ -50,6 +54,12 @@ var fs = {
             }
         });
     },
+        /**
+     * Reads a file from the specified path in the chosen filesystem.
+     * @param {string} path - The path of the file to read.
+     * @param {string} [filesystem="opfs"] - The filesystem to use ("opfs" or "idbfs").
+     * @returns {Promise<any>} A promise that resolves with the file's content.
+     */
     read: function (path, filesystem = "opfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('read', path);
@@ -58,6 +68,13 @@ var fs = {
                 return this.askwfs('read', path);
         }
     },
+        /**
+     * Writes data to a file at the specified path in the chosen filesystem.
+     * @param {string} path - The path of the file to write.
+     * @param {any} data - The data to write to the file.
+     * @param {string} [filesystem="opfs"] - The filesystem to use ("opfs" or "idbfs").
+     * @returns {Promise<any>} A promise that resolves when the write operation is complete.
+     */
     write: function (path, data, filesystem = "opfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('write', path, data);
@@ -66,6 +83,12 @@ var fs = {
             return this.askwfs('write', path, data);
         }
     },
+        /**
+     * Deletes a file at the specified path in the chosen filesystem.
+     * @param {string} path - The path of the file to delete.
+     * @param {string} [filesystem="opfs"] - The filesystem to use ("opfs" or "idbfs").
+     * @returns {Promise<any>} A promise that resolves when the delete operation is complete.
+     */
     del: function (path, filesystem = "opfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('delete', path);
@@ -74,6 +97,11 @@ var fs = {
             return this.askwfs('delete', path);
         }
     },
+        /**
+     * Erases the entire filesystem.
+     * @param {string} [filesystem="idbfs"] - The filesystem to erase ("opfs" or "idbfs").
+     * @returns {Promise<any>} A promise that resolves when the erase operation is complete.
+     */
     erase: function (filesystem = "idbfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('erase', path);
@@ -81,6 +109,12 @@ var fs = {
             return this.askwfs('erase', path);
         }
     },
+        /**
+     * Lists the contents of a directory at the specified path in the chosen filesystem.
+     * @param {string} path - The path of the directory to list.
+     * @param {string} [filesystem="opfs"] - The filesystem to use ("opfs" or "idbfs").
+     * @returns {Promise<any>} A promise that resolves with the contents of the directory.
+     */
     ls: function (path, filesystem = "opfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('ls', path);
@@ -88,6 +122,12 @@ var fs = {
             return this.askwfs('ls', path);
         }
     },
+        /**
+     * Creates a directory at the specified path in the chosen filesystem.
+     * @param {string} path - The path of the directory to create.
+     * @param {string} [filesystem="opfs"] - The filesystem to use ("opfs" or "idbfs").
+     * @returns {Promise<any>} A promise that resolves when the directory is created.
+     */
     mkdir: function (path, filesystem = "opfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('mkdir', path);
@@ -96,6 +136,7 @@ var fs = {
         }
     }
 };
+window.servicesStarted = []
 setTimeout(function () {
     fs.ls("/user/info/name").then(async (namefile) => {
             // get count of items in app json object
@@ -109,6 +150,7 @@ setTimeout(function () {
                     wm.notifSys("Services", `Loading ${app[key].name || key}`, 5000);
                     var appResponse = await app[key].onstartup(); // this is where each compontent is called
                     wm.notifSys("Services", `${app[key].name || key} says:<br>"${appResponse}"`, 5000);
+                    window.servicesStarted.push(key);
                     counter++;
                 }
             }
