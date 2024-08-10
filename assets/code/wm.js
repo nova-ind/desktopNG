@@ -21,7 +21,7 @@ var wm = {
         const thing2 = document.createElement('div');
         win.main.appendChild(thing);
         win.main.appendChild(thing2);
-        if (opt) {
+        if (allowClose) {
             tk.cb('b1', 'Close', function () { ui.dest(win.win, 100); ui.dest(win.tbn, 100); }, thing2);
         }
 
