@@ -65,6 +65,30 @@ var app = {
             }, appearPane); tk.cb('b1', 'Back', () => ui.sw2(appearPane, mainPane), appearPane);
         }
     },
+    store: {
+        runs: true,
+        name: 'AppStore',
+        icon: './assets/img/systemIcons/store.svg',
+        init: async function () {
+            const main = tk.mbw('Store', '800px', '500px', true, true, true, undefined, './assets/img/systemIcons/store.svg');
+            // tk.cb('b1 b2', 'Home', function(){}, )
+            var navbar = main.win.children[0].children[0];
+            navbar.appendChild(tk.cb('b4', 'Home', function () {}, null))
+            navbar.appendChild(tk.cb('b4', 'Categories', function () {}, null))
+            navbar.appendChild(tk.cb('b4', 'This Device', function () {}, null))
+            var wc = main.main;
+            var appstorepage = tk.c('iframe', wc);
+            appstorepage.setAttribute("frameborder", "0")
+            appstorepage.src = "/assets/sysappfiles/appstore/index.html";
+            appstorepage.style.width = "100%"
+            appstorepage.style.height = "100%"
+            wc.style.height = "calc(100% - 65px)"
+            appstorepage.onload = function(){
+                console.log(document.body.parentElement)
+                appstorepage.contentDocument.body.parentElement.setAttribute("style",document.body.parentElement.getAttribute("style"))
+            }
+        }
+    },
     setup: {
         runs: false,
         init: async function () {
@@ -515,4 +539,4 @@ var app = {
     }
 }
 
-app.files.init()
+app.store.init()

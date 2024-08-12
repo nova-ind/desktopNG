@@ -124,22 +124,8 @@ var wd = {
                         <img src='${apps[key].icon}' class='appIcon'/>
                         <span class='appName'>${apps[key].name}</span>`
                         btn.classList.add("appItem");
-                        btn.addEventListener('click', function () {
-                            if (apps[key].hasOwnProperty("requiresServices")) {
-                                apps[key].requiresServices.forEach(service => {
-                                    if (!window.servicesStarted.includes(service)) {
-                                        console.log(`Service ${service} not started!`);
-                                        wm.wal(`The app ${apps[key].name} requires the service ${service} to be started. It wil not launch until ${service} is started.`, "error");
-                                        return;
-                                    } else {
-                                        console.log(`Service ${service} started!`);
-                                        ui.dest(el.sm, 150);
-                                        el.sm = undefined;
-                                        apps[key].init();
-                                    }
-                                });
-                            }
-                        });
+                        var $thisapp = app[key]
+                        btn.onclick = $thisapp.init
                     } else {
                         console.log(`<i> ${apps[key].name} is not launchable! :(`);
                     }
