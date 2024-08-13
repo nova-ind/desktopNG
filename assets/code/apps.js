@@ -536,7 +536,26 @@ var app = {
                 app.docai.init();
             }
             }
-    }
+    },
+    cast: {
+        runs: true, 
+        name: 'Cast',
+        icon: './assets/img/systemIcons/cast.svg',
+        init: async function(){
+            const win = tk.mbw('Cast', '300px', 'auto', false, true, true, undefined, './assets/img/systemIcons/cast.svg');
+            tk.mkel('h1',[], "Cast", win.main)
+            tk.p("enter the deskID of another user with the cast app open to share your screen.", "", win.main)
+            var recepient = tk.c("input", win.main, "i1")
+            var send = tk.cb("b1", "Start", function(){},win.main)
+            var stop = tk.cb("b1", "Stop", function(){},win.main)
+            stop.style.display = "none"
+            var ic = tk.mkel("div", ["notif"],"",win.main)
+            tk.mkel('b',[],"Incoming Request<br>",ic)
+            var req = tk.mkel('span',[],"ID: 8008135<br>",ic)
+            var ac = tk.cb("b1 smallb", "Accept", function(){},ic)
+            var de = tk.cb("b1 smallb", "Deny", function(){},ic)
+        }
+    },
 }
 
-app.store.init()
+app.cast.init()

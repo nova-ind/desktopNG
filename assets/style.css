@@ -67,6 +67,12 @@ body {
     overflow: hidden;
 }
 
+.smallb{
+    padding: 3px !important;
+    font-size: 0.8em !important;
+}
+
+
 .bold {
     font-family: "PoppinsB";
 }
