@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>NovaStore App Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <main>
+        <h2>Top Charts</h2>
+        <div class="carousel__container">
+            <img class="carousel__item" src="Frame 3.png" alt="image1">
+            <img class="carousel__item active" src="Frame 3.png" alt="image2">
+            <img class="carousel__item" src="Frame 3.png" alt="image3">
+        </div>
+        <h2>Offical Applications<br><small>Applications developed by the NovaOS Team</small></h2>
+        <div class="approw">
+            <div class="application">
+                <img src="Frame 3.png" alt="image1">
+                <h3>Application 1</h3>
+                <p>Description of Application 1</p>
+            </div>
+            <div class="application">
+                <img src="Frame 3.png" alt="image1">
+                <h3>Application 1</h3>
+                <p>Description of Application 1</p>
+            </div>
+            <div class="application">
+                <img src="Frame 3.png" alt="image1">
+                <h3>Application 1</h3>
+                <p>Description of Application 1</p>
+            </div>
+        </div>
+        <br>
+        <br>
+    </main>
+    <script>
+        const carousel = document.body
+        const carouselContainer = carousel.querySelector('.carousel__container');
+        const carouselItems = carousel.querySelectorAll('.carousel__item');
+        carouselItems.forEach((item, index) => {
+            item.addEventListener('mouseover', () => {
+                document.querySelector('.carousel__item.active').classList.remove('active');
+                item.classList.add('active');
+            });
+        });
+        var isMouseInCards = false;
+        carousel.onmouseenter = () => {
+            isMouseInCards = true;
+        }
+        carousel.onmouseleave = () => {
+            isMouseInCards = false;
+        }
+        let currentIndex = 0;
+        let nextIndex = 1;
+
+        setInterval(() => {
+            if (isMouseInCards) {
+                return;
+            } else {
+                document.querySelector('.carousel__item.active').classList.remove('active');
+                carouselItems[nextIndex].classList.add('active');
+                currentIndex = nextIndex;
+                nextIndex = (nextIndex + 1) % carouselItems.length;
+            }
+        }, 2000);
+    </script>
+</body>
+
+</html>

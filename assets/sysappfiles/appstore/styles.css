@@ -1,0 +1,182 @@
+:root {
+    --sh1: #9999FF;
+    --sh2: #bbbbff;
+    --bg1: #eeeeff;
+    --bg2: #ccccff;
+    --accent: 60, 70, 235;
+    --acc: var(--accent);
+    --ui1: rgb(255, 255, 255, 0.6);
+    --ui2: #ffffff;
+    --ui3: #dddddd;
+    --font: #000;
+    --bl1: 12px;
+    --bl2: 8px;
+    --rad1: 16px;
+    --rad2: 12px;
+    --rad3: 8px;
+    --fz1: 15px;
+    --fz2: 12px;
+    --inv: 0;
+}
+
+body {
+    margin: 0px;
+}
+
+main {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: calc(100vw);
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--font);
+    text-align: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+h2{
+    margin-block-end:0.2em;
+    margin-block-start:1em;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle;
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    width: calc(100vw - 20px);
+    background-color: #151515;
+}
+
+header h1 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+small {
+    font-size: 0.6em;
+    font-weight: normal;
+}
+
+a {
+    text-decoration: none;
+    color: #fefefe;
+    margin-left: 2.5x;
+    margin-right: 2.5px;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+body:has(i:target#home) a#home {
+    background-color: #fefefe;
+    color: #101010;
+}
+
+body:has(i:target#categories) a#categories {
+    background-color: #fefefe;
+    color: #101010;
+}
+
+body:has(i:target#thissystem) a#thissystem {
+    background-color: #fefefe;
+    color: #101010;
+}
+
+.carousel__container {
+    width: 100vw;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: visible;
+}
+
+.carousel__item {
+    width: 50vw;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s;
+    margin: 5px;
+    border-radius: 25px;
+    box-shadow: rgba(var(--acc), 0.3) 0px 0px;
+    overflow: hidden;
+}
+
+.carousel__item.active {
+    z-index: 5;
+    box-shadow: rgba(var(--acc), 0.3) 5px 5px;
+}
+
+.carousel__item:not(.active) {
+    width: calc(50vw * 0.7);
+    height: auto;
+}
+
+.carousel__item img {
+    width: 100%;
+    height: 100%;
+}
+
+.approw {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .application{
+width: 20vw;
+height: auto;
+margin: 5px;
+border-radius: 25px;
+overflow: hidden;
+box-shadow: var(--acc) 0px 0px 3px;
+background-color: rgba(var(--acc), 0.3);
+padding: 5px 8px;
+margin: 1px;
+transition: 0.08s ease-in-out;
+cursor: pointer;
+} */
+.application {
+    background-color: rgba(var(--acc), 0.3);
+    border-radius: var(--rad2);
+    font-size: var(--fz1);
+    width: 20vw;
+    margin: 1px;
+    transition: 0.08s ease-in-out;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.application:hover,
+.application.on,
+.ckbx.on {
+    background-color: rgba(var(--acc), 0.4);
+    border: 1px solid rgba(var(--acc), 0.6);
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 20px 4px;
+}
+
+.application:active,
+.application.on:hover,
+.ckbx.on:hover {
+    transform: scale(0.88);
+    background-color: rgba(var(--acc), 0.20);
+}
+
+.application img {
+    width: 100%;
+    border-radius: var(--rad2);
+    height: 60%;
+    object-fit: cover;
+}
+
+h3 {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+}

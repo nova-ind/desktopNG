@@ -73,13 +73,19 @@ var app = {
             const main = tk.mbw('Store', '800px', '500px', true, true, true, undefined, './assets/img/systemIcons/store.svg');
             // tk.cb('b1 b2', 'Home', function(){}, )
             var navbar = main.win.children[0].children[0];
-            navbar.appendChild(tk.cb('b4', 'Home', function () {}, null))
-            navbar.appendChild(tk.cb('b4', 'Categories', function () {}, null))
-            navbar.appendChild(tk.cb('b4', 'This Device', function () {}, null))
             var wc = main.main;
             var appstorepage = tk.c('iframe', wc);
+            navbar.appendChild(tk.cb('b4', 'Home', function () {
+                appstorepage.src = "/assets/sysappfiles/appstore/home.html"
+            }, null))
+            navbar.appendChild(tk.cb('b4', 'Categories', function () {
+                appstorepage.src = "/assets/sysappfiles/appstore/categories.html"
+            }, null))
+            navbar.appendChild(tk.cb('b4', 'This Device', function () {
+                appstorepage.src = "/assets/sysappfiles/appstore/thisdevice.html"
+            }, null))
             appstorepage.setAttribute("frameborder", "0")
-            appstorepage.src = "/assets/sysappfiles/appstore/index.html";
+            appstorepage.src = "/assets/sysappfiles/appstore/home.html";
             appstorepage.style.width = "100%"
             appstorepage.style.height = "100%"
             wc.style.height = "calc(100% - 65px)"

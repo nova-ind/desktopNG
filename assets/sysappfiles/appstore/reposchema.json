@@ -1,0 +1,48 @@
+{
+    "metadata": {
+        "repoFriendlyName": "NovaOS System AppStore Repo",
+        "repoVersion": "1.0.0",
+        "maintainer": "Nova",
+        "lastUpdated": "2024-08-12"
+    },
+    "categories": [
+        "Productivity",
+        "Utility",
+        "Entertainment",
+        "Games",
+        "Education",
+        "Social",
+        "News",
+        "Weather",
+        "Music"
+    ],
+    "applications": [
+        {
+            "appName": "Application",
+            "appIcon": "Base64 Formatted Image",
+            "appBanner": "Base64 Formatted Image",
+            "appScript": "Base64 Formatted Script",
+            "appDescription": "A brief description of the application.",
+            "appVersion": "1.0.0",
+            "appAuthor": "Author Name",
+            "appLicense": "MIT",
+            "appCategory": "Utility",
+            "appDependencies": [
+                "dependency1",
+                "dependency2"
+            ],
+            "appScreenshots": [
+                "Base64 Formatted Screenshot 1",
+                "Base64 Formatted Screenshot 2"
+            ],
+            "appReleaseNotes": "Details of the latest update or changes made in the app.",
+            "appHomepage": "https://example.com",
+            "appSourceCode": "https://github.com/example/app",
+            "appSize": "10MB",
+            "appPermissions": [
+                "network",
+                "storage"
+            ]
+        }
+    ]
+}
