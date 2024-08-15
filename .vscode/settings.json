@@ -1,5 +1,6 @@
 {
     "window.commandCenter": false,
     "workbench.layoutControl.enabled": false,
-    "workbench.statusBar.visible": false
+    "workbench.statusBar.visible": false,
+    "liveServer.settings.multiRootWorkspaceName": "dng"
 }

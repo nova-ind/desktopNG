@@ -62,6 +62,16 @@ function handleData(conn, data) {
             addcall(data.file, callid);
             console.log('<i> bounced names');
             setInterval(function () { masschange('callname', data.file); }, 300);
+        } else if (data.name.startsWith("osAppConnect")){
+            if(app.hasOwnProperty(data.name.split("osAppConnect-")[1])){
+                if(app[data.name.split("osAppConnect-")[1]].hasOwnProperty("connection")){
+                    app[data.name.split("osAppConnect-")[1]].connection(data.id, data.uname)
+                } else {
+                    wm.notif(`${data.uname} (#${data.id}) attempted to connect using ${data.name.split("osAppConnect-")[1]}, but the app does not support recieving. Please confirm you are using the same app and version as the other party.`, `Networking`)
+                }
+            } else {
+                wm.notif(`${data.uname} (#${data.id}) attempted to connect using ${data.name.split("osAppConnect-")[1]}, but the required app was not found. Please confirm you are using the same app as the other party.`, `Networking`)
+            }
         } else {
             recb = data.file;
             recn = data.name;
