@@ -110,7 +110,7 @@ ${cont}`;
                 dest(win);
             }
         } else {
-            log(`<!> Error closing window. Window: ${div} - Button: ${document.getElementById(win)}`);
+            console.log(`<!> Error closing window. Window: ${div} - Button: ${document.getElementById(win)}`);
         }
     },
     /**

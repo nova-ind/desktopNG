@@ -541,21 +541,87 @@ var app = {
         runs: true, 
         name: 'Cast',
         icon: './assets/img/systemIcons/cast.svg',
-        init: async function(){
-            const win = tk.mbw('Cast', '300px', 'auto', false, true, true, undefined, './assets/img/systemIcons/cast.svg');
+        init: async function(id = false, username = "NovaOS User"){
+            var p;
+            const win = tk.mbw('Cast', '300px', 'auto', false, true, true, "ncast", './assets/img/systemIcons/cast.svg');
+            win.win.id= "ncast"
             tk.mkel('h1',[], "Cast", win.main)
             tk.p("enter the deskID of another user with the cast app open to share your screen.", "", win.main)
             var recepient = tk.c("input", win.main, "i1")
-            var send = tk.cb("b1", "Start", function(){},win.main)
+            recepient.required = true
+            var send = tk.cb("b1", "Start", async function(){
+                var conn =  peer.connect(id)
+                conn.on('open', async function() {
+                    // Receive messages
+                
+                    // Send messages
+                    var castpeer = new Peer(await fs.read('/user/info/deskid')+"-cast")
+                    castpeer.on('open', async function (id) {
+                        conn.send({name:"osAppConnect-cast",id:await fs.read('/system/deskid'),uname:await fs.read('/user/info/name') || "NovaOS User"});
+                        
+                    })
+                    castpeer.on('connection', (conn) => {
+                        conn.on('data', (data) => {
+                            console.log(data)
+                        });
+                    });
+                  });
+            },win.main)
             var stop = tk.cb("b1", "Stop", function(){},win.main)
             stop.style.display = "none"
-            var ic = tk.mkel("div", ["notif"],"",win.main)
-            tk.mkel('b',[],"Incoming Request<br>",ic)
-            var req = tk.mkel('span',[],"ID: 8008135<br>",ic)
-            var ac = tk.cb("b1 smallb", "Accept", function(){},ic)
-            var de = tk.cb("b1 smallb", "Deny", function(){},ic)
+            console.log(id)
+            if(id !== false){
+                var ic = tk.mkel("div", ["notif"],"",win.main)
+                ic.id = "ncastNotizone"
+                tk.mkel('b',[],"Incoming Request<br>",ic)
+                var req = tk.mkel('span',[],`ID: ${id.toString()}<br>Username: ${username.toString()}<br>`,ic)
+                var ac = tk.cb("b1 smallb", "Accept", async function(){
+                    p = new Peer(await fs.read('/system/deskid')+"-cast");
+                    p.on('open', function(id) {
+                        console.log('My peer ID is: ' + id);
+                        var c = p.connect(id+"-cast");
+                        c.on('open', function() {
+                            // Receive messages
+                            c.on('data', function(data) {
+                              console.log('Received', data);
+                            });
+                        
+                            // Send messages
+                            c.send('connAccept');
+                          });
+                        
+                    });
+                    ui.dest(ic)
+                    const recv = tk.mbw(`Cast Reciever: ${username.toString()}#${id.toString()}`, '850px', '490px', false, true, true, './assets/img/systemIcons/cast.svg')
+                    const video = tk.c('video', recv.main)
+                    video.setAttribute("controls", "yes")
+                    video.style.width = "100%"
+                    video.style.height = "100%"
+                    const stop = tk.cb('b4', "Stop", function(){}, recv.title.children[0])
+                    p.on('call', function(call) {
+                        // Answer the call, providing our mediaStream
+                        call.answer(null);
+                        call.on('stream', function(stream) {
+                            // `stream` is the MediaStream of the remote peer.
+                            // Here you'd add it to an HTML video/canvas element.
+                            video.srcObject = stream;
+                            video.play()
+                          });
+                    });
+                },ic)
+                var de = tk.cb("b1 smallb", "Deny", function(){ui.dest(ic)},ic)
+            }
+        },
+        connection: async function (id, uname) {
+            if(document.querySelector("#ncast")){
+                document.querySelector("#ncast .winb.red").click()
+                app.cast.init(id, uname)
+            } 
+            else{
+                app.cast.init(id, uname)
+            }
         }
     },
 }
 
-app.cast.init()
+app.cast.connection(30012)

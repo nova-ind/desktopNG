@@ -415,7 +415,7 @@ var tk = {
         }
         if (quit === true) {
             closeButton.classList.add('red');
-            closeButton.addEventListener('mousedown', function () {
+            closeButton.addEventListener('click', function () {
                 ui.dest(windowDiv, 100);
                 ui.dest(tbn, 100);
             });
