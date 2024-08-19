@@ -21,7 +21,7 @@ var ptp = {
                     console.log('<!> Maximum retry attempts reached. DeskID registration failed.');
                     wm.wal(`<p class="h3">WebDesk to WebDesk services are disabled</p><p>Your DeskID didn't register for some reason, therefore you can't use WebDrop, WebCall or Migration Assistant.</p><p>If you'd like, you can reboot to try again. Check your Internet too.</p>`, 'reboot()', 'Reboot');
                 } else {
-                    snack('Failed to connect.');
+                    wm.notif('Networking', 'Failed to connect.');
                 }
             });
 

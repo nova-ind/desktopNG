@@ -89,16 +89,16 @@ var app = {
             appstorepage.style.width = "100%"
             appstorepage.style.height = "100%"
             wc.style.height = "calc(100% - 65px)"
-            appstorepage.onload = function(){
+            appstorepage.onload = function () {
                 console.log(document.body.parentElement)
-                appstorepage.contentDocument.body.parentElement.setAttribute("style",document.body.parentElement.getAttribute("style"))
+                appstorepage.contentDocument.body.parentElement.setAttribute("style", document.body.parentElement.getAttribute("style"))
             }
         }
     },
     setup: {
         runs: false,
         init: async function () {
-            const setupWin = tk.mbw('Setup', '300px', '300px', true,true,true)
+            const setupWin = tk.mbw('Setup', '300px', '300px', true, true, true)
             const main = tk.c('div', setupWin.main, 'setupbox');
             // create setup menubar
             const bar = tk.c('div', main, 'setupbar');
@@ -179,10 +179,10 @@ var app = {
             navPane.classList.add("navpane")
             const fm = tk.c('div', mainPane)
             fm.classList.add("fm")
-            const backButton = tk.cb('b1', '◀️', function () {}, navBar);
-            const fwdButton = tk.cb('b1', '▶️', function () {}, navBar);
-            const reButton = tk.cb('b1', '🔁', function () {}, navBar);
-            const mkFolder = tk.cb('b1', '➕', function () {}, navBar);
+            const backButton = tk.cb('b1', '◀️', function () { }, navBar);
+            const fwdButton = tk.cb('b1', '▶️', function () { }, navBar);
+            const reButton = tk.cb('b1', '🔁', function () { }, navBar);
+            const mkFolder = tk.cb('b1', '➕', function () { }, navBar);
             const breadcrumbs = tk.c('div', navBar);
             breadcrumbs.classList.add("bc");
             const items = tk.c('div', fm);
@@ -194,12 +194,12 @@ var app = {
             classicDrive.classList.add("flist", "width", "drive")
             classicDrive.innerText = "IDBFS (Classic)"
             async function navto(path, filesystem = "opfs") {
-                if(history.length == 0){
-                    history.push({path: path, filesystem: filesystem})
+                if (history.length == 0) {
+                    history.push({ path: path, filesystem: filesystem })
                     currentHistoryIndex = history.length - 1
                 }
-                if(history[history.length - 1].path !== path || history[history.length - 1].filesystem !== filesystem){
-                    history.push({path: path, filesystem: filesystem})
+                if (history[history.length - 1].path !== path || history[history.length - 1].filesystem !== filesystem) {
+                    history.push({ path: path, filesystem: filesystem })
                     currentHistoryIndex = history.length - 1
                 }
 
@@ -214,9 +214,9 @@ var app = {
 
                 // }
                 console.log(history)
-                reButton.onclick = async function () {navto(path, filesystem)}
+                reButton.onclick = async function () { navto(path, filesystem) }
                 backButton.onclick = async function () {
-                    console.log(history,forwardHistory,currentHistoryIndex)
+                    console.log(history, forwardHistory, currentHistoryIndex)
                     if (history.length > 1) {
                         currentHistoryIndex = history.length - 2;
                         forwardHistory.push(history.pop())
@@ -226,20 +226,20 @@ var app = {
                     }
                 }
                 fwdButton.onclick = async function () {
-                    console.log("Scheiße", history,forwardHistory,currentHistoryIndex)
+                    console.log("Scheiße", history, forwardHistory, currentHistoryIndex)
                     if (forwardHistory.length > 0) {
-                        currentHistoryIndex+=1;
-                        const next = forwardHistory[forwardHistory.length - 1]  
+                        currentHistoryIndex += 1;
+                        const next = forwardHistory[forwardHistory.length - 1]
                         history.push(forwardHistory.pop())
                         console.log(next, "hasOwnProperty")
-                        if(next !== undefined){navto(next.path, next.filesystem)}
+                        if (next !== undefined) { navto(next.path, next.filesystem) }
                     }
                 }
                 mkFolder.onclick = async function () {
-                    if(filesystem == 'opfs'){
+                    if (filesystem == 'opfs') {
                         fs.mkdir(`${path}${prompt("enter folder name here", "New Folder")}/.`, 'opfs');
                     }
-                    else{
+                    else {
                         fs.write(`${path}${prompt("enter folder name here", "New Folder")}/.`, '', 'idbfs');
                     };
                     navto(path, filesystem)
@@ -268,10 +268,10 @@ var app = {
                     }
                 });
             }
-            osDrive.addEventListener("click", await function (){
+            osDrive.addEventListener("click", await function () {
                 navto("/", "opfs")
             })
-            classicDrive.addEventListener("click", await function (){
+            classicDrive.addEventListener("click", await function () {
                 navto("/", "idbfs")
             });
 
@@ -350,7 +350,7 @@ var app = {
     sysqna: {
         runs: false,
         name: 'DocAI ML Models',
-        onstartup: async function() {
+        onstarytup: async function () {
             try {
                 const model = await qna.load();
                 console.log("Model loaded");
@@ -362,7 +362,7 @@ var app = {
             }
         },
     },
-    txter:{
+    txter: {
         runs: true,
         name: 'txter editor',
         icon: './assets/img/systemIcons/txter.svg',
@@ -401,7 +401,7 @@ var app = {
             `
             var askBtn = document.getElementById('ask');
             var question = document.getElementById('question');
-            if(window.docAImodel){
+            if (window.docAImodel) {
                 var model = window.docAImodel
                 askBtn.removeAttribute('disabled');
                 async function ask() {
@@ -452,8 +452,8 @@ var app = {
                             return acc;
                         }, {});
                         var grouped = []
-                        for(key in grpd){
-                            grouped.push({path: key, answers: grpd[key]})
+                        for (key in grpd) {
+                            grouped.push({ path: key, answers: grpd[key] })
                         }
                         console.log(grouped);
                         // Display answers
@@ -481,11 +481,11 @@ var app = {
                             var lineEnd = txtFile.substr(highestEndIndex).split(".")[0]
                             var bestOutput = sentenceEnd.length < lineEnd.length ? sentenceEnd : lineEnd;
                             // highestEndIndex = lowestStartIndex+Math.min(txtFile.substr(highestEndIndex).indexOf("."), txtFile.substr(highestEndIndex).indexOf("\n"))
-                            answersFormatted.push({text: txtFile.substring(lowestStartIndex, highestEndIndex)+bestOutput, score: ans.answers[0].score, path: ans.path});
+                            answersFormatted.push({ text: txtFile.substring(lowestStartIndex, highestEndIndex) + bestOutput, score: ans.answers[0].score, path: ans.path });
                         });
                         var undefineds = 0
                         var count = 0
-                        setTimeout(function(){
+                        setTimeout(function () {
                             document.querySelector("#answers").innerHTML = "";
                             answersFormatted.forEach(a => {
                                 if (a !== undefined && count < 3) {
@@ -520,7 +520,7 @@ var app = {
 
 
                 }
-                if(query !== ""){ask()}
+                if (query !== "") { ask() }
                 // Find the answers
                 askBtn.addEventListener('click', ask);
             } else {
@@ -541,90 +541,104 @@ var app = {
                 document.querySelector("#docaimltbn").remove()
                 app.docai.init();
             }
-            }
+        }
     },
     cast: {
-        runs: true, 
+        runs: true,
         name: 'Cast',
         icon: './assets/img/systemIcons/cast.svg',
-        init: async function(id = false, username = "NovaOS User"){
+        init: async function (id = false, username = "ffs, not a cast") {
+            const displayMediaOptions = {
+                video: {
+                    displaySurface: "browser",
+                },
+                audio: {
+                    suppressLocalAudioPlayback: false,
+                },
+                preferCurrentTab: true,
+                selfBrowserSurface: "include",
+                systemAudio: "exclude",
+                surfaceSwitching: "include",
+                monitorTypeSurfaces: "include",
+            };
             var p;
             const win = tk.mbw('Cast', '300px', 'auto', false, true, true, "ncast", './assets/img/systemIcons/cast.svg');
-            win.win.id= "ncast"
-            tk.mkel('h1',[], "Cast", win.main)
+            win.win.id = "ncast"
+            tk.mkel('h1', [], "Cast", win.main)
             tk.p("enter the deskID of another user with the cast app open to share your screen.", "", win.main)
             var recepient = tk.c("input", win.main, "i1")
             recepient.required = true
-            var send = tk.cb("b1", "Start", async function(){
-                var conn =  peer.connect(id)
-                conn.on('open', async function() {
+            var send = tk.cb("b1", "Start", async function () {
+                var conn = peer.connect(recepient.value)
+                conn.on('open', async function () {
                     // Receive messages
-                
+
                     // Send messages
-                    var castpeer = new Peer(await fs.read('/user/info/deskid')+"-cast")
-                    castpeer.on('open', async function (id) {
-                        conn.send({name:"osAppConnect-cast",id:await fs.read('/system/deskid'),uname:await fs.read('/user/info/name') || "NovaOS User"});
-                        
+                    var castpeer = new Peer(await fs.read('/system/deskid') + "-cast")
+                    castpeer.on('open', async function (id2) {
+                        console.log(id2, castpeer)
+                        conn.send({ name: "osAppConnect-cast", id: await fs.read('/system/deskid'), uname: await fs.read('/user/info/name') || "NovaOS User" });
+
                     })
-                    castpeer.on('connection', (conn) => {
-                        conn.on('data', (data) => {
-                            console.log(data)
+                    castpeer.on('connection', (conn2) => {
+                        conn2.on('data', async function (data) {
+                            if (data == "connAccept") {
+                                castpeer.call(recepient.value + "-cast",await navigator.mediaDevices.getDisplayMedia(displayMediaOptions))
+                            }
                         });
+                        conn2.send("hai uwu")
                     });
-                  });
-            },win.main)
-            var stop = tk.cb("b1", "Stop", function(){},win.main)
+                });
+            }, win.main)
+            var stop = tk.cb("b1", "Stop", function () { }, win.main)
             stop.style.display = "none"
             console.log(id)
-            if(id !== false){
-                var ic = tk.mkel("div", ["notif"],"",win.main)
+        },
+        connection: async function (id, username = "ffs, not a cast") {
+            if (username !== "ffs, not a cast") {
+                const win = tk.mbw('Cast', '300px', 'auto', false, true, true, "ncast", './assets/img/systemIcons/cast.svg');
+                var ic = tk.mkel("div", ["notif"], "", win.main)
                 ic.id = "ncastNotizone"
-                tk.mkel('b',[],"Incoming Request<br>",ic)
-                var req = tk.mkel('span',[],`ID: ${id.toString()}<br>Username: ${username.toString()}<br>`,ic)
-                var ac = tk.cb("b1 smallb", "Accept", async function(){
-                    p = new Peer(await fs.read('/system/deskid')+"-cast");
-                    p.on('open', function(id) {
-                        console.log('My peer ID is: ' + id);
-                        var c = p.connect(id+"-cast");
-                        c.on('open', function() {
+                tk.mkel('b', [], "Incoming Request<br>", ic)
+                var req = tk.mkel('span', [], `ID: ${id.toString()}<br>Username: ${username.toString()}<br>`, ic)
+                var ac = tk.cb("b1 smallb", "Accept", async function () {
+                    p = new Peer(await fs.read('/system/deskid') + "-cast");
+                    p.on('open', function (thisID) {
+                        console.log('My peer ID is: ' + thisID);
+                        var c = p.connect(id + "-cast");
+                        c.on('open', function () {
                             // Receive messages
-                            c.on('data', function(data) {
-                              console.log('Received', data);
+                            c.on('data', function (data) {
+                                console.log('Received', data);
                             });
-                        
+
                             // Send messages
                             c.send('connAccept');
-                          });
-                        
+                        });
+
                     });
                     ui.dest(ic)
                     const recv = tk.mbw(`Cast Reciever: ${username.toString()}#${id.toString()}`, '850px', '490px', false, true, true, './assets/img/systemIcons/cast.svg')
+                    win.title.children[0].children[0].click()
                     const video = tk.c('video', recv.main)
                     video.setAttribute("controls", "yes")
                     video.style.width = "100%"
-                    video.style.height = "100%"
-                    const stop = tk.cb('b4', "Stop", function(){}, recv.title.children[0])
-                    p.on('call', function(call) {
+                    video.style.height = "420px"
+                    p.on('call', function (call) {
                         // Answer the call, providing our mediaStream
                         call.answer(null);
-                        call.on('stream', function(stream) {
+                        call.on('stream', function (stream) {
                             // `stream` is the MediaStream of the remote peer.
                             // Here you'd add it to an HTML video/canvas element.
                             video.srcObject = stream;
                             video.play()
-                          });
+                            const stop = tk.cb('b4', "Stop", function () {
+                                p.disconnect()
+                            }, recv.title.children[0])
+                        });
                     });
-                },ic)
-                var de = tk.cb("b1 smallb", "Deny", function(){ui.dest(ic)},ic)
-            }
-        },
-        connection: async function (id, uname) {
-            if(document.querySelector("#ncast")){
-                document.querySelector("#ncast .winb.red").click()
-                app.cast.init(id, uname)
-            } 
-            else{
-                app.cast.init(id, uname)
+                }, ic)
+                var de = tk.cb("b1 smallb", "Deny", function () { ui.dest(ic) }, ic)
             }
         }
     },
