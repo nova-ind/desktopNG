@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOBE</title>
+</head>
+
+<body>
+    <!-- <div class="circle">
+        <div class="row1">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+        </div>
+        <div class="row2">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+        </div>
+        <div class="row3">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+            <img src="../../img/systemIcons/cast.svg" class="logo" alt="">
+        </div>
+        <img src="../../img/systemIcons/os.svg" class="oslogo" alt="">
+
+    </div>
+    <h1 id="name">NovaOS</h1>
+    <h3 id="slogan">The internet OS</h3>
+     -->
+     <div class="circle">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+        <img src="../../img/systemIcons/cast.svg" class="item" alt="">
+      </div>
+      <img src="../../img/systemIcons/cast.svg" class="item oslogo" alt="">
+      
+    <style>
+      body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100vw;
+}
+
+.circle {
+  position: relative;
+  width: 500px; /* Circle diameter */
+  height: 500px;
+}
+
+.item {
+  position: absolute;
+  width: 100px;  /* Item size */
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  border-radius: 50%;
+}
+.circle .item{
+    animation: comein 5s ease-in-out;
+    transform-origin: center !important;
+}
+/* Positioning the items around the circle */
+.circle .item:nth-child(1) { 
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0); 
+}
+
+.circle .item:nth-child(2) { 
+  top: 25%;
+  left: 85%;
+  transform: translate(-50%, -50%); 
+}
+
+.circle .item:nth-child(3) { 
+  top: 50%;
+  left: 100%;
+  transform: translate(-50%, -50%); 
+}
+
+.circle .item:nth-child(4) { 
+  top: 75%;
+  left: 85%;
+  transform: translate(-50%, -50%); 
+}
+
+.circle .item:nth-child(5) { 
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -100%); 
+}
+
+.circle .item:nth-child(6) { 
+  top: 75%;
+  left: 15%;
+  transform: translate(-50%, -50%); 
+}
+
+.circle .item:nth-child(7) { 
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%); 
+}
+
+.circle .item:nth-child(8) { 
+  top: 25%;
+  left: 15%;
+  transform: translate(-50%, -50%); 
+}
+.oslogo{
+    width: 300px;
+    height: 300px;
+}
+@keyframes comein {
+    0% {
+        width: 0px;
+        height: 0px;
+        filter: hue-rotate(360deg);
+        opacity: 0;
+    }
+    10% {
+        filter: hue-rotate(0deg);
+        width: 100px;
+        height: 100px;
+        opacity: 1;
+        rotate: 0deg;
+    }
+    30%{
+        rotate: 250deg;
+        scale: 0;
+        opacity: 0.5;
+    }
+    50%{
+        rotate: 0deg;
+        scale: 0;
+        opacity: 0;
+    }
+}
+@keyframes rotate {
+    0% {
+        rotate: 0deg;
+    }
+    50% {
+        rotate: 360deg;
+    }
+    100% {
+        rotate: 0deg;
+    }
+}
+    </style>
+</body>
+
+</html>
