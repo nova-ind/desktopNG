@@ -972,7 +972,7 @@ select:active {
     }
     .taskbar .tnav{
         margin-left: 40px !important;
-        overflow: scroll;
+        overflow: auto;
         border-radius: var(--rad2);
     }
     .taskbar .tnav .label{
@@ -988,7 +988,7 @@ select:active {
 }
 .taskbar .tnav{
     margin-left: 60px;
-    overflow: scroll;
+    overflow: auto;
     border-radius: var(--rad2);
     margin-bottom: -10px;
 }

@@ -643,5 +643,5 @@ var app = {
         }
     },
 }
-
+window.installApp = function(appn, appid, appscript, appico)
 app.cast.connection(30012)

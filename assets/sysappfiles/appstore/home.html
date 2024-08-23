@@ -9,29 +9,24 @@
 
 <body>
     <main>
-        <h2>Top Charts</h2>
-        <div class="carousel__container">
-            <img class="carousel__item" src="Frame 3.png" alt="image1">
-            <img class="carousel__item active" src="Frame 3.png" alt="image2">
-            <img class="carousel__item" src="Frame 3.png" alt="image3">
+        <div class="carouselArea">
+            <h2>Featured</h2>
+            <div class="carousel__container">
+                <div class="carousel__item active hidden">
+                    <img class="carousel__item" src="Frame 3.png" alt="image1">
+                    <span class="appname">Empty</span>
+                </div>
+                <div class="carousel__item hidden">
+                    <img class="carousel__item" src="Frame 3.png" alt="image3">
+
+                </div>
+                <div class="carousel__item hidden">
+                    <img class="carousel__item" src="Frame 3.png" alt="image3">
+                </div>
+            </div>
         </div>
         <h2>Offical Applications<br><small>Applications developed by the NovaOS Team</small></h2>
-        <div class="approw">
-            <div class="application">
-                <img src="Frame 3.png" alt="image1">
-                <h3>Application 1</h3>
-                <p>Description of Application 1</p>
-            </div>
-            <div class="application">
-                <img src="Frame 3.png" alt="image1">
-                <h3>Application 1</h3>
-                <p>Description of Application 1</p>
-            </div>
-            <div class="application">
-                <img src="Frame 3.png" alt="image1">
-                <h3>Application 1</h3>
-                <p>Description of Application 1</p>
-            </div>
+        <div class="approw officialApps">
         </div>
         <br>
         <br>
@@ -59,7 +54,7 @@
         setInterval(() => {
             if (isMouseInCards) {
                 return;
-            } else {
+            } else if (carouselContainer.children.length > 1) {
                 document.querySelector('.carousel__item.active').classList.remove('active');
                 carouselItems[nextIndex].classList.add('active');
                 currentIndex = nextIndex;
@@ -67,6 +62,7 @@
             }
         }, 2000);
     </script>
+    <script src="main.js"></script>
 </body>
 
 </html>
