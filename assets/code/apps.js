@@ -555,7 +555,7 @@ var app = {
                 audio: {
                     suppressLocalAudioPlayback: false,
                 },
-                preferCurrentTab: true,
+                preferCurrentTab: false,
                 selfBrowserSurface: "include",
                 systemAudio: "exclude",
                 surfaceSwitching: "include",
