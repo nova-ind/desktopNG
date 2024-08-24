@@ -22,6 +22,11 @@
 *{
     transition: all 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
+
+.hide{
+    display: none;
+}
+
 body {
     margin: 0px;
     overflow-x: hidden;
@@ -218,7 +223,8 @@ cursor: pointer;
     object-fit: cover;
 }
 
-h3 {
+h3,h4,h5 {
     margin-block-start: 0em;
     margin-block-end: 0em;
+    display: inline;
 }

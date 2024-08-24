@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    var repoResponse = await fetch('https://novaos-appstore-repo.pages.dev/appstore.json');
+    var repoResponse = await fetch('https://pkgs.os.novafurry.win/allapps.json');
     repoResponse = await repoResponse.json();
     var featuredApps = []
     var officialApps = []
-    repoResponse.applications.forEach(app => {
-        if(app.category.split(",").includes("backendTagFeatured") && featuredApps.length < 4){
+    repoResponse.forEach(app => {
+        if(app.specialTags.includes("Featured") && featuredApps.length < 4){
             featuredApps.push(app)
         }
-        else if(app.category.split(",").includes("backendTagOfficial")){
+        else if(app.specialTags.includes("Official")){
             officialApps.push(app)
         }
     });

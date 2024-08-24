@@ -85,7 +85,7 @@ var app = {
                 appstorepage.src = "/assets/sysappfiles/appstore/thisdevice.html"
             }, null))
             appstorepage.setAttribute("frameborder", "0")
-            appstorepage.src = "/assets/sysappfiles/appstore/home.html";
+            appstorepage.src = "/assets/sysappfiles/appstore/app.html?eapp";
             appstorepage.style.width = "100%"
             appstorepage.style.height = "100%"
             wc.style.height = "calc(100% - 65px)"
@@ -582,8 +582,19 @@ var app = {
                     })
                     castpeer.on('connection', (conn2) => {
                         conn2.on('data', async function (data) {
+                            console.log(data)
                             if (data == "connAccept") {
-                                castpeer.call(recepient.value + "-cast",await navigator.mediaDevices.getDisplayMedia(displayMediaOptions))
+                                if(navigator.userAgent.toLowerCase().includes('firefox')){
+                                    var w = tk.mbw("Stupid confirmation because firefox sucks", "300px", "auto", false, true, true, "ncast", './assets/img/systemIcons/cast.svg')
+                                    tk.p("Firefox is a bad browser and needs you to hit the button below because the other button isn't direct enough.", "", w.main)
+                                    tk.mkel("h1", [], "FUCK YOU MOZILLA", w.main)
+                                    tk.cb("b1","Start cast forreallz", async function(){
+                                        castpeer.call(recepient.value + "-cast", await navigator.mediaDevices.getDisplayMedia(displayMediaOptions))
+                                    }, w.main);
+                                }
+                                else{
+                                    castpeer.call(recepient.value + "-cast", await navigator.mediaDevices.getDisplayMedia(displayMediaOptions))
+                                }
                             }
                         });
                         conn2.send("hai uwu")
@@ -643,5 +654,16 @@ var app = {
         }
     },
 }
-window.installApp = function(appn, appid, appscript, appico)
-app.cast.connection(30012)
+window.installApp = function (appn, appid, appscripts, appico) {
+    var appc = {
+        runs: true,
+        name: appn,
+        icon: appico
+    }
+    fs.mkdir(`/system/apps/${appid}`, 'opfs')
+    fs.write(`/system/apps/${appid}/meta.json`, JSON.stringify(appc))
+    appscripts.forEach(async function (script) {
+        fs.write(`/system/apps/${appid}/${script.name}`, script.script)
+    })
+}
+// app.cast.connection(30012) 
