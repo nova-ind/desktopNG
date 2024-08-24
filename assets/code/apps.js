@@ -99,7 +99,8 @@ var app = {
         runs: false,
         init: async function () {
             const setupWin = tk.mbw('Setup', '300px', '300px', true, true, true)
-            const main = tk.c('div', setupWin.main, 'setupbox');
+            const main = document.querySelector("#setuparea")
+            // const main = tk.c('div', setupWin.main, 'setupbox');
             // create setup menubar
             const bar = tk.c('div', main, 'setupbar');
             const tnav = tk.c('div', bar, 'tnav');
