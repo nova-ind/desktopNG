@@ -98,67 +98,57 @@ var app = {
     setup: {
         runs: false,
         init: async function () {
-            const setupWin = tk.mbw('Setup', '300px', '300px', true, true, true)
-            const main = document.querySelector("#setuparea")
-            // const main = tk.c('div', setupWin.main, 'setupbox');
-            // create setup menubar
-            const bar = tk.c('div', main, 'setupbar');
-            const tnav = tk.c('div', bar, 'tnav');
-            const title = tk.c('div', bar, 'title');
-            tk.cb('b4', 'Start Over', () => fs.erase('reboot'), tnav);
-            tk.cb('b4 time', 'what', undefined, title);
-            // first menu
-            const first = tk.c('div', main, 'setb');
-            tk.img('./assets/img/systemIcons/os.svg', 'setupi', first);
-            tk.p('Welcome to NovaOS Deskop Next-Gen!', 'h2', first);
-            tk.p('NovaOS is proudly powered by WebDesk!', 'h3', first);
-            tk.cb('b1', `Login as Guest`, () => wd.desktop('Guest', gen(8)), first);
-            tk.cb('b1', `Begin Setup`, () => ui.sw2(first, transfer), first);
-            // migrate menu
-            const transfer = tk.c('div', main, 'setb hide');
-            tk.img('./assets/img/setup/quick.png', 'setupi', transfer);
-            tk.p('Quick Start', 'h2', transfer);
-            tk.p(`If you have used WebDesk or NovaOS-NG previously, you can migrate it's data to this device. To do so, open settings, choose Backup, then Migrate and enter the code below.`, undefined, transfer);
-            tk.p('--------', 'h2 deskid', transfer);
-            tk.cb('b1', 'No thanks', () => ui.sw2(transfer, warn), transfer);
-            transfer.id = "quickstartwdsetup";
-            // copying menu
-            const copy = tk.c('div', main, 'setb hide');
-            tk.img('./assets/img/setup/restore.svg', 'setupi', copy);
-            tk.p('Restoring from other Device', 'h2', copy);
-            tk.p('This might take a while depending on settings and file size.', undefined, copy);
-            tk.p('Starting...', 'restpg', copy);
-            tk.cb('b1', 'Cancel', function () { fs.erase('reboot'); }, copy);
-            copy.id = "quickstartwdgoing";
-            // warn menu
-            const warn = tk.c('div', main, 'setb hide');
-            tk.img('./assets/img/systemIcons/os.svg', 'setupi', warn);
-            tk.p(`Online services`, 'h2', warn);
-            tk.p('NovaOS makes an ID called a DeskID for you. Others using WebDesk, NovaOS-NG or compatible tools can use this ID to send you files or call you.', undefined, warn);
-            tk.p('To recieve calls and files from others, NovaOS needs to be open. When not in use, NovaOS uses less resources', undefined, warn);
-            tk.p('You can find your DeskID upon completion of setup.', undefined, warn);
-            // tk.cb('b1', `What's my DeskID?`, function () {
-            //     const box = wm.cm();
-            //     tk.p(`Your DeskID is <span class="deskid med">unknown</span>. You'll need to finish setup to use this ID.`, undefined, box);
-            //     tk.cb('b1 rb', 'Got it', undefined, box);
-            // }, warn); 
-            tk.cb('b1', 'Got it', function () { ui.sw2(warn, user) }, warn);
-            // user menu
-            const user = tk.c('div', main, 'setb hide');
-            tk.img('./assets/img/setup/user.svg', 'setupi', user);
-            tk.p('About You', 'h2', user);
-            tk.p(`Set up a user for NovaOS to store all of your stuff in, and set up permissions. By default, your data is stored on-device, soon you will be able to opt-in to cloud sync..`, undefined, user);
-            const input = tk.c('input', user, 'i1');
-            input.placeholder = "Pick a username.";
-            tk.cb('b1', 'Done!', function () { wd.finishsetup(input.value, user, sum) }, user);
-            // summary
-            const sum = tk.c('div', main, 'setb hide');
-            tk.img('./assets/img/setup/check.svg', 'setupi', sum);
-            tk.p('Setup is complete.', 'h2', sum);
-            tk.p('Keep in mind, novaOS is still in early public alpha.', undefined, sum);
-            tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Complete setup', function () { wd.reboot(); }, sum);
-            sum.id = "setupdone";
-            fs.mkdir('/user/Documents/', 'opfs');
+            if (!sys.isIOT) {
+                const main = document.querySelector("#setuparea")
+                // const main = tk.c('div', setupWin.main, 'setupbox');
+                // create setup menubar
+                const bar = tk.c('div', main, 'setupbar');
+                const tnav = tk.c('div', bar, 'tnav');
+                const title = tk.c('div', bar, 'title');
+                tk.cb('b4', 'Start Over', () => fs.erase('reboot'), tnav);
+                tk.cb('b4 time', 'what', undefined, title);
+                // first menu
+                const first = tk.c('div', main, 'setb');
+                tk.img('./assets/img/systemIcons/os.svg', 'setupi', first);
+                tk.p('Welcome to NovaOS Deskop Next-Gen!', 'h2', first);
+                tk.p('NovaOS is proudly powered by WebDesk!', 'h3', first);
+                tk.cb('b1', `Login as Guest`, () => wd.desktop('Guest', gen(8)), first);
+                tk.cb('b1', `Begin Setup`, () => ui.sw2(first, warn), first);
+                // warn menu
+                const warn = tk.c('div', main, 'setb hide');
+                tk.img('./assets/img/systemIcons/os.svg', 'setupi', warn);
+                tk.p(`Online services`, 'h2', warn);
+                tk.p('NovaOS makes an ID called a DeskID for you. Others using WebDesk, NovaOS-NG or compatible tools can use this ID to send you files or call you.', undefined, warn);
+                tk.p('To recieve calls and files from others, NovaOS needs to be open. When not in use, NovaOS uses less resources', undefined, warn);
+                tk.p('You can find your DeskID upon completion of setup.', undefined, warn);
+                // tk.cb('b1', `What's my DeskID?`, function () {
+                //     const box = wm.cm();
+                //     tk.p(`Your DeskID is <span class="deskid med">unknown</span>. You'll need to finish setup to use this ID.`, undefined, box);
+                //     tk.cb('b1 rb', 'Got it', undefined, box);
+                // }, warn); 
+                tk.cb('b1', 'Got it', function () { ui.sw2(warn, user) }, warn);
+                // user menu
+                const user = tk.c('div', main, 'setb hide');
+                tk.img('./assets/img/setup/user.svg', 'setupi', user);
+                tk.p('About You', 'h2', user);
+                tk.p(`Set up a user for NovaOS to store all of your stuff in, and set up permissions. By default, your data is stored on-device, soon you will be able to opt-in to cloud sync..`, undefined, user);
+                const input = tk.c('input', user, 'i1');
+                input.placeholder = "Pick a username.";
+                tk.cb('b1', 'Done!', function () { wd.finishsetup(input.value, user, sum) }, user);
+                // summary
+                const sum = tk.c('div', main, 'setb hide');
+                tk.img('./assets/img/setup/check.svg', 'setupi', sum);
+                tk.p('Setup is complete.', 'h2', sum);
+                tk.p('Keep in mind, novaOS is still in early public alpha.', undefined, sum);
+                tk.cb('b1 rb', 'Erase & restart', function () { fs.erase('reboot'); }, sum); tk.cb('b1', 'Complete setup', function () { wd.reboot(); }, sum);
+                sum.id = "setupdone";
+                fs.mkdir('/user/Documents/', 'opfs');
+            } else{
+                fs.mkdir('/user/Documents/', 'opfs');
+                wd.finishsetup()
+                wd.reboot()
+
+            }
         }
     },
     files: {
@@ -570,9 +560,10 @@ var app = {
             var recepient = tk.c("input", win.main, "i1")
             recepient.required = true
             var send = tk.cb("b1", "Start", async function () {
+                console.log('Initializing')
                 var conn = peer.connect(recepient.value)
                 conn.on('open', async function () {
-                    // Receive messages
+                    console.log('Connected')
 
                     // Send messages
                     var castpeer = new Peer(await fs.read('/system/deskid') + "-cast")
@@ -585,15 +576,15 @@ var app = {
                         conn2.on('data', async function (data) {
                             console.log(data)
                             if (data == "connAccept") {
-                                if(navigator.userAgent.toLowerCase().includes('firefox')){
+                                if (navigator.userAgent.toLowerCase().includes('firefox')) {
                                     var w = tk.mbw("Stupid confirmation because firefox sucks", "300px", "auto", false, true, true, "ncast", './assets/img/systemIcons/cast.svg')
                                     tk.p("Firefox is a bad browser and needs you to hit the button below because the other button isn't direct enough.", "", w.main)
                                     tk.mkel("h1", [], "FUCK YOU MOZILLA", w.main)
-                                    tk.cb("b1","Start cast forreallz", async function(){
+                                    tk.cb("b1", "Start cast forreallz", async function () {
                                         castpeer.call(recepient.value + "-cast", await navigator.mediaDevices.getDisplayMedia(displayMediaOptions))
                                     }, w.main);
                                 }
-                                else{
+                                else {
                                     castpeer.call(recepient.value + "-cast", await navigator.mediaDevices.getDisplayMedia(displayMediaOptions))
                                 }
                             }
@@ -606,51 +597,70 @@ var app = {
             stop.style.display = "none"
             console.log(id)
         },
+        iot: async function () {
+            const win = tk.mbw("iotapp", 'auto', 'auto', false, false, false, "ncast", "")
+            var title = tk.mkel("h1", ["time"], "", win.main)
+            var kb = tk.mkel("h2", [], "", win.main)
+            kb.innerHTML = `Use '${await fs.read('/system/deskid')}' to connect`
+        },
         connection: async function (id, username = "ffs, not a cast") {
+            async function  acceptCast() {
+                p = new Peer(await fs.read('/system/deskid') + "-cast");
+                p.on('open', function (thisID) {
+                    console.log('My peer ID is: ' + thisID);
+                    var c = p.connect(id + "-cast");
+                    c.on('open', function () {
+                        // Receive messages
+                        c.on('data', function (data) {
+                            console.log('Received', data);
+                        });
+
+                        // Send messages
+                        c.send('connAccept');
+                    });
+
+                });
+                ui.dest(ic)
+                const recv = tk.mbw(`Cast Reciever: ${username.toString()}#${id.toString()}`, '850px', '490px', false, true, true, './assets/img/systemIcons/cast.svg')
+                if(!sys.isIOT){                win.title.children[0].children[0].click()
+                }
+                const video = tk.c('video', recv.main)
+                video.setAttribute("controls", "yes")
+                video.setAttribute("autoplay", "yes")
+                video.style.width = "100%"
+                video.style.height = "100%"
+                video.style.id = "castvideo"
+                p.on('call', function (call) {
+                    // Answer the call, providing our mediaStream
+                    call.answer(null);
+                    call.on('stream', function (stream) {
+                        // `stream` is the MediaStream of the remote peer.
+                        // Here you'd add it to an HTML video/canvas element.
+                        video.srcObject = stream;
+                        video.play()
+                        const stop = tk.cb('b4', "Stop", function () {
+                            p.disconnect()
+                        }, recv.title.children[0])
+                    });
+                    call.on('close', function () {
+                        ui.dest(recv.win)
+                    })
+                });
+            }
             if (username !== "ffs, not a cast") {
-                const win = tk.mbw('Cast', '300px', 'auto', false, true, true, "ncast", './assets/img/systemIcons/cast.svg');
-                var ic = tk.mkel("div", ["notif"], "", win.main)
-                ic.id = "ncastNotizone"
-                tk.mkel('b', [], "Incoming Request<br>", ic)
-                var req = tk.mkel('span', [], `ID: ${id.toString()}<br>Username: ${username.toString()}<br>`, ic)
-                var ac = tk.cb("b1 smallb", "Accept", async function () {
-                    p = new Peer(await fs.read('/system/deskid') + "-cast");
-                    p.on('open', function (thisID) {
-                        console.log('My peer ID is: ' + thisID);
-                        var c = p.connect(id + "-cast");
-                        c.on('open', function () {
-                            // Receive messages
-                            c.on('data', function (data) {
-                                console.log('Received', data);
-                            });
-
-                            // Send messages
-                            c.send('connAccept');
-                        });
-
-                    });
-                    ui.dest(ic)
-                    const recv = tk.mbw(`Cast Reciever: ${username.toString()}#${id.toString()}`, '850px', '490px', false, true, true, './assets/img/systemIcons/cast.svg')
-                    win.title.children[0].children[0].click()
-                    const video = tk.c('video', recv.main)
-                    video.setAttribute("controls", "yes")
-                    video.style.width = "100%"
-                    video.style.height = "420px"
-                    p.on('call', function (call) {
-                        // Answer the call, providing our mediaStream
-                        call.answer(null);
-                        call.on('stream', function (stream) {
-                            // `stream` is the MediaStream of the remote peer.
-                            // Here you'd add it to an HTML video/canvas element.
-                            video.srcObject = stream;
-                            video.play()
-                            const stop = tk.cb('b4', "Stop", function () {
-                                p.disconnect()
-                            }, recv.title.children[0])
-                        });
-                    });
-                }, ic)
-                var de = tk.cb("b1 smallb", "Deny", function () { ui.dest(ic) }, ic)
+                if(!sys.isIOT){
+                    const win = tk.mbw('Cast', '300px', 'auto', false, true, true, "ncast", './assets/img/systemIcons/cast.svg');
+                    var ic = tk.mkel("div", ["notif"], "", win.main)
+                    ic.id = "ncastNotizone"
+                    tk.mkel('b', [], "Incoming Request<br>", ic)
+                    var req = tk.mkel('span', [], `ID: ${id.toString()}<br>Username: ${username.toString()}<br>`, ic)
+                    var ac = tk.cb("b1 smallb", "Accept", acceptCast(), ic)
+                    var de = tk.cb("b1 smallb", "Deny", function () { ui.dest(ic) }, ic)
+                }
+                else{
+                    acceptCast()
+                    wm.notif("Cast Connection", `${username}#${id} connected to this reciever`)
+                }
             }
         }
     },
@@ -668,3 +678,10 @@ window.installApp = function (appn, appid, appscripts, appico) {
     })
 }
 // app.cast.connection(30012) 
+if(sys.isIOT){
+    try{
+        app[sys.iotApp].iot()
+    }catch{
+        app[sys.iotApp].init()
+    }
+}

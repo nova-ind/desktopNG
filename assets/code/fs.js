@@ -127,7 +127,7 @@ var fs = {
      * @param {string} path - The path of the directory to create.
      * @param {string} [filesystem="opfs"] - The filesystem to use ("opfs" or "idbfs").
      * @returns {Promise<any>} A promise that resolves when the directory is created.
-     */
+     */     
     mkdir: function (path, filesystem = "opfs") {
         if(filesystem == "opfs") {
             return this.askwfsOPFS('mkdir', path);

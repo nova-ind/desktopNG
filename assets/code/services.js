@@ -9,6 +9,9 @@ var ptp = {
                 ui.masschange('deskid', peerId);
                 sys.deskid = peerId;
                 console.log('<i> DeskID is online. ID: ' + sys.deskid);
+                document.querySelectorAll('.deskid').forEach((el) => {
+                    el.innerHTML = sys.deskid;
+                });
             });
 
             peer.on('error', async (err) => {
@@ -19,7 +22,7 @@ var ptp = {
                     setTimeout(attemptConnection, 10000);
                 } else if (retryc >= 5) {
                     console.log('<!> Maximum retry attempts reached. DeskID registration failed.');
-                    wm.wal(`<p class="h3">WebDesk to WebDesk services are disabled</p><p>Your DeskID didn't register for some reason, therefore you can't use WebDrop, WebCall or Migration Assistant.</p><p>If you'd like, you can reboot to try again. Check your Internet too.</p>`, 'reboot()', 'Reboot');
+                    wm.wal(`<p class="h3">Networking services are disabled</p><p>Your DeskID didn't register for some reason, therefore you can't use WebDrop, WebCall or Migration Assistant.</p><p>If you'd like, you can reboot to try again. Check your Internet too.</p>`, 'reboot()', 'Reboot');
                 } else {
                     wm.notif('Networking', 'Failed to connect.');
                 }
@@ -27,6 +30,7 @@ var ptp = {
 
             peer.on('connection', (conn) => {
                 conn.on('data', (data) => {
+                    console.log('<i> Data recieved: ' + data, conn);
                     handleData(conn, data);
                 });
             });

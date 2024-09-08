@@ -688,7 +688,7 @@ p {
 }
 
 .tbmenu {
-    position: fixed;
+    position: absolute;
     border-radius: var(--rad1);
     border: 1px solid var(--ui2);
     background-color: var(--ui1);
@@ -699,7 +699,7 @@ p {
     max-width: 80%;
     max-width: 360px;
     max-height: 80%;
-    z-index: 4;
+    /* z-index: 4; */
     animation: tb2 0.28s;
     left: 5px;
 }
@@ -785,7 +785,8 @@ p {
     margin-block-end: 0px;
 }
 .tbmenu{
-    z-index: 9002451;
+    z-index: 900245212312312 !important;
+
 }
 /* {
     width: 20px;
@@ -901,24 +902,24 @@ select:active {
         border:none;
         border-top: 1px solid var(--ui2);
         border-radius: 0px;
-        height: 6vh;
+        height: 4vh;
     }
     .tbmenu{
-        width: 100vw !important;
-        height: calc(76vh - 3px) !important;
-        max-height: calc(76vh - 3px) !important;
+        width: calc(100vw - 24px) !important;
+        height: calc(100vh - 8vh - 31px) !important;
+        max-height: unset !important;
         max-width: unset !important;
         position: absolute !important;
         left:0px !important;
         top:4vh !important;
         border-radius: 0px !important;
         overflow:visible !important;
-        z-index: 303367 !important;
+        /* z-index: 303367 !important; */
     }
     .window{
         width: 100vw !important;
-        height: calc(76vh - 3px) !important;
-        max-height: calc(76vh - 3px) !important;
+        height: calc(100vh - 8vh - 10px) !important;
+        max-height: unset !important;
         max-width: unset !important;
         position: absolute !important;
         left:0px !important;
@@ -944,10 +945,10 @@ select:active {
         z-index: -100 !important;
     }
     #contcent{
-        width: 100vw !important;
-        height: calc(76vh - 3px) !important;
-        max-height: calc(76vh - 3px) !important;
-        max-width: 100vw !important;
+        width: calc(100vw - 4px) !important;
+        height: calc(100vh - 8vh - 14px) !important;
+        max-height: unset !important;
+        max-width: unset !important;
         position: absolute !important;
         left:0px !important;
         top:4vh !important;
@@ -1094,4 +1095,50 @@ select:active {
 }
 .taskbar .tnav .icon, .title .icon{
     vertical-align: bottom;
+}
+
+.b1.start{
+    margin-top: 0px;
+}
+.taskbar .tnav{
+    margin-top:-10px;
+}
+
+body[iot="true"]{
+    background-color: #000;
+    color: #fff;
+}
+body[iot="true"] .window{
+    position: absolute !important;
+    top: 0px !important;
+    left: 0px !important;   
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0px !important;
+    resize: none !important;
+    background-color: transparent;
+    backdrop-filter: none;
+    border:0px;
+}
+body[iot="true"] .window .content{
+    padding: 0px !important;
+    margin: 0px !important;
+    background-color: transparent;
+    backdrop-filter: none;
+}
+body[iot="true"] .d.tb{
+    display: none !important;
+}
+body[iot="true"] .taskbar{
+    display: none !important;
+}
+body[iot="true"] .topbar{
+    display: none !important;
+}
+body[iot="true"] #background{
+    display: none !important;
+}
+body[iot="true"] #castvideo {
+    width: 100vw;
+    height: 100vh;
 }

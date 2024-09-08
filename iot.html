@@ -30,8 +30,8 @@
         autodarkacc: undefined,
         webdrop: true,
         name: "Default User",
-        isIOT: false,
-        iotApp: null,
+        isIOT: true,
+        iotApp: "cast",
         idLen: 8,
     }
 
@@ -42,7 +42,7 @@
     }
 </script>
 
-<body>
+<body iot="true">
     <div class="topbar"><div class="title"><button class="b1 time" onclick="wd.controls.toggle()">14:07:10</button></div></div>
     <div id="background">
     </div>
@@ -110,14 +110,15 @@
         var sd = "balh"
         sd = await fs.read('/user/info/name');
         console.log("baah", sd);
+            const deskid = await fs.read('/system/deskid');
+            await ptp.go(deskid);
+
         if (sd !== undefined) {
             const name = await fs.read('/user/info/name');
-            const deskid = await fs.read('/system/deskid');
             const darkpref = await fs.read('/user/info/lightdarkpref');
             const lightdark = await fs.read('/user/info/lightdark');
             const color = await fs.read('/user/info/color');
             await wd.desktop(name, deskid, 'wait');
-            await ptp.go(deskid);
             sys.setupd = true;
 
             if (darkpref === "auto") {
@@ -141,7 +142,7 @@
                 ui.crtheme('#C68A00');
             }
         } else {
-            const id = gen(8);
+            const id = gen(sys.idLen);
             await ptp.go(id);
             await fs.mkdir('/system', "opfs");
             await fs.write('/system/deskid', id, "opfs");

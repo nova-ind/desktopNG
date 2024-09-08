@@ -126,6 +126,11 @@ var wd = {
                         btn.classList.add("appItem");
                         var $thisapp = app[key]
                         btn.onclick = $thisapp.init
+                        btn.addEventListener('click', function () {
+                            if (document.querySelector(".tbmenu")) {
+                                ui.dest(document.querySelector(".tbmenu"), 150);
+                            }
+                        });
                     } else {
                         console.log(`<i> ${apps[key].name} is not launchable! :(`);
                     }
@@ -138,6 +143,10 @@ var wd = {
                     $(".contcent").fadeOut(150, function () { });
                 }
                 el.sm = tk.c('div', document.body, 'tbmenu');
+                el.sm.addEventListener('mouseleave', function () {
+                    ui.dest(el.sm, 150);
+                    el.sm = undefined;
+                });
                 const btm = el.taskbar.getBoundingClientRect();
                 el.sm.style.bottom = btm.height + btm.x + 4 + "px";
                 tk.p(`Hello, ${name}!`, 'h2', el.sm);
@@ -246,11 +255,19 @@ var wd = {
      * Stores the user's name and sets parts of the filesystem
     */
     finishsetup: function (name, div1, div2) {
-        ui.sw2(div1, div2); ui.masschange('name', name);
-        fs.mkdir('/user')
-        fs.mkdir('/user/info')
-        fs.mkdir('/user/Documents')
-        fs.write('/user/info/name', name);
+        if(sys.isIOT){
+            ui.sw2(div1, div2); ui.masschange('name', "iotuser");
+            fs.mkdir('/user')
+            fs.mkdir('/user/info')
+            fs.mkdir('/user/Documents')
+            fs.write('/user/info/name', "iotuser");
+        } else{
+            ui.sw2(div1, div2); ui.masschange('name', name);
+            fs.mkdir('/user')
+            fs.mkdir('/user/info')
+            fs.mkdir('/user/Documents')
+            fs.write('/user/info/name', name);
+        }
     },
     /**
      * Reboot NovaOS
