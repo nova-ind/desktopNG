@@ -566,7 +566,7 @@ var app = {
                     console.log('Connected')
 
                     // Send messages
-                    var castpeer = new Peer(await fs.read('/system/deskid') + "-cast")
+                    var castpeer = new Peer(await fs.read('/system/deskid') + "-cast", {config: {'iceServers': [ { urls: 'stun:freeturn.net:3478' }, { urls: 'turn:freeturn.net:3478', username: 'free', credential: 'free' } ]}})
                     castpeer.on('open', async function (id2) {
                         console.log(id2, castpeer)
                         conn.send({ name: "osAppConnect-cast", id: await fs.read('/system/deskid'), uname: await fs.read('/user/info/name') || "NovaOS User" });

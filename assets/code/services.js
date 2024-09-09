@@ -3,7 +3,7 @@ var ptp = {
         let retryc = 0;
 
         async function attemptConnection() {
-            peer = new Peer(id);
+            peer = new Peer(id,  {config: {'iceServers': [ { urls: 'stun:freeturn.net:3478' }, { urls: 'turn:freeturn.net:3478', username: 'free', credential: 'free' } ]}});
 
             peer.on('open', (peerId) => {
                 ui.masschange('deskid', peerId);
