@@ -141,7 +141,7 @@
                 ui.crtheme('#C68A00');
             }
         } else {
-            const id = gen(8);
+            const id = gen(4);
             await ptp.go(id);
             await fs.mkdir('/system', "opfs");
             await fs.write('/system/deskid', id, "opfs");
