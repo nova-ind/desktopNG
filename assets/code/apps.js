@@ -849,6 +849,11 @@ var app = {
       );
       var recepient = tk.c("input", win.main, "i1");
       recepient.required = true;
+      var disableTurn = tk.c("input", win.main, "");
+      disableTurn.id = 'dt'
+      var dtlabel = tk.c("label", win.main,"");
+      dtlabel.for = 'dt'
+      dtlabel.innerText = 'Disable Cloud Connections (LAN Only) (requires ?cast.dt in the end of the url on recieving page :) )'
       var send = tk.cb(
         "b1",
         "Start",
@@ -861,9 +866,13 @@ var app = {
             console.log("Connected");
 
             // Send messages
-            var castpeer = new Peer(
-              (await fs.read("/system/deskid")) + "-cast",
-              {
+            if(disableTurn.checked == true){
+              var castconfig = {
+                config: {},
+              }
+            }
+            else{
+              var castconfig = {
                 config: {
                   iceServers: [
                     { urls: "stun:freeturn.net:3478" },
@@ -875,6 +884,10 @@ var app = {
                   ],
                 },
               }
+            }
+            var castpeer = new Peer(
+              (await fs.read("/system/deskid")) + "-cast",
+              castconfig
             );
             castpeer.on("open", async function (id2) {
               console.log(id2, castpeer);
@@ -945,7 +958,26 @@ var app = {
       var win;
       var recv;
       async function acceptCast() {
-        p = new Peer((await fs.read("/system/deskid")) + "-cast");
+         if(window.location.search == "?cast.dt"){
+              var castconfig = {
+                config: {},
+              }
+            }
+            else{
+              var castconfig = {
+                config: {
+                  iceServers: [
+                    { urls: "stun:freeturn.net:3478" },
+                    {
+                      urls: "turn:freeturn.net:3478",
+                      username: "free",
+                      credential: "free",
+                    },
+                  ],
+                },
+              }
+            }
+        p = new Peer((await fs.read("/system/deskid")) + "-cast", castconfig);
         p.on("open", function (thisID) {
           console.log("My peer ID is: " + thisID);
           var c = p.connect(id + "-cast");
