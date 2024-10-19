@@ -850,10 +850,11 @@ var app = {
       var recepient = tk.c("input", win.main, "i1");
       recepient.required = true;
       var disableTurn = tk.c("input", win.main, "");
-      disableTurn.id = 'dt'
-      var dtlabel = tk.c("label", win.main,"");
-      dtlabel.for = 'dt'
-      dtlabel.innerText = 'Disable Cloud Connections (LAN Only) (requires ?cast.dt in the end of the url on recieving page :) )'
+      disableTurn.id = "dt";
+      var dtlabel = tk.c("label", win.main, "");
+      dtlabel.for = "dt";
+      dtlabel.innerText =
+        "Disable Cloud Connections (LAN Only) (requires ?cast.dt in the end of the url on recieving page :) )";
       var send = tk.cb(
         "b1",
         "Start",
@@ -866,12 +867,11 @@ var app = {
             console.log("Connected");
 
             // Send messages
-            if(disableTurn.checked == true){
+            if (disableTurn.checked == true) {
               var castconfig = {
                 config: {},
-              }
-            }
-            else{
+              };
+            } else {
               var castconfig = {
                 config: {
                   iceServers: [
@@ -883,7 +883,7 @@ var app = {
                     },
                   ],
                 },
-              }
+              };
             }
             var castpeer = new Peer(
               (await fs.read("/system/deskid")) + "-cast",
@@ -958,25 +958,24 @@ var app = {
       var win;
       var recv;
       async function acceptCast() {
-         if(window.location.search == "?cast.dt"){
-              var castconfig = {
-                config: {},
-              }
-            }
-            else{
-              var castconfig = {
-                config: {
-                  iceServers: [
-                    { urls: "stun:freeturn.net:3478" },
-                    {
-                      urls: "turn:freeturn.net:3478",
-                      username: "free",
-                      credential: "free",
-                    },
-                  ],
+        if (window.location.search == "?cast.dt") {
+          var castconfig = {
+            config: {},
+          };
+        } else {
+          var castconfig = {
+            config: {
+              iceServers: [
+                { urls: "stun:freeturn.net:3478" },
+                {
+                  urls: "turn:freeturn.net:3478",
+                  username: "free",
+                  credential: "free",
                 },
-              }
-            }
+              ],
+            },
+          };
+        }
         p = new Peer((await fs.read("/system/deskid")) + "-cast", castconfig);
         p.on("open", function (thisID) {
           console.log("My peer ID is: " + thisID);
@@ -984,12 +983,12 @@ var app = {
           c.on("data", function (data) {
             if (data == "cast_over") {
               recv.title.children[0].children[0].click();
-              if(sys.isIOT){
-                window.location.reload()
-            }else{
+              if (sys.isIOT) {
+                window.location.reload();
+              } else {
                 p = undefined;
                 c = undefined;
-            }
+              }
             }
           });
           c.on("open", function () {
@@ -1035,8 +1034,8 @@ var app = {
           call.on("close", function () {
             p.destroy();
             recv.title.children[0].children[0].click();
-            if(sys.isIOT){
-                window.location.reload()
+            if (sys.isIOT) {
+              window.location.reload();
             }
             // win.title.children[0].children[0].click();
           });
@@ -1069,7 +1068,7 @@ var app = {
             "Accept",
             function () {
               acceptCast();
-              win.title.children[0].children[0].click()
+              win.title.children[0].children[0].click();
             },
             ic
           );
@@ -1077,7 +1076,7 @@ var app = {
             "b1 smallb",
             "Deny",
             function () {
-                win.title.children[0].children[0].click()
+              win.title.children[0].children[0].click();
             },
             ic
           );
@@ -1089,6 +1088,108 @@ var app = {
           );
         }
       }
+    },
+  },
+  appmark: {
+    runs: true,
+    name: "App Market",
+    icon: "./assets/img/systemIcons/store.svg",
+    create: async function (apploc, app, update) {
+      async function execute(url2) {
+        try {
+          const response = await fetch(url2);
+          if (!response.ok) {
+            wm.wal(
+              `<p>Couldn't load apps, check your internet or try again later. If it's not back up within an hour, DM macos.amfi on Discord.</p>`
+            );
+          }
+          const scriptContent = await response.text();
+          const script = document.createElement("script");
+          script.textContent = scriptContent;
+          document.head.appendChild(script);
+          sys.installer = script;
+          return scriptContent;
+        } catch (error) {
+          console.error(`Failed to execute script: ${error}`);
+          throw error;
+        }
+      }
+
+      console.log(`<i> Installing ${apploc}`);
+      const apps = await fs.read("/system/apps.json");
+      if (apps) {
+        const ok = await execute(`https://appmarket.meower.xyz` + apploc);
+        const newen = {
+          name: app.name,
+          ver: app.ver,
+          id: Date.now(),
+          exec: ok,
+        };
+        const jsondata = JSON.parse(apps);
+        const check = jsondata.some((entry) => entry.name === newen.name);
+        if (check === true) {
+          console.log("<i> Already installed");
+          wm.wal("<p>Already installed!</p>");
+        } else {
+          jsondata.push(newen);
+          if (update === true) {
+            wm.notif(`Updated: `, app.name);
+          } else {
+            wm.notif(`Installed: `, app.name);
+          }
+          console.log("nata", jsondata);
+          await fs.write("/system/apps.json", jsondata);
+        }
+      } else {
+        const ok = await execute(`https://appmarket.meower.xyz` + apploc);
+        await fs.write(
+          "/system/apps.json",
+          JSON.stringify([
+            { name: app.name, ver: app.ver, id: Date.now(), exec: ok },
+          ])
+        );
+        wm.notif(`Installed: `, app.name);
+      }
+    },
+    init: async function () {
+      const win = tk.mbw(
+        "App Market",
+        "340px",
+        "auto",
+        true,
+        undefined,
+        undefined,
+        "./assets/img/systemIcons/store.svg"
+      );
+      const apps = tk.c("div", win.main);
+      const appinfo = tk.c("div", win.main, "hide");
+      async function loadapps() {
+        try {
+          const response = await fetch(`https://appmarket.meower.xyz/refresh`);
+          const apps = await response.json();
+          apps.forEach(function (app2) {
+            const notif = tk.c("div", win.main, "notif2");
+            tk.p(
+              `<span class="bold">${app2.name}</bold> by ${app2.pub}`,
+              "bold",
+              notif
+            );
+            tk.p(app2.info, undefined, notif);
+            notif.addEventListener("click", async function () {
+              app.appmark.create(app2.path, app2);
+            });
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      tk.p("Welcome to the App Market!", undefined, apps);
+      tk.p(
+        `Look for things you might want, all apps have <span class="bold">full access</span> to this WebDesk/it's files. Anything in this store is safe.`,
+        undefined,
+        apps
+      );
+      await loadapps();
     },
   },
 };
