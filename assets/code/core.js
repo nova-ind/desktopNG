@@ -50,6 +50,29 @@ var gens = randTk.gens;
  * @namespace
  */
 var wd = {
+    loadapps: async function (inapp, onlineApps, apps) {
+        const onlineApp = onlineApps.find(app => app.name === inapp.name);
+
+        if (onlineApp.ver === inapp.ver && sys.fucker === false) {
+            console.log(`<i> ${inapp.name} is up to date (${inapp.ver} = ${onlineApp.ver})`);
+            const fucker = await fs.read(inapp.exec);
+            if (fucker) {
+                eval(fucker);
+            } else {
+                fs.del('/system/apps.json');
+                fs.delfold('/system/apps');
+                wm.notif('App Issues', 'All apps were uninstalled due to corruption or an update. Your data is safe, you can reinstall them anytime.', () => app.appmark.init(), 'App Market');
+                sys.fucker = true;
+                return;
+            }
+        } else {
+            const remove = apps.filter(item => item.id !== inapp.id);
+            const removed = JSON.stringify(remove);
+            fs.write('/system/apps.json', removed);
+            app.appmark.create(onlineApp.path, onlineApp, true);
+            console.log(`<!> ${inapp.name} was updated (${inapp.ver} --> ${onlineApp.ver})`);
+        }
+    },
     win: function () {
         $('.d').not('.dragged').on('mousedown touchstart', function (event) {
             var $window = $(this).closest('.window');

@@ -392,7 +392,7 @@ var tk = {
      * @param {String} [icon='./assets/img/systemIcons/noicon.svg'] - The icon of the window
      * @returns {Object} The created window
      */
-    mbw: function (title, wid, hei, full, min, quit, id, icon = './assets/img/systemIcons/noicon.svg') {
+    mbw: function (title, wid, hei, full, min = true, quit = true, id, icon = './assets/img/systemIcons/noicon.svg') {
         var windowDiv = document.createElement('div');
         windowDiv.classList.add('window');
         windowDiv.classList.add('winf');

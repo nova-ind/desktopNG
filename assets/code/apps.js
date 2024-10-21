@@ -153,28 +153,28 @@ var app = {
           null
         )
       );
-      navbar.appendChild(
-        tk.cb(
-          "b4",
-          "Categories",
-          function () {
-            appstorepage.src = "/assets/sysappfiles/appstore/categories.html";
-          },
-          null
-        )
-      );
-      navbar.appendChild(
-        tk.cb(
-          "b4",
-          "This Device",
-          function () {
-            appstorepage.src = "/assets/sysappfiles/appstore/thisdevice.html";
-          },
-          null
-        )
-      );
+      // navbar.appendChild(
+      //   tk.cb(
+      //     "b4",
+      //     "Categories",
+      //     function () {
+      //       appstorepage.src = "/assets/sysappfiles/appstore/categories.html";
+      //     },
+      //     null
+      //   )
+      // );
+      // navbar.appendChild(
+      //   tk.cb(
+      //     "b4",
+      //     "This Device",
+      //     function () {
+      //       appstorepage.src = "/assets/sysappfiles/appstore/thisdevice.html";
+      //     },
+      //     null
+      //   )
+      // );
       appstorepage.setAttribute("frameborder", "0");
-      appstorepage.src = "/assets/sysappfiles/appstore/app.html?eapp";
+      appstorepage.src = "/assets/sysappfiles/appstore/home.html";
       appstorepage.style.width = "100%";
       appstorepage.style.height = "100%";
       wc.style.height = "calc(100% - 65px)";
@@ -184,6 +184,26 @@ var app = {
           "style",
           document.body.parentElement.getAttribute("style")
         );
+      };
+      appstorepage.contentWindow.onhashchange = function () {
+        var hash = appstorepage.contentWindow.location.hash;
+        if (hash.startsWith("#installApp:")) {
+          var appid = hash.split(":")[1];
+          function toDataUrl(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              var reader = new FileReader();
+              reader.onloadend = function () {
+                callback(reader.result);
+              };
+              reader.readAsDataURL(xhr.response);
+            };
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+            xhr.send();
+          }
+          
+        }
       };
     },
   },
@@ -203,41 +223,9 @@ var app = {
         const first = tk.c("div", main, "setb");
         tk.img("./assets/img/systemIcons/os.svg", "setupi", first);
         tk.p("Welcome to NovaOS Deskop Next-Gen!", "h2", first);
-        tk.p("NovaOS is proudly powered by WebDesk!", "h3", first);
+        tk.p("NovaOS is powered by WebDesk!", "h3", first);
         tk.cb("b1", `Login as Guest`, () => wd.desktop("Guest", gen(8)), first);
-        tk.cb("b1", `Begin Setup`, () => ui.sw2(first, warn), first);
-        // warn menu
-        const warn = tk.c("div", main, "setb hide");
-        tk.img("./assets/img/systemIcons/os.svg", "setupi", warn);
-        tk.p(`Online services`, "h2", warn);
-        tk.p(
-          "NovaOS makes an ID called a DeskID for you. Others using WebDesk, NovaOS-NG or compatible tools can use this ID to send you files or call you.",
-          undefined,
-          warn
-        );
-        tk.p(
-          "To recieve calls and files from others, NovaOS needs to be open. When not in use, NovaOS uses less resources",
-          undefined,
-          warn
-        );
-        tk.p(
-          "You can find your DeskID upon completion of setup.",
-          undefined,
-          warn
-        );
-        // tk.cb('b1', `What's my DeskID?`, function () {
-        //     const box = wm.cm();
-        //     tk.p(`Your DeskID is <span class="deskid med">unknown</span>. You'll need to finish setup to use this ID.`, undefined, box);
-        //     tk.cb('b1 rb', 'Got it', undefined, box);
-        // }, warn);
-        tk.cb(
-          "b1",
-          "Got it",
-          function () {
-            ui.sw2(warn, user);
-          },
-          warn
-        );
+        tk.cb("b1", `Begin Setup`, () => ui.sw2(first, user), first);
         // user menu
         const user = tk.c("div", main, "setb hide");
         tk.img("./assets/img/setup/user.svg", "setupi", user);
@@ -1157,8 +1145,8 @@ var app = {
         "340px",
         "auto",
         true,
-        undefined,
-        undefined,
+        true,
+        true,
         "./assets/img/systemIcons/store.svg"
       );
       const apps = tk.c("div", win.main);
@@ -1170,8 +1158,8 @@ var app = {
           apps.forEach(function (app2) {
             const notif = tk.c("div", win.main, "notif2");
             tk.p(
-              `<span class="bold">${app2.name}</bold> by ${app2.pub}`,
-              "bold",
+              `<bold class="bold">${app2.name}</bold> by ${app2.pub}`,
+              "",
               notif
             );
             tk.p(app2.info, undefined, notif);
