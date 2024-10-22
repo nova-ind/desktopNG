@@ -110,6 +110,7 @@
     </div> -->
   </body>
 </html>
+
 <script src="./assets/code/vals.js"></script>
 <script src="./assets/lib/jq.js"></script>
 <script src="./assets/lib/jszip.js"></script>
@@ -122,139 +123,157 @@
 <script src="./assets/code/fs.js"></script>
 <script src="./assets/code/apps.js"></script>
 <script>
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./serviceworker.js')
+    .then(registration => console.log('ServiceWorker registered'))
+    .catch(err => console.error('ServiceWorker registration failed:', err));
+}
   async function boot() {
-      var uname = "No Username, somehow."
-      uname = await fs.read('/user/info/name');
-      if (uname !== undefined) {
-          const name = await fs.read('/user/info/name');
-          const deskid = await fs.read('/system/deskid');
-          const darkpref = await fs.read('/user/info/lightdarkpref');
-          const lightdark = await fs.read('/user/info/lightdark');
-          const color = await fs.read('/user/info/color');
-          await wd.desktop(name, deskid, 'wait');
-          await ptp.go(deskid);
-          sys.setupd = true;
-
-          if (darkpref === "auto") {
-              sys.autodarkacc = true;
-          } else {
-              sys.autodarkacc = false;
-          }
-          if (lightdark === "dark") {
-              wd.dark();
-          } else if (lightdark === "clear") {
-              wd.clearm();
-          } else if (lightdark === "clear2") {
-              wd.clearm2();
-          } else {
-              wd.light();
-          }
-          ui.crtheme(color);
-          console.log(color)
-          if (!color) {
-              fs.write('/user/info/color', '#C68A00');
-              ui.crtheme('#C68A00');
-          }
-      } else {
-          const id = gen(4);
-          await ptp.go(id);
-          await fs.mkdir('/system', "opfs");
-          await fs.write('/system/deskid', id, "opfs");
-          app.setup.init();
-          sys.setupd = false;
-      }
-
-      const dropZone = document.body;
-      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-          dropZone.addEventListener(eventName, preventDefaults, false);
-          document.body.addEventListener(eventName, preventDefaults, false);
-      });
-
-      dropZone.addEventListener('drop', handleDrop, false);
-
-      function preventDefaults(e) {
-          e.preventDefault();
-          e.stopPropagation();
-      }
-
-      function handleDrop(e) {
-          let dt = e.dataTransfer;
-          let files = dt.files;
-
-          handleFiles(files);
-      }
-
-      async function handleFiles(files) {
-          let filesArray = [...files];
-          filesArray.forEach(file => {
-              const reader = new FileReader();
-              reader.onload = function (e) {
-                  const contents = e.target.result;
-                  fs.write(`/user/files/${file.name}`, contents);
-              };
-
-              if (file.type.startsWith('image')) {
-                  reader.readAsDataURL(file);
-              } else {
-                  reader.readAsArrayBuffer(file);
-              }
-          });
-      }
-  
-  const data = await fs.read('/system/apps.json');
-          if (data) {
-              const apps = JSON.parse(data);
-              try {
-                  const response = await fetch('https://appmarket.meower.xyz/refresh');
-                  const onlineApps = await response.json();
-                  for (const inapp of apps) {
-                      await wd.loadapps(inapp, onlineApps, apps);
-                  }
-              } catch (err) {
-                  console.log(err);
-                  try {
-                      for (const inapp of apps) {
-                          await wd.loadapps(inapp, inapp, inapp);
-                      }
-                  } catch (error) {
-                      if (sys.fucker === false) {
-                          sys.fucker = true;
-                          fs.del('/system/apps.json');
-                          fs.delfold('/system/apps');
-                          wm.notif('App Issues', 'All apps were uninstalled due to corruption or an update. Your data is safe, you can reinstall them anytime.', () => app.appmark.init(), 'App Market');
-                      }
-                  }
-              }
-          }
+    var uname = "No Username, somehow.";
+    var lsofuserinfo = await fs.ls("/user/info");
+    function hasNameFile(element, index, array) {
+      return element.name == "name";
     }
+    var unamexist = lsofuserinfo.items.some(hasNameFile);
+    if (unamexist) {
+        console.log("yea")
+      const name = await fs.read("/user/info/name");
+      const deskid = await fs.read("/system/deskid");
+      const darkpref = await fs.read("/user/info/lightdarkpref");
+      const lightdark = await fs.read("/user/info/lightdark");
+      const color = await fs.read("/user/info/color");
+      await wd.desktop(name, deskid, "wait");
+      await ptp.go(deskid);
+      sys.setupd = true;
+
+      if (darkpref === "auto") {
+        sys.autodarkacc = true;
+      } else {
+        sys.autodarkacc = false;
+      }
+      if (lightdark === "dark") {
+        wd.dark();
+      } else if (lightdark === "clear") {
+        wd.clearm();
+      } else if (lightdark === "clear2") {
+        wd.clearm2();
+      } else {
+        wd.light();
+      }
+      ui.crtheme(color);
+      console.log(color);
+      if (!color) {
+        fs.write("/user/info/color", "#C68A00");
+        ui.crtheme("#C68A00");
+      }
+    } else {
+      console.log("narr")
+      const id = gen(4);
+      await ptp.go(id);
+      await fs.mkdir("/system", "opfs");
+      await fs.write("/system/deskid", id, "opfs");
+      app.setup.init();
+      sys.setupd = false;
+    }
+
+    const dropZone = document.body;
+    ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+      document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    dropZone.addEventListener("drop", handleDrop, false);
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    function handleDrop(e) {
+      let dt = e.dataTransfer;
+      let files = dt.files;
+
+      handleFiles(files);
+    }
+
+    async function handleFiles(files) {
+      let filesArray = [...files];
+      filesArray.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const contents = e.target.result;
+          fs.write(`/user/files/${file.name}`, contents);
+        };
+
+        if (file.type.startsWith("image")) {
+          reader.readAsDataURL(file);
+        } else {
+          reader.readAsArrayBuffer(file);
+        }
+      });
+    }
+
+    const data = await fs.read("/system/apps.json");
+    if (data) {
+      const apps = JSON.parse(data);
+      try {
+        const response = await fetch("https://appmarket.meower.xyz/refresh");
+        const onlineApps = await response.json();
+        for (const inapp of apps) {
+          await wd.loadapps(inapp, onlineApps, apps);
+        }
+      } catch (err) {
+        console.log(err);
+        try {
+          for (const inapp of apps) {
+            await wd.loadapps(inapp, inapp, inapp);
+          }
+        } catch (error) {
+          if (sys.fucker === false) {
+            sys.fucker = true;
+            fs.del("/system/apps.json");
+            fs.delfold("/system/apps");
+            wm.notif(
+              "App Issues",
+              "All apps were uninstalled due to corruption or an update. Your data is safe, you can reinstall them anytime.",
+              () => app.appmark.init(),
+              "App Market"
+            );
+          }
+        }
+      }
+    } else {
+      fs.write("/system/apps.json", "");
+    }
+  }
   // if(localStorage.getItem("networking") == "false") {
   //     document.querySelector("#netw").classList.remove("on");
   // } else {
   //     document.querySelector("#netw").classList.add("on")
   // }
-  if(localStorage.getItem("doNotDisturb") == "falsbrthe") {
-      document.querySelector("#dnd").classList.remove("on");
+  if (localStorage.getItem("doNotDisturb") == "falsbrthe") {
+    document.querySelector("#dnd").classList.remove("on");
   } else {
-      document.querySelector("#dnd").classList.add("on")
+    document.querySelector("#dnd").classList.add("on");
   }
 
-  $("#dm").on("change", function() {
-      if($(this).val() == "dark") {
-          wd.dark();
-          fs.write('/user/info/lightdark', 'dark');
-      } else if($(this).val() == "light") {
-          wd.light();
-          fs.write('/user/info/lightdark', 'light');
-      } else if($(this).val() == "auto") {
-          fs.write('/user/info/lightdarkpref', 'auto');
-              fs.read('/user/info/color').then((col) => ui.crtheme(col));
-              sys.autodarkacc = true;
-      } else if($(this).val() == "cml") {
-          wd.clearm();
-          fs.write('/user/info/lightdark', 'clear');
-      } else if($(this).val() == "cmd") {
-          wd.clearm2();
-          fs.write('/user/info/lightdark', 'clear2');
-      }
+  $("#dm").on("change", function () {
+    if ($(this).val() == "dark") {
+      wd.dark();
+      fs.write("/user/info/lightdark", "dark");
+    } else if ($(this).val() == "light") {
+      wd.light();
+      fs.write("/user/info/lightdark", "light");
+    } else if ($(this).val() == "auto") {
+      fs.write("/user/info/lightdarkpref", "auto");
+      fs.read("/user/info/color").then((col) => ui.crtheme(col));
+      sys.autodarkacc = true;
+    } else if ($(this).val() == "cml") {
+      wd.clearm();
+      fs.write("/user/info/lightdark", "clear");
+    } else if ($(this).val() == "cmd") {
+      wd.clearm2();
+      fs.write("/user/info/lightdark", "clear2");
+    }
   });
 </script>

@@ -82,13 +82,13 @@ var foxyfs = {
                 }
                 return { items: content };
             }
-            var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+            var dirHandle = await opfsRoot.getDirectoryHandle(path[0], {create:true});
             if (path.length > 1) {
                 for (var item of path) {
                     if (item == path[0]) {
 
                     } else {
-                        dirHandle = await dirHandle.getDirectoryHandle(item)
+                        dirHandle = await dirHandle.getDirectoryHandle(item, {create:true})
                     }
                 }
                 var content = [];
