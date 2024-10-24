@@ -134,8 +134,8 @@
     function hasNameFile(element, index, array) {
       return element.name == "name";
     }
-    var unamexist = lsofuserinfo.items.some(hasNameFile);
-    if (unamexist) {
+    // var unamexist = lsofuserinfo.items.some(hasNameFile);
+    if (lsofuserinfo !== undefined) {
         console.log("yea")
       const name = await fs.read("/user/info/name");
       const deskid = await fs.read("/system/deskid");

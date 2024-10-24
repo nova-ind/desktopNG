@@ -224,7 +224,6 @@ var app = {
         tk.img("./assets/img/systemIcons/os.svg", "setupi", first);
         tk.p("Welcome to NovaOS Deskop Next-Gen!", "h2", first);
         tk.p("NovaOS is powered by WebDesk!", "h3", first);
-        tk.cb("b1", `Login as Guest`, () => wd.desktop("Guest", gen(8)), first);
         tk.cb("b1", `Begin Setup`, () => ui.sw2(first, user), first);
         // user menu
         const user = tk.c("div", main, "setb hide");

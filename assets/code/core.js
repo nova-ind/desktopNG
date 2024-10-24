@@ -277,19 +277,20 @@ var wd = {
     /** 
      * Stores the user's name and sets parts of the filesystem
     */
-    finishsetup: function (name, div1, div2) {
+    finishsetup: async function (name, div1, div2) {
         if(sys.isIOT){
             ui.sw2(div1, div2); ui.masschange('name', "iotuser");
-            fs.mkdir('/user')
-            fs.mkdir('/user/info')
-            fs.mkdir('/user/Documents')
-            fs.write('/user/info/name', "iotuser");
+            await fs.mkdir('/user');
+            await fs.mkdir('/user/info');
+            await fs.mkdir('/user/Documents');
+            await fs.write('/user/info/name', "iotuser");
         } else{
             ui.sw2(div1, div2); ui.masschange('name', name);
-            fs.mkdir('/user')
-            fs.mkdir('/user/info')
-            fs.mkdir('/user/Documents')
-            fs.write('/user/info/name', name);
+            await fs.mkdir('/user');
+            await fs.mkdir('/user/info');
+            await fs.mkdir('/user/Documents');
+            await fs.del('/user/info/name');
+            await fs.write('/user/info/name', name);
         }
     },
     /**
