@@ -12,7 +12,7 @@ var plainTextTypes = [
   "application/atom+xml",
 ];
 var foxyfs = {
-  getFileHandle: async function getFileHandle(path1) {
+  getFileHandle: async function getFileHandle(path1, opt = {}) {
     // Remove leading slash if present and split the path
     const cleanPath = path1.startsWith("/") ? path1.substring(1) : path1;
     const path = cleanPath.split("/");
@@ -26,7 +26,7 @@ var foxyfs = {
     try {
       // Case 1: File is in root directory
       if (path.length === 0) {
-        return await opfsRoot.getFileHandle(nameofFile, {create: true});
+        return await opfsRoot.getFileHandle(nameofFile, opt);
       }
 
       // Case 2: File is in a nested directory
@@ -34,7 +34,7 @@ var foxyfs = {
 
       // Navigate through the directory structure
       for (const dir of path) {
-        if (!dir) continue; // Skip empty directory 
+        if (!dir) continue; // Skip empty directory
         dirHandle = await dirHandle.getDirectoryHandle(dir, { create: false });
         if (!dirHandle) {
           console.log(`Directory not found: ${dir}`);
@@ -43,9 +43,7 @@ var foxyfs = {
       }
 
       // Get the final file handle
-      const fileHandle = await dirHandle.getFileHandle(nameofFile, {
-        create: false,
-      });
+      const fileHandle = await dirHandle.getFileHandle(nameofFile, opt);
       if (!fileHandle) {
         console.log(`File not found: ${dir}`);
         throw new Error(`FileNotFoundErr,${dir}`);
@@ -63,7 +61,7 @@ var foxyfs = {
       throw error;
     }
   },
-  getDirHandle: async function (path1) {
+  getDirHandle: async function (path1, opt = {}) {
     var path = path1.split("/");
     var nameofFile = path[path.length - 1];
     path[path.length - 1] = "";
@@ -72,18 +70,19 @@ var foxyfs = {
     });
     var content = {};
     if (path.length == 0) {
-      var dirHandle = await opfsRoot.getDirectoryHandle(nameofFile);
+      var dirHandle = await opfsRoot.getDirectoryHandle(nameofFile, opt);
     } else if (path.length > 1) {
-      var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+      var dirHandle = await opfsRoot.getDirectoryHandle(path[0], opt);
 
       for (var item of path) {
         if (item == path[0]) {
         } else {
-          dirHandle = await dirHandle.getDirectoryHandle(item);
+          dirHandle = await dirHandle.getDirectoryHandle(item, opt);
         }
       }
     } else if (path.length == 1) {
-      var dirHandle = await opfsRoot.getDirectoryHandle(path[0]);
+      var dirHandle = await opfsRoot.getDirectoryHandle(path[0]),
+        opt;
     }
     return dirHandle;
   },
@@ -208,10 +207,12 @@ var foxyfs = {
       var h = await foxyfs.getFileHandle(path);
       var file = await h.getFile();
       console.log(file.type);
-      if(file.type == ""){
+      if (file.type == "") {
         return await file.text();
-      }
-      else if(plainTextTypes.includes(file.type) || file.type.startsWith("text/")){
+      } else if (
+        plainTextTypes.includes(file.type) ||
+        file.type.startsWith("text/")
+      ) {
         return await file.text();
       } else {
         return file;
