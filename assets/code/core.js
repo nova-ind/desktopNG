@@ -289,7 +289,6 @@ var wd = {
             await fs.mkdir('/user');
             await fs.mkdir('/user/info');
             await fs.mkdir('/user/Documents');
-            await fs.del('/user/info/name');
             await fs.write('/user/info/name', name);
         }
     },
