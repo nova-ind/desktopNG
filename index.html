@@ -136,6 +136,7 @@
     async function boot() {
         var uname = "No Username, somehow.";
         var lsofuserinfo = await fs.ls("/user/info");
+        console.log(lsofuserinfo);
         function hasNameFile(element, index, array) {
             return element.name == "name";
         }
