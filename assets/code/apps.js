@@ -1179,6 +1179,164 @@ var app = {
       await loadapps();
     },
   },
+  modernde: {
+    runs: false,
+    name: "ModernDE",
+    icon: "./assets/img/systemIcons/os.svg",
+    desktop: function (name, deskid) {
+      ui.dest(tk.g("setuparea"));
+      function smApps(apps = app) {
+        document.querySelectorAll(".appItem").forEach(function (e) {
+          e.remove();
+        });
+        for (var key in apps) {
+          if (apps.hasOwnProperty(key)) {
+            if (apps[key].hasOwnProperty("runs") && apps[key].runs === true) {
+              console.log(`<i> ${apps[key].name} is launchable!`);
+              const btn = tk.cb("b1", apps[key].name, function () {}, el.sm);
+              btn.innerHTML = `
+                          <img src='${apps[key].icon}' class='appIcon'/>
+                          <span class='appName'>${apps[key].name}</span>`;
+              btn.classList.add("appItem");
+              var $thisapp = app[key];
+              btn.onclick = $thisapp.init;
+              btn.addEventListener("click", function () {
+                if (document.querySelector(".tbmenu")) {
+                  ui.dest(document.querySelector(".tbmenu"), 150);
+                }
+              });
+            } else {
+              console.log(`<i> ${apps[key].name} is not launchable! :(`);
+            }
+          }
+        }
+      }
+      function startmenu() {
+        if (el.sm == undefined) {
+          if (document.querySelector(".contcent")) {
+            $(".contcent").fadeOut(150, function () {});
+          }
+          el.sm = tk.c("div", document.body, "tbmenu");
+          el.sm.addEventListener("mouseleave", function () {
+            ui.dest(el.sm, 150);
+            el.sm = undefined;
+          });
+          const btm = el.taskbar.getBoundingClientRect();
+          el.sm.style.bottom = btm.height + btm.x + 4 + "px";
+          tk.p(`Hello, ${name}!`, "h2", el.sm);
+          console.log(el.sm);
+          var searchbar = tk.mkel("input", ["i1"], "", el.sm);
+          searchbar.placeholder = "Search for anything...";
+          searchbar.addEventListener("input", async function (event) {
+            var results = {};
+            var search = event.target.value.trim();
+            var searchAsWords = search.split(" ");
+            var appIds = Object.keys(app);
+            appIds.forEach(function (appId, index) {
+              appIds[index] = appId.toLowerCase();
+            });
+            searchAsWords.forEach((srch) => {
+              if (appIds.includes(srch.toLowerCase())) {
+                results[srch] = app[srch];
+              }
+            });
+            // search by app names
+            searchAsWords.forEach((srch) => {
+              for (var key in app) {
+                console.log(app[key]);
+                if (app.hasOwnProperty(key) && app[key].hasOwnProperty("name")) {
+                  console.log(app[key].name);
+                  if (app[key].name.toLowerCase().includes(srch.toLowerCase())) {
+                    results[key] = app[key];
+                  }
+                }
+              }
+            });
+            console.log(results);
+            smApps(results);
+            if (document.querySelector(".aiResponse") == null) {
+              var aiResponse = tk.c("p", el.sm, "aiResponse");
+            }
+            document.querySelector(".aiResponse").innerText = "";
+  
+            // const  = {
+            //     queries: [search],
+            //     responses: [
+            //         `Your system colour is set to ${await fs.read('/user/info/color')}.`,
+            //         `Your system colour scheme is set to ${await fs.read('/user/info/lightdark') || "default"}.`,
+            //         `Your name is ${await fs.read('/user/info/name') || "unset, somehow (how did you get here without triggering setup lmaoo)"}.`,
+            //     ]
+            // };
+            if (
+              (search.includes("what") &&
+                search.includes("your") &&
+                search.includes("name")) ||
+              (search.includes("who") && search.includes("you")) ||
+              (search.includes("ai") && search.includes("you"))
+            ) {
+              document.querySelector(".aiResponse").innerText =
+                "I'm NovaAI! (not really ai lmao im just some if loops uwu)";
+            } else if (
+              search.includes("what") &&
+              search.includes("my") &&
+              search.includes("name")
+            ) {
+              document.querySelector(".aiResponse").innerText =
+                `Your name is ${(await fs.read("/user/info/name")) || "unset, somehow (how did you get here without triggering setup lmaoo)"}!`;
+            } else if (
+              search.includes("what") &&
+              (search.includes("color") || search.includes("colour")) &&
+              (search.includes("theme") || search.includes("accent"))
+            ) {
+              document.querySelector(".aiResponse").innerText =
+                `Your system colour is set to ${(await fs.read("/user/info/color")) || "unknown"}.`;
+            } else if (
+              search.includes("what") &&
+              (search.includes("color") || search.includes("colour")) &&
+              (search.includes("scheme") || search.includes("mode"))
+            ) {
+              document.querySelector(".aiResponse").innerText =
+                `Your system colour mode is set to ${(await fs.read("/user/info/lightdark")) || "default"}.`;
+            } else if (
+              search.includes("what") &&
+              (search.includes("time") ||
+                search.includes("clock") ||
+                search.includes("hour") ||
+                search.includes("minute"))
+            ) {
+              document.querySelector(".aiResponse").innerHTML =
+                `It is currently <div class="time">${wd.clock() || "Unknown"}</div>`;
+            } else if (app.hasOwnProperty("docai")) {
+              document.querySelector(".aiResponse").innerHTML =
+                `No results found.<br> Would you like to <button class="b1" onclick="app.docai.init('${search}')">Search for it with DocAI?</button>`;
+            } else {
+              document.querySelector(".aiResponse").innerText =
+                "No results found, and DocAI is not found on your system!";
+            }
+          });
+          smApps(app);
+        } else {
+          ui.dest(el.sm, 150);
+          el.sm = undefined;
+        }
+      }
+      function desktopgo() {
+        tk.css("/assets/modernde.css")
+        setTimeout(function(){
+          el.topbar = tk.c("div", document.body, "modernde-topbar");
+          el.topbarLeft = tk.c("div", el.topbar, "")
+          el.topbarRight = tk.c("div", el.topbar, "")
+          el.taskbar = tk.c("div", document.body, "modernde-taskbar");
+          const start = tk.cb("modernde-start", "", () => startmenu(), el.topbarLeft);
+          var title = tk.c("span", el.topbarLeft, "modernde-title")
+          title.innerText = abt.product || "WebDesk or Derivative work (set abt/product in index.html please)"
+          start.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-command small-icon text-white opacity-80"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>`;
+          tk.cb("time modernde-time", "--:--", () => wd.controls.toggle(), el.topbarRight);
+        }, 200)
+      }
+      desktopgo()
+    },
+  }
 };
 window.installApp = function (appn, appid, appscripts, appico) {
   var appc = {
