@@ -1326,16 +1326,39 @@ var app = {
           el.topbar = tk.c("div", document.body, "modernde-topbar");
           el.topbarLeft = tk.c("div", el.topbar, "")
           el.topbarRight = tk.c("div", el.topbar, "")
-          el.taskbar = tk.c("div", document.body, "modernde-taskbar");
+          el.taskbar = tk.c("div", document.body, "modernde-dock");
+          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
+          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
+          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
+          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
+          el.wp = tk.c("img", document.body, "modernde-wallpaper")
+          el.wp.src="/wallpaper/tricirc?4F46E5#581C87"
           const start = tk.cb("modernde-start", "", () => startmenu(), el.topbarLeft);
           var title = tk.c("span", el.topbarLeft, "modernde-title")
           title.innerText = abt.product || "WebDesk or Derivative work (set abt/product in index.html please)"
           start.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-command small-icon text-white opacity-80"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>`;
           tk.cb("time modernde-time", "--:--", () => wd.controls.toggle(), el.topbarRight);
+          el.desktopCards = tk.c("div", document.body, "modernde-deskcardContainer")
+          el.sysstats = tk.c("div", el.desktopCards, "modernde-card mde-sysstatcard")
+          el.sysstats.innerHTML = `
+          <h1>System Status</h1>
+          <div class="statusline">
+            <b>Battery</b>
+            <div class="mde-progress" vtxt="50%" style="--vw: 50%" subtitle="20min to full"></div>
+          </div>
+          <div class="mde-statusline">
+            <b>OPFS Storage</b>
+            <div class="mde-progress" vtxt="50%" style="--vw: 50%" subtitle="Healthy"></div>
+          </div>`
         }, 200)
       }
       desktopgo()
     },
+    desktopEvent: function( ev ){
+      if(ev.type == "windowAdded") {
+
+      }
+    }
   }
 };
 window.installApp = function (appn, appid, appscripts, appico) {
