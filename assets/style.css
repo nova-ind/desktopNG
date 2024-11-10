@@ -1,5 +1,5 @@
 :root {
-    --sh1: #9999FF;
+    --sh1: #9999ff;
     --sh2: #bbbbff;
     --bg1: #eeeeff;
     --bg2: #ccccff;
@@ -18,10 +18,15 @@
     --fz2: 12px;
     --inv: 0;
 }
-*{
+* {
     user-select: none;
     transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
 }
+
+html {
+    background-color: transparent;
+}
+
 #background {
     position: fixed;
     left: 0;
@@ -38,22 +43,22 @@
 }
 
 @font-face {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     src: url(./fonts/Poppins-Regular.ttf);
 }
 
 @font-face {
-    font-family: 'PoppinsB';
+    font-family: "PoppinsB";
     src: url(./fonts/Poppins-Bold.ttf);
 }
 
 @font-face {
-    font-family: 'PoppinsM';
+    font-family: "PoppinsM";
     src: url(./fonts/Poppins-Medium.ttf);
 }
 
 @font-face {
-    font-family: 'MonoS';
+    font-family: "MonoS";
     src: url(./fonts/mono.ttf);
 }
 
@@ -61,17 +66,16 @@ body {
     background-color: #000;
     animation: fade 0.7s;
     color: var(--font);
-    font-family: 'Poppins', Arial;
+    font-family: "Poppins", Arial;
     text-align: center;
     font-size: var(--fz1);
     overflow: hidden;
 }
 
-.smallb{
+.smallb {
     padding: 3px !important;
     font-size: 0.8em !important;
 }
-
 
 .bold {
     font-family: "PoppinsB";
@@ -88,7 +92,7 @@ body {
 
 button {
     cursor: pointer;
-    font-family: 'PoppinsM', Arial;
+    font-family: "PoppinsM", Arial;
     color: var(--font);
 }
 
@@ -133,12 +137,12 @@ button {
 p {
     padding: 0px;
     margin: 3px;
-    font-family: 'Poppins', Arial;
+    font-family: "Poppins", Arial;
     font-size: var(--fz1);
     filter: invert(var(--inv));
 }
 
-@media (max-width:400px) {
+@media (max-width: 400px) {
     .setup {
         width: 85% !important;
     }
@@ -149,32 +153,32 @@ p {
         margin-right: 9px;
     }
 
-    @media (max-height:700px) {
+    @media (max-height: 700px) {
         .setup {
             height: 80% !important;
         }
     }
 }
-@media (max-width: 800px){
-    #contcent{
+@media (max-width: 800px) {
+    #contcent {
         position: absolute;
-        top:48px;
-        right:5px !important;
-        left:5px !important;
-        left:unset !important;
+        top: 48px;
+        right: 5px !important;
+        left: 5px !important;
+        left: unset !important;
         width: calc(100vw - 30px);
         height: calc(100vh - 122px);
         max-height: unset !important;
         max-width: unset !important;
     }
-    #cccb{
-        left:10px;
+    #cccb {
+        left: 10px;
         width: calc(100% - 20px) !important;
         position: fixed;
         bottom: 10px !important;
     }
 }
-#contcent{
+#contcent {
     position: fixed;
     border-radius: var(--rad1);
     border: 1px solid var(--ui2);
@@ -194,7 +198,7 @@ p {
 }
 .setupbox {
     position: fixed;
-    transform: translate(-50%, -50%) scale(1.0);
+    transform: translate(-50%, -50%) scale(1);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 150px 30px;
     left: 50%;
     top: 50%;
@@ -227,7 +231,20 @@ p {
     resize: both;
     height: auto;
     min-height: 300px;
-    z-index: 5;
+    z-index: 5;    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px;
+    padding-left: 11px;
+    padding-right: 11px;
+    background-color: var(--ui2);
+    width: 100%;
+    box-sizing: border-box;
+    user-select: none;
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+    border-bottom: 1px solid var(--ui3);
+    transition: 0.05s;
     background-color: var(--ui1);
     display: none;
     overflow: auto !important;
@@ -263,7 +280,6 @@ p {
     margin-bottom: -10px;
 }
 
-
 .title {
     flex-grow: 1;
     text-align: right;
@@ -271,8 +287,9 @@ p {
     text-overflow: ellipsis;
     margin-left: 2px;
 }
-.taskbar, .topbar{
-    overflow-y:hidden;
+.taskbar,
+.topbar {
+    overflow-y: hidden;
 }
 .winb {
     width: 14px;
@@ -346,7 +363,7 @@ p {
 
 .h2 {
     font-size: 20px;
-    font-family: 'PoppinsM', Arial;
+    font-family: "PoppinsM", Arial;
 }
 
 .b2 {
@@ -365,15 +382,19 @@ p {
     border: 1px solid transparent;
 }
 
-.b1:hover, .b1.on, .ckbx.on {
+.b1:hover,
+.b1.on,
+.ckbx.on {
     background-color: rgba(var(--acc), 0.4);
     border: 1px solid rgba(var(--acc), 0.6);
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 20px 4px;
 }
 
-.b1:active, .b1.on:hover, .ckbx.on:hover {
+.b1:active,
+.b1.on:hover,
+.ckbx.on:hover {
     transform: scale(0.88);
-    background-color: rgba(var(--acc), 0.20);
+    background-color: rgba(var(--acc), 0.2);
 }
 
 .b4 {
@@ -394,7 +415,7 @@ p {
 .b4:active {
     background-color: rgba(var(--accent), 0.35);
     border-color: rgba(var(--accent), 0.8);
-    transform: scale(0.90);
+    transform: scale(0.9);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -402,8 +423,7 @@ p {
     display: none;
 }
 
-@media (max-width:1030px) {
-
+@media (max-width: 1030px) {
     .circle,
     .circle2 {
         width: 35vw !important;
@@ -445,8 +465,7 @@ p {
     }
 }
 
-@media (max-width:600px) {
-
+@media (max-width: 600px) {
     .circle,
     .circle2 {
         width: 50vw !important;
@@ -489,7 +508,6 @@ p {
 }
 
 @media (min-width: 1030px) {
-
     .circle,
     .circle2 {
         width: 24vw;
@@ -558,7 +576,7 @@ p {
     color: var(--fontc);
     width: 100%;
     box-sizing: border-box;
-    font-family: 'PoppinsM', Arial;
+    font-family: "PoppinsM", Arial;
     margin-bottom: 2px;
     transition: 0.05s;
     outline: none;
@@ -574,7 +592,7 @@ p {
     overflow-y: scroll;
 }
 
-#desktopNotificationsArea{
+#desktopNotificationsArea {
     position: fixed;
     top: 10px;
     right: 10px;
@@ -650,7 +668,7 @@ p {
     border: 1px solid var(--ui2);
     background-color: var(--ui1);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 75px 15px;
-    animation: tb 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation: tb 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     backdrop-filter: blur(var(--bl2));
     -webkit-backdrop-filter: blur(var(--bl2));
     z-index: 303369;
@@ -658,7 +676,6 @@ p {
     white-space: nowrap;
     overflow: hidden;
 }
-
 
 @keyframes tb {
     0% {
@@ -704,8 +721,13 @@ p {
     left: 5px;
 }
 @keyframes tb2 {
-    0% {bottom: 90px; opacity: 0%;}
-    100% {opacity: 100%;}
+    0% {
+        bottom: 90px;
+        opacity: 0%;
+    }
+    100% {
+        opacity: 100%;
+    }
 }
 
 .flist {
@@ -714,7 +736,7 @@ p {
     border: none;
     padding: 4px;
     border-radius: 9px;
-    font-family: 'PoppinsB', Arial;
+    font-family: "PoppinsB", Arial;
     display: inline;
 }
 
@@ -730,20 +752,20 @@ p {
 .width {
     width: 100%;
     box-sizing: border-box;
-    font-family: 'Poppins', Arial !important;
+    font-family: "Poppins", Arial !important;
     text-align: left;
 }
 
 .flists {
     background-color: transparent;
     font: var(--font);
-    padding:2px;
+    padding: 2px;
     border: none;
     border-radius: 9px;
-    font-family: 'PoppinsB', Arial;
+    font-family: "PoppinsB", Arial;
 }
-.bc{
-    padding:0px;
+.bc {
+    padding: 0px;
     text-align: left;
     background-color: rgba(var(--acc), 0.3);
     border-radius: var(--rad2);
@@ -755,7 +777,8 @@ p {
     width: 100%;
 }
 
-.flist, .flists{
+.flist,
+.flists {
     /* padding-inline: 0px; */
     /* padding-block: 0px; */
     height: 100%;
@@ -771,7 +794,7 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'PoppinsB', Arial;
+    font-family: "PoppinsB", Arial;
     font-size: 30px;
     color: var(--font);
 }
@@ -780,13 +803,12 @@ p {
     height: 100px;
     margin-right: 10px;
 }
-.splashscreen *{
+.splashscreen * {
     margin-block-start: 0px;
     margin-block-end: 0px;
 }
-.tbmenu{
+.tbmenu {
     z-index: 900245212312312 !important;
-
 }
 /* {
     width: 20px;
@@ -821,10 +843,8 @@ select:hover {
 select:active {
     /* transform: scale(0.88); */
     /* padding: 4px 6px; */
-    background-color: rgba(var(--acc), 0.20);
+    background-color: rgba(var(--acc), 0.2);
 }
-
-
 
 .ckbx {
     background-color: rgba(var(--acc), 0.3);
@@ -848,7 +868,7 @@ select:active {
 
 .ckbx:active {
     transform: scale(0.88);
-    background-color: rgba(var(--acc), 0.20);
+    background-color: rgba(var(--acc), 0.2);
 }
 
 /* .ckbx input:after {
@@ -872,7 +892,7 @@ select:active {
     border-bottom: 1px solid var(--ui2);
     background-color: var(--ui1);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 75px 15px;
-    animation: tb 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation: tb 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     backdrop-filter: blur(var(--bl2));
     -webkit-backdrop-filter: blur(var(--bl2));
     z-index: 303369;
@@ -880,151 +900,151 @@ select:active {
     white-space: nowrap;
     bottom: unset !important;
     overflow: hidden;
-
 }
-.topbar *{
+.topbar * {
     margin: 0px;
     padding: 4px;
 }
-.topbar .b1{
+.topbar .b1 {
     background-color: transparent;
 }
-@media (max-width:800px){
-    .topbar{
+@media (max-width: 800px) {
+    .topbar {
         display: flex;
         top: 0px;
         height: 4vh;
     }
-    .taskbar{
-        left:0px;
+    .taskbar {
+        left: 0px;
         bottom: 0px !important;
         right: 0px;
-        border:none;
+        border: none;
         border-top: 1px solid var(--ui2);
         border-radius: 0px;
         height: 4vh;
     }
-    .tbmenu{
+    .tbmenu {
         width: calc(100vw - 24px) !important;
         height: calc(100vh - 8vh - 31px) !important;
         max-height: unset !important;
         max-width: unset !important;
         position: absolute !important;
-        left:0px !important;
-        top:4vh !important;
+        left: 0px !important;
+        top: 4vh !important;
         border-radius: 0px !important;
-        overflow:visible !important;
+        overflow: visible !important;
         /* z-index: 303367 !important; */
     }
-    .window{
+    .window {
         width: 100vw !important;
         height: calc(100vh - 8vh - 10px) !important;
         max-height: unset !important;
         max-width: unset !important;
         position: absolute !important;
-        left:0px !important;
-        top:4vh !important;
+        left: 0px !important;
+        top: 4vh !important;
         border-radius: 0px !important;
-        overflow:visible !important;
+        overflow: visible !important;
     }
-    .window .content{
-        padding:2px;
+    .window .content {
+        padding: 2px;
     }
-    .window .tnav{
+    .window .tnav {
         /* display: none; */
     }
-    .window .title{
+    .window .title {
         /* position: absolute;
         top:0;
         left:0; */
     }
-    .window .tb{
+    .window .tb {
         border-radius: 0px !important;
     }
-    .window:not(.winf){
+    .window:not(.winf) {
         z-index: -100 !important;
     }
-    #contcent{
+    #contcent {
         width: calc(100vw - 4px) !important;
         height: calc(100vh - 8vh - 14px) !important;
         max-height: unset !important;
         max-width: unset !important;
         position: absolute !important;
-        left:0px !important;
-        top:4vh !important;
+        left: 0px !important;
+        top: 4vh !important;
         border-radius: 0px !important;
-        overflow:visible !important;
+        overflow: visible !important;
         z-index: 303367 !important;
-        padding:2px;
+        padding: 2px;
     }
-    #cccb{
-        margin:0px !important;
-        left:2px;
-        width:calc(100% - 10px) !important;
+    #cccb {
+        margin: 0px !important;
+        left: 2px;
+        width: calc(100% - 10px) !important;
     }
-    .taskbar .time{
+    .taskbar .time {
         display: none;
     }
-    .smtxt{
+    .smtxt {
         display: none;
     }
-    .smico{
+    .smico {
         display: block !important;
     }
-    .taskbar .tnav{
+    .taskbar .tnav {
         margin-left: 40px !important;
         overflow: auto;
         border-radius: var(--rad2);
     }
-    .taskbar .tnav .label{
+    .taskbar .tnav .label {
         display: none;
     }
 }
-.winf{
+.winf {
     z-index: 303365 !important;
 }
-.start{
+.start {
     position: absolute;
-    left:5px;
+    left: 5px;
 }
-.taskbar .tnav{
+.taskbar .tnav {
     margin-left: 60px;
     overflow: auto;
     border-radius: var(--rad2);
     margin-bottom: -10px;
 }
-.smico{
+.smico {
     display: none;
 }
-.winf:has(.d){
+.winf:has(.d) {
     z-index: 99999999999 !important;
 }
 .navbar {
     display: flex;
     flex-grow: 2;
-    flex-direction:row;
-    width:calc(100%);
-    flex-shrink:2;
+    flex-direction: row;
+    width: calc(100%);
+    flex-shrink: 2;
     height: 40px;
     /* position: absolute; */
     right: 10px;
-    grid-area:nav;
+    grid-area: nav;
 }
-.navbar > .bc{
+.navbar > .bc {
 }
-.navpane ul, .navpane li {
+.navpane ul,
+.navpane li {
     list-style: none;
     text-align: left;
     padding-inline-start: 0px;
     margin-block-start: 0px;
     margin-block-end: 0px;
 }
-.navpane{
-    height:100%;
+.navpane {
+    height: 100%;
     /* width:35%; */
     /* position:static; */
     /* top:30px; */
-    min-height:200PX;
+    min-height: 200px;
     grid-area: panel;
     resize: horizontal;
     display: block;
@@ -1032,15 +1052,15 @@ select:active {
     min-width: 80px;
     max-width: 500px;
 }
-.fm{
+.fm {
     /* position:absolute; */
     /* right:10px; */
     /* top:100px; */
-    width:100%;
-    height:calc(100%);
-    grid-area:main;
+    width: 100%;
+    height: calc(100%);
+    grid-area: main;
 }
-.content.fileman .lowerZone{
+.content.fileman .lowerZone {
     display: flex;
     flex-direction: row-reverse;
     flex-wrap: nowrap;
@@ -1050,32 +1070,31 @@ select:active {
     height: calc(100%);
     overflow: hidden;
 }
-.content.fileman{
+.content.fileman {
     display: flex;
     flex-direction: column-reverse;
     height: calc(100% - 65px);
 }
-.content.fileman > *{
+.content.fileman > * {
     max-height: calc(100%);
-    flex-grow:2;
-    flex-shrink:1;
+    flex-grow: 2;
+    flex-shrink: 1;
     max-height: 100%;
 }
-.window:has(.fileman){
+.window:has(.fileman) {
     min-width: 400px;
 }
 .setupbox {
-    height:70%;
-    width:100%;
-    
+    height: 70%;
+    width: 100%;
 }
-.window:has(.setupbox){
-    top:10vh !important;
-    left:15vw !important;
+.window:has(.setupbox) {
+    top: 10vh !important;
+    left: 15vw !important;
     width: 70vw !important;
     height: 80vh !important;
 }
-.appIcon{
+.appIcon {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -1083,7 +1102,7 @@ select:active {
     margin-right: auto;
     display: block;
 }
-.appItem{
+.appItem {
     text-align: center;
     max-width: 80px;
     width: 80px;
@@ -1093,49 +1112,50 @@ select:active {
     display: inline-block;
     vertical-align: top;
 }
-.taskbar .tnav .icon, .title .icon{
+.taskbar .tnav .icon,
+.title .icon {
     vertical-align: bottom;
 }
 
-.b1.start{
+.b1.start {
     margin-top: 0px;
 }
-.taskbar .tnav{
-    margin-top:-10px;
+.taskbar .tnav {
+    margin-top: -10px;
 }
 
-body[iot="true"]{
+body[iot="true"] {
     background-color: #000;
     color: #fff;
 }
-body[iot="true"] .window{
+body[iot="true"] .window {
     position: absolute !important;
     top: 0px !important;
-    left: 0px !important;   
+    left: 0px !important;
     width: 100% !important;
     height: 100% !important;
     border-radius: 0px !important;
     resize: none !important;
     background-color: transparent;
     backdrop-filter: none;
-    border:0px;
+    border: 0px;
 }
-body[iot="true"] .window .content{
+body[iot="true"] .window .content {
     padding: 0px !important;
     margin: 0px !important;
     background-color: transparent;
     backdrop-filter: none;
 }
-body[iot="true"] .d.tb{
+body[iot="true"] .d.tb {
     display: none !important;
 }
-body[iot="true"] .taskbar{
+body[iot="true"] .taskbar {
     display: none !important;
 }
-body[iot="true"] .topbar{
+body[iot="true"] .topbar {
     display: none !important;
 }
-body[iot="true"] #background{
+body[iot="true"] #background {
     display: none !important;
 }
 body[iot="true"] #castvideo {

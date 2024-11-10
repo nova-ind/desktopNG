@@ -96,7 +96,7 @@ var foxyfs = {
       if (path.length == 0) {
         var content = [];
         for await (let [name, handle] of opfsRoot.entries()) {
-          content.push({ name: name, type: handle.kind, path: dir + name });
+          content.push({ name: name, type: handle.kind, path: dir + "/" + name });
         }
         return { items: content };
       }
@@ -126,6 +126,7 @@ var foxyfs = {
       }
     } catch (error) {
       console.log(error);
+      return error;
     }
   },
   mkdir: async function (location, name) {

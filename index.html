@@ -1,101 +1,106 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <link rel="stylesheet" href="./assets/style.css" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, user-scalable=no"
-        />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <link rel="shortcut icon" href="./assets/img/systemIcons/os.svg" />
-        <link rel="apple-touch-icon" href="./assets/img/systemIcons/os.svg" />
-        <title>NovaOS NG</title>
-        <!-- Make sure your page supports utf-8 characterset. -->
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <!-- Load TensorFlow.js. This is required to use the qna model. -->
-        <script src="./assets/lib/tf.js"></script>
-        <!-- Load the qna model. -->
-        <script src="./assets/models/qna.model"></script>
-        <!-- Load the Universal Sentence Encoder. This is required to use the novaOS AI. -->
-        <script src="./assets/lib/use.js"></script>
-    </head>
+<!DOCTYPE html>
+<html lang="en" style="">
+  <head>
     <style>
-        @font-face {
-          font-family: 'LucideIcons';
-          src: url(https://unpkg.com/lucide-static@latest/font/Lucide.ttf) format('truetype');
-        }
-      </style>
-    <script>
-        var abt = {
-            lastmod: "July 29, 2024",
-            ver: "0.0.9",
-            product: "novaOS"
-        };
+        html:not(:has(.setupbar)){background-color: black;}
+    </style>
+    </style>
+    <link rel="stylesheet" id="stockstyles" href="./assets/style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="shortcut icon" href="./assets/img/systemIcons/os.svg" />
+    <link rel="apple-touch-icon" href="./assets/img/systemIcons/os.svg" />
+    <title>NovaOS NG</title>
+    <!-- Make sure your page supports utf-8 characterset. -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Load TensorFlow.js. This is required to use the qna model. -->
+    <script src="./assets/lib/tf.js"></script>
+    <!-- Load the qna model. -->
+    <script src="./assets/models/qna.model"></script>
+    <!-- Load the Universal Sentence Encoder. This is required to use the novaOS AI. -->
+    <script src="./assets/lib/use.js"></script>
+  </head>
+  <style>
+    @font-face {
+      font-family: "LucideIcons";
+      src: url(https://unpkg.com/lucide-static@latest/font/Lucide.ttf)
+        format("truetype");
+    }
+  </style>
+  <script>
+    var abt = {
+      lastmod: "July 29, 2024",
+      ver: "0.0.9",
+      product: "novaOS",
+    };
 
-        var sys = {
-            deskid: undefined,
-            setupd: undefined,
-            migrid: 1,
-            autodarkacc: undefined,
-            webdrop: true,
-            name: "Default User",
-            isIOT: false,
-            iotApp: null,
-            idLen: 8,
-        };
+    var sys = {
+      deskid: undefined,
+      setupd: undefined,
+      migrid: 1,
+      autodarkacc: undefined,
+      webdrop: true,
+      name: "Default User",
+      isIOT: false,
+      iotApp: null,
+      idLen: 8,
+    };
 
-        var el = {
-            taskbar: undefined,
-            sm: undefined,
-            tr: undefined,
-        };
-    </script>
+    var el = {
+      taskbar: undefined,
+      sm: undefined,
+      tr: undefined,
+    };
+  </script>
 
-    <body>
-        
-        <!--    <div class="circle"></div>
+  <body style="display: none !important;">
+    <!--    <div class="circle"></div>
     <div class="circle2"></div> -->
-        <div id="setuparea"></div>
-        <div style="display: none" id="contcent" class="contcent">
-            <p class="h3">Control Center</p>
-            <p class="lockdown">
-                Your DeskID is <span class="mcode bold deskid">----</span>
-            </p>
-            <span
-                class="ckbx"
-                id="dnd"
-                onclick='localStorage.setItem("doNotDisturb", localStorage.getItem("doNotDisturb") == "false");if(localStorage.getItem("doNotDisturb") == "false") this.classList.remove("on"); else this.classList.add("on")'
-            >
-                Do not disturb
-            </span>
-            <!-- <span class="ckbx" id="netw" onclick='localStorage.setItem("networking", localStorage.getItem("networking") == "false");if(localStorage.getItem("networking") == "false") this.classList.remove("on"); else this.classList.add("on")'>
+    <div id="setuparea"></div>
+    <div style="display: none" id="contcent" class="contcent">
+      <p class="h3">Control Center</p>
+      <p class="lockdown">
+        Your DeskID is <span class="mcode bold deskid">----</span>
+      </p>
+      <span
+        class="ckbx"
+        id="dnd"
+        onclick='localStorage.setItem("doNotDisturb", localStorage.getItem("doNotDisturb") == "false");if(localStorage.getItem("doNotDisturb") == "false") this.classList.remove("on"); else this.classList.add("on")'
+      >
+        Do not disturb
+      </span>
+      <!-- <span class="ckbx" id="netw" onclick='localStorage.setItem("networking", localStorage.getItem("networking") == "false");if(localStorage.getItem("networking") == "false") this.classList.remove("on"); else this.classList.add("on")'>
             Network Services
         </span> -->
-            <select id="dm">
-                <option value="titol" disabled>Display Mode</option>
-                <option value="dark">Dark mode</option>
-                <option value="light">Light</option>
-                <option value="auto">Auto</option>
-                <option value="cml">Clear Mode: Light</option>
-                <option value="cmd">Clear Mode: Dark</option>
-            </select>
-            <p class="med" style="margin-top: 3px; margin-bottom: 3px">
-                Notifications (select to delete)
-            </p>
-            <div id="notif">
-                <!-- <div class="notif2" id="defnotif">No notifications yet.</div> -->
-            </div>
-            <button
-                id="cccb"
-                class="b1"
-                style="margin-top: 7px; width: 60%"
-                onclick="wd.controls.toggle()"
-            >
-                Close
-            </button>
-        </div>
-        <div id="desktopNotificationsArea"></div>
-        <!-- <div class="splashscreen">
+      <select id="dm">
+        <option value="titol" disabled>Display Mode</option>
+        <option value="dark">Dark mode</option>
+        <option value="light">Light</option>
+        <option value="auto">Auto</option>
+        <option value="cml">Clear Mode: Light</option>
+        <option value="cmd">Clear Mode: Dark</option>
+      </select>
+      <p class="med" style="margin-top: 3px; margin-bottom: 3px">
+        Notifications (select to delete)
+      </p>
+      <div id="notif">
+        <!-- <div class="notif2" id="defnotif">No notifications yet.</div> -->
+      </div>
+      <button
+        id="cccb"
+        class="b1"
+        style="margin-top: 7px; width: 60%"
+        onclick="wd.controls.toggle()"
+      >
+        Close
+      </button>
+    </div>
+    <div id="desktopNotificationsArea"></div>
+    <div id="background"></div>
+    <!-- <div class="splashscreen">
         <div class="splashscreen-content">
             <div class="splashscreen-logo">
                 <img src="./assets/img/systemIcons/os.svg" alt="NovaOS NG">
@@ -110,7 +115,7 @@
             </div>
         </div>
     </div> -->
-    </body>
+  </body>
 </html>
 
 <script src="./assets/code/vals.js"></script>
@@ -125,169 +130,174 @@
 <script src="./assets/code/fs.js"></script>
 <script src="./assets/code/apps.js"></script>
 <script>
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-            .register("./serviceworker.js")
-            .then((registration) => console.log("ServiceWorker registered"))
-            .catch((err) =>
-                console.error("ServiceWorker registration failed:", err),
-            );
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("./serviceworker.js")
+      .then((registration) => {
+        console.log("ServiceWorker registered");
+        // boot();./
+      })
+      .catch((err) => console.error("ServiceWorker registration failed:", err));
+  }
+  window.addEventListener("load", function(){
+            document.body.style.display = "block";
+            window.removeEventListener("load")
+    })
+  async function boot() {
+    var uname = "No Username, somehow.";
+    var lsofuserinfo = await fs.ls("/user/info");
+    console.log(lsofuserinfo);
+    function hasNameFile(element, index, array) {
+      return element.name == "name";
     }
-    async function boot() {
-        var uname = "No Username, somehow.";
-        var lsofuserinfo = await fs.ls("/user/info");
-        console.log(lsofuserinfo);
-        function hasNameFile(element, index, array) {
-            return element.name == "name";
-        }
-        // var unamexist = lsofuserinfo.items.some(hasNameFile);
-        if (lsofuserinfo !== undefined) {
-            console.log("yea");
-            const name = await fs.read("/user/info/name");
-            const deskid = await fs.read("/system/deskid");
-            const darkpref = await fs.read("/user/info/lightdarkpref");
-            const lightdark = await fs.read("/user/info/lightdark");
-            const color = await fs.read("/user/info/color");
-            if ((await fs.read("/system/useCustomDesktopFunc")) == "yes") {
-                await eval(
-                    `${await fs.read("/system/customDesktopFunc")}("${name}", ${deskid}, "wait")`,
-                );
-            } else {
-                await wd.desktop(name, deskid, "wait");
-            }
-            await ptp.go(deskid);
-            sys.setupd = true;
+    // var unamexist = lsofuserinfo.items.some(hasNameFile);
+    if (lsofuserinfo.items !== undefined) {
+      console.log("yea");
+      const name = await fs.read("/user/info/name");
+      const deskid = await fs.read("/system/deskid");
+      const darkpref = await fs.read("/user/info/lightdarkpref");
+      const lightdark = await fs.read("/user/info/lightdark");
+      const color = await fs.read("/user/info/color");
+      if ((await fs.read("/system/useCustomDesktopFunc")) == "yes") {
+        await eval(
+          `${await fs.read(
+            "/system/customDesktopFunc"
+          )}("${name}", ${deskid}, "wait")`
+        );
+      } else {
+        await wd.desktop(name, deskid, "wait");
+      }
+      await ptp.go(deskid);
+      sys.setupd = true;
 
-            if (darkpref === "auto") {
-                sys.autodarkacc = true;
-            } else {
-                sys.autodarkacc = false;
-            }
-            if (lightdark === "dark") {
-                wd.dark();
-            } else if (lightdark === "clear") {
-                wd.clearm();
-            } else if (lightdark === "clear2") {
-                wd.clearm2();
-            } else {
-                wd.light();
-            }
-            ui.crtheme(color);
-            console.log(color);
-            if (!color) {
-                fs.write("/user/info/color", "#C68A00");
-                ui.crtheme("#C68A00");
-            }
-        } else {
-            console.log("narr");
-            const id = gen(4);
-            await ptp.go(id);
-            await fs.mkdir("/system", "opfs");
-            await fs.write("/system/deskid", id, "opfs");
-            app.setup.init();
-            sys.setupd = false;
-        }
-
-        const dropZone = document.body;
-        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
-        });
-
-        dropZone.addEventListener("drop", handleDrop, false);
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        function handleDrop(e) {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-
-            handleFiles(files);
-        }
-
-        async function handleFiles(files) {
-            let filesArray = [...files];
-            filesArray.forEach((file) => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const contents = e.target.result;
-                    fs.write(`/user/files/${file.name}`, contents);
-                };
-
-                if (file.type.startsWith("image")) {
-                    reader.readAsDataURL(file);
-                } else {
-                    reader.readAsArrayBuffer(file);
-                }
-            });
-        }
-
-        const data = await fs.read("/system/apps.json");
-        if (data) {
-            const apps = JSON.parse(data);
-            try {
-                const response = await fetch(
-                    "https://appmarket.meower.xyz/refresh",
-                );
-                const onlineApps = await response.json();
-                for (const inapp of apps) {
-                    await wd.loadapps(inapp, onlineApps, apps);
-                }
-            } catch (err) {
-                console.log(err);
-                try {
-                    for (const inapp of apps) {
-                        await wd.loadapps(inapp, inapp, inapp);
-                    }
-                } catch (error) {
-                    if (sys.fucker === false) {
-                        sys.fucker = true;
-                        fs.del("/system/apps.json");
-                        fs.delfold("/system/apps");
-                        wm.notif(
-                            "App Issues",
-                            "All apps were uninstalled due to corruption or an update. Your data is safe, you can reinstall them anytime.",
-                            () => app.appmark.init(),
-                            "App Market",
-                        );
-                    }
-                }
-            }
-        } else {
-            fs.write("/system/apps.json", "");
-        }
-    }
-    // if(localStorage.getItem("networking") == "false") {
-    //     document.querySelector("#netw").classList.remove("on");
-    // } else {
-    //     document.querySelector("#netw").classList.add("on")
-    // }
-    if (localStorage.getItem("doNotDisturb") == "falsbrthe") {
-        document.querySelector("#dnd").classList.remove("on");
+      if (darkpref === "auto") {
+        sys.autodarkacc = true;
+      } else {
+        sys.autodarkacc = false;
+      }
+      if (lightdark === "dark") {
+        wd.dark();
+      } else if (lightdark === "clear") {
+        wd.clearm();
+      } else if (lightdark === "clear2") {
+        wd.clearm2();
+      } else {
+        wd.light();
+      }
+      ui.crtheme(color);
+      console.log(color);
+      if (!color) {
+        fs.write("/user/info/color", "#C68A00");
+        ui.crtheme("#C68A00");
+      }
     } else {
-        document.querySelector("#dnd").classList.add("on");
+      console.log("narr");
+      const id = gen(4);
+      await ptp.go(id);
+      await fs.mkdir("/system", "opfs");
+      await fs.write("/system/deskid", id, "opfs");
+      app.setup.init();
+      sys.setupd = false;
     }
 
-    $("#dm").on("change", function () {
-        if ($(this).val() == "dark") {
-            wd.dark();
-            fs.write("/user/info/lightdark", "dark");
-        } else if ($(this).val() == "light") {
-            wd.light();
-            fs.write("/user/info/lightdark", "light");
-        } else if ($(this).val() == "auto") {
-            fs.write("/user/info/lightdarkpref", "auto");
-            fs.read("/user/info/color").then((col) => ui.crtheme(col));
-            sys.autodarkacc = true;
-        } else if ($(this).val() == "cml") {
-            wd.clearm();
-            fs.write("/user/info/lightdark", "clear");
-        } else if ($(this).val() == "cmd") {
-            wd.clearm2();
-            fs.write("/user/info/lightdark", "clear2");
-        }
+    const dropZone = document.body;
+    ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+      document.body.addEventListener(eventName, preventDefaults, false);
     });
+
+    dropZone.addEventListener("drop", handleDrop, false);
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    function handleDrop(e) {
+      let dt = e.dataTransfer;
+      let files = dt.files;
+
+      handleFiles(files);
+    }
+
+    async function handleFiles(files) {
+      let filesArray = [...files];
+      filesArray.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const contents = e.target.result;
+          fs.write(`/user/files/${file.name}`, contents);
+        };
+
+        if (file.type.startsWith("image")) {
+          reader.readAsDataURL(file);
+        } else {
+          reader.readAsArrayBuffer(file);
+        }
+      });
+    }
+
+    const data = await fs.read("/system/apps.json");
+    if (data) {
+      const apps = JSON.parse(data);
+      try {
+        const response = await fetch("https://appmarket.meower.xyz/refresh");
+        const onlineApps = await response.json();
+        for (const inapp of apps) {
+          await wd.loadapps(inapp, onlineApps, apps);
+        }
+      } catch (err) {
+        console.log(err);
+        try {
+          for (const inapp of apps) {
+            await wd.loadapps(inapp, inapp, inapp);
+          }
+        } catch (error) {
+          if (sys.fucker === false) {
+            sys.fucker = true;
+            fs.del("/system/apps.json");
+            fs.delfold("/system/apps");
+            wm.notif(
+              "App Issues",
+              "All apps were uninstalled due to corruption or an update. Your data is safe, you can reinstall them anytime.",
+              () => app.appmark.init(),
+              "App Market"
+            );
+          }
+        }
+      }
+    } else {
+      fs.write("/system/apps.json", "");
+    }
+  }
+  // if(localStorage.getItem("networking") == "false") {
+  //     document.querySelector("#netw").classList.remove("on");
+  // } else {
+  //     document.querySelector("#netw").classList.add("on")
+  // }
+  if (localStorage.getItem("doNotDisturb") == "falsbrthe") {
+    document.querySelector("#dnd").classList.remove("on");
+  } else {
+    document.querySelector("#dnd").classList.add("on");
+  }
+
+  $("#dm").on("change", function () {
+    if ($(this).val() == "dark") {
+      wd.dark();
+      fs.write("/user/info/lightdark", "dark");
+    } else if ($(this).val() == "light") {
+      wd.light();
+      fs.write("/user/info/lightdark", "light");
+    } else if ($(this).val() == "auto") {
+      fs.write("/user/info/lightdarkpref", "auto");
+      fs.read("/user/info/color").then((col) => ui.crtheme(col));
+      sys.autodarkacc = true;
+    } else if ($(this).val() == "cml") {
+      wd.clearm();
+      fs.write("/user/info/lightdark", "clear");
+    } else if ($(this).val() == "cmd") {
+      wd.clearm2();
+      fs.write("/user/info/lightdark", "clear2");
+    }
+  });
 </script>

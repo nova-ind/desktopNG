@@ -140,7 +140,7 @@ var app = {
         "./assets/img/systemIcons/store.svg"
       );
       // tk.cb('b1 b2', 'Home', function(){}, )
-      var navbar = main.win.children[0].children[0];
+      var navbar = main.title.children[1];
       var wc = main.main;
       var appstorepage = tk.c("iframe", wc);
       navbar.appendChild(
@@ -202,7 +202,6 @@ var app = {
             xhr.responseType = "blob";
             xhr.send();
           }
-          
         }
       };
     },
@@ -296,21 +295,23 @@ var app = {
         undefined,
         app.files.icon
       );
+      win.title.children[1].remove()
+      win.title.setAttribute("class", "")
       win.main.classList.add("fileman");
       const lowerZone = tk.c("div", win.main);
       lowerZone.classList.add("lowerZone");
       const mainPane = tk.c("div", lowerZone);
-      const navBar = tk.c("div", win.main);
-      navBar.classList.add("navbar");
       const navPane = tk.c("div", lowerZone);
+      const navBar = tk.c("div", navPane);
+      navBar.classList.add("navbar");
       navPane.classList.add("navpane");
+      const breadcrumbs = tk.c("div", mainPane);
       const fm = tk.c("div", mainPane);
-      fm.classList.add("fm");
+      mainPane.classList.add("fm");
       const backButton = tk.cb("b1", "◀️", function () {}, navBar);
       const fwdButton = tk.cb("b1", "▶️", function () {}, navBar);
       const reButton = tk.cb("b1", "🔁", function () {}, navBar);
       const mkFolder = tk.cb("b1", "➕", function () {}, navBar);
-      const breadcrumbs = tk.c("div", navBar);
       breadcrumbs.classList.add("bc");
       const items = tk.c("div", fm);
       const navPaneDrives = tk.c("ul", navPane);
@@ -463,7 +464,15 @@ var app = {
     name: "Browser",
     icon: "./assets/img/systemIcons/networking.svg",
     init: async function () {
-      const win = tk.mbw("Browser", "80vw", "82vh", false, true, true);
+      const win = tk.mbw(
+        "Browser",
+        "80vw",
+        "82vh",
+        false,
+        true,
+        true,
+        "./assets/img/systemIcons/networking.svg"
+      );
       ui.dest(win.title, 0);
       const tabs = tk.c("div", win.main, "tabbar d");
       let currenttab = tk.c("div", win.main, "hide");
@@ -546,7 +555,7 @@ var app = {
   sysqna: {
     runs: false,
     name: "DocAI ML Models",
-    onstarytup: async function () {
+    onstartup: async function () {
       try {
         const model = await qna.load();
         console.log("Model loaded");
@@ -641,7 +650,7 @@ var app = {
         askBtn.removeAttribute("disabled");
         async function ask() {
           window.ans = [];
-          var resp = await fs.ls("/user/Documents/");
+          var resp = await fs.ls("/user/");
           console.log(resp);
           var documents = resp.items;
           console.log(documents);
@@ -654,6 +663,7 @@ var app = {
           });
           document.querySelector("#answers").innerHTML = "<p>Thinking...</p>";
           console.log(question.value);
+          console.log(contentsDisplay, contentsForAi);
           async function processDocuments(documents) {
             let ans = [];
 
@@ -836,12 +846,13 @@ var app = {
       );
       var recepient = tk.c("input", win.main, "i1");
       recepient.required = true;
-      var disableTurn = tk.c("input", win.main, "");
-      disableTurn.id = "dt";
-      var dtlabel = tk.c("label", win.main, "");
-      dtlabel.for = "dt";
-      dtlabel.innerText =
-        "Disable Cloud Connections (LAN Only) (requires ?cast.dt in the end of the url on recieving page :) )";
+      var disableT///rn = tk.c("input", win.main, "");
+      // disableTurn.id = "dt";
+      // disableTurn.type = "checkbox";
+      // var dtlabel = tk.c("label", win.main, "");
+      // dtlabel.for = "dt";
+      // dtlabel.innerText =
+        // "Disable Cloud Connections (LAN Only) (requires ?cast.dt in the end of the url on recieving page)";
       var send = tk.cb(
         "b1",
         "Start",
@@ -854,7 +865,7 @@ var app = {
             console.log("Connected");
 
             // Send messages
-            if (disableTurn.checked == true) {
+            if (false == true) {
               var castconfig = {
                 config: {},
               };
@@ -922,6 +933,7 @@ var app = {
         },
         win.main
       );
+      send.style.display = "block";
       //   var stop = tk.cb("b1", "Stop", function () {}, win.main);
       stop.style.display = "none";
       console.log(id);
@@ -1183,22 +1195,36 @@ var app = {
     runs: false,
     name: "ModernDE",
     icon: "./assets/img/systemIcons/os.svg",
-    desktop: function (name, deskid) {
+    desktop: async function (name, deskid) {
+      document.querySelector("link[rel=stylesheet]").remove()
+      tk.css("/assets/modernde.css");
+      // tk.css("/fs/opfs/system/mde/styles.css");
+      document.querySelector("#background").remove()
+      document.querySelector("#contcent").remove()
+      var z = await fs.ls("/user/info/");
+      function hasmdeal(file) {
+        return file.name == "mdeAppLaunches.json";
+      }
+
+      if (!z.items.some(hasmdeal)) {
+        fs.write("/user/info/mdeAppLaunches.json", `{}`);
+        fs.write("/user/info/mdeAppLaunches.json", `{}`);
+      }
       ui.dest(tk.g("setuparea"));
       function smApps(apps = app) {
-        document.querySelectorAll(".appItem").forEach(function (e) {
+        document.querySelectorAll(".mde-appItem").forEach(function (e) {
           e.remove();
         });
         for (var key in apps) {
           if (apps.hasOwnProperty(key)) {
             if (apps[key].hasOwnProperty("runs") && apps[key].runs === true) {
-              console.log(`<i> ${apps[key].name} is launchable!`);
-              const btn = tk.cb("b1", apps[key].name, function () {}, el.sm);
+              const btn = tk.cb("", apps[key].name, function () {}, smappArea);
               btn.innerHTML = `
-                          <img src='${apps[key].icon}' class='appIcon'/>
-                          <span class='appName'>${apps[key].name}</span>`;
-              btn.classList.add("appItem");
+                          <img id='${key}' src='${apps[key].icon}' class='appIcon'/>
+                          <span id='${key}' class='appName'>${apps[key].name}</span>`;
+              btn.classList.add("mde-appItem");
               var $thisapp = app[key];
+              btn.id = key;
               btn.onclick = $thisapp.init;
               btn.addEventListener("click", function () {
                 if (document.querySelector(".tbmenu")) {
@@ -1206,7 +1232,28 @@ var app = {
                 }
               });
             } else {
-              console.log(`<i> ${apps[key].name} is not launchable! :(`);
+            }
+          }
+        }
+      }
+      function muApps(apps = app) {
+        for (var key in apps) {
+          if (apps.hasOwnProperty(key)) {
+            if (apps[key].hasOwnProperty("runs") && apps[key].runs === true) {
+              const btn = tk.cb("", apps[key].name, function () {}, smappArea);
+              btn.innerHTML = `
+                          <img id='${key}' src='${apps[key].icon}' class='appIcon'/>
+                          <span id='${key}' class='appName'>${apps[key].name}</span>`;
+              btn.classList.add("mde-muAppItem");
+              var $thisapp = app[key];
+              btn.id = key;
+              btn.onclick = $thisapp.init;
+              btn.addEventListener("click", function () {
+                if (document.querySelector(".tbmenu")) {
+                  ui.dest(document.querySelector(".tbmenu"), 150);
+                }
+              });
+            } else {
             }
           }
         }
@@ -1216,16 +1263,35 @@ var app = {
           if (document.querySelector(".contcent")) {
             $(".contcent").fadeOut(150, function () {});
           }
-          el.sm = tk.c("div", document.body, "tbmenu");
-          el.sm.addEventListener("mouseleave", function () {
+          el.sm = tk.c("dialog", document.body, "mde-startmenu");
+          el.sm.setAttribute("popover", "");
+          el.sm.showPopover();
+          el.sm.addEventListener("close", function () {
             ui.dest(el.sm, 150);
             el.sm = undefined;
           });
+          el.sm.addEventListener("mouseup", function (ev) {
+            console.log(ev);
+            if (ev.target.getAttribute("class").includes("app")) {
+              ui.dest(el.sm, 150);
+              fs.read("/user/info/mdeAppLaunches.json").then((data) => {
+                var applaunches = JSON.parse(data);
+                if (applaunches[ev.target.id]) {
+                  applaunches[ev.target.id] += 1;
+                } else {
+                  applaunches[ev.target.id] = 1;
+                }
+                console.log(applaunches);
+                fs.write(
+                  "/user/info/mdeAppLaunches.json",
+                  JSON.stringify(applaunches)
+                );
+              });
+            }
+          });
           const btm = el.taskbar.getBoundingClientRect();
-          el.sm.style.bottom = btm.height + btm.x + 4 + "px";
-          tk.p(`Hello, ${name}!`, "h2", el.sm);
           console.log(el.sm);
-          var searchbar = tk.mkel("input", ["i1"], "", el.sm);
+          var searchbar = tk.mkel("input", ["mde-search"], "", el.sm);
           searchbar.placeholder = "Search for anything...";
           searchbar.addEventListener("input", async function (event) {
             var results = {};
@@ -1244,9 +1310,14 @@ var app = {
             searchAsWords.forEach((srch) => {
               for (var key in app) {
                 console.log(app[key]);
-                if (app.hasOwnProperty(key) && app[key].hasOwnProperty("name")) {
+                if (
+                  app.hasOwnProperty(key) &&
+                  app[key].hasOwnProperty("name")
+                ) {
                   console.log(app[key].name);
-                  if (app[key].name.toLowerCase().includes(srch.toLowerCase())) {
+                  if (
+                    app[key].name.toLowerCase().includes(srch.toLowerCase())
+                  ) {
                     results[key] = app[key];
                   }
                 }
@@ -1258,7 +1329,7 @@ var app = {
               var aiResponse = tk.c("p", el.sm, "aiResponse");
             }
             document.querySelector(".aiResponse").innerText = "";
-  
+
             // const  = {
             //     queries: [search],
             //     responses: [
@@ -1281,22 +1352,30 @@ var app = {
               search.includes("my") &&
               search.includes("name")
             ) {
-              document.querySelector(".aiResponse").innerText =
-                `Your name is ${(await fs.read("/user/info/name")) || "unset, somehow (how did you get here without triggering setup lmaoo)"}!`;
+              document.querySelector(".aiResponse").innerText = `Your name is ${
+                (await fs.read("/user/info/name")) ||
+                "unset, somehow (how did you get here without triggering setup lmaoo)"
+              }!`;
             } else if (
               search.includes("what") &&
               (search.includes("color") || search.includes("colour")) &&
               (search.includes("theme") || search.includes("accent"))
             ) {
-              document.querySelector(".aiResponse").innerText =
-                `Your system colour is set to ${(await fs.read("/user/info/color")) || "unknown"}.`;
+              document.querySelector(
+                ".aiResponse"
+              ).innerText = `Your system colour is set to ${
+                (await fs.read("/user/info/color")) || "unknown"
+              }.`;
             } else if (
               search.includes("what") &&
               (search.includes("color") || search.includes("colour")) &&
               (search.includes("scheme") || search.includes("mode"))
             ) {
-              document.querySelector(".aiResponse").innerText =
-                `Your system colour mode is set to ${(await fs.read("/user/info/lightdark")) || "default"}.`;
+              document.querySelector(
+                ".aiResponse"
+              ).innerText = `Your system colour mode is set to ${
+                (await fs.read("/user/info/lightdark")) || "default"
+              }.`;
             } else if (
               search.includes("what") &&
               (search.includes("time") ||
@@ -1304,76 +1383,299 @@ var app = {
                 search.includes("hour") ||
                 search.includes("minute"))
             ) {
-              document.querySelector(".aiResponse").innerHTML =
-                `It is currently <div class="time">${wd.clock() || "Unknown"}</div>`;
+              document.querySelector(
+                ".aiResponse"
+              ).innerHTML = `It is currently <div class="time">${
+                wd.clock() || "Unknown"
+              }</div>`;
             } else if (app.hasOwnProperty("docai")) {
-              document.querySelector(".aiResponse").innerHTML =
-                `No results found.<br> Would you like to <button class="b1" onclick="app.docai.init('${search}')">Search for it with DocAI?</button>`;
+              document.querySelector(
+                ".aiResponse"
+              ).innerHTML = `No results found.<br> Would you like to <button class="b1" onclick="app.docai.init('${search}')">Search for it with DocAI?</button>`;
             } else {
               document.querySelector(".aiResponse").innerText =
                 "No results found, and DocAI is not found on your system!";
             }
+
+            if (search == "") {
+              smApps(app);
+              el.sm.classList.remove("searching");
+              document.querySelector(".aiResponse").innerText = "";
+            } else {
+              el.sm.classList.add("searching");
+            }
           });
-          smApps(app);
+          fs.read("/user/info/mdeAppLaunches.json").then((data) => {
+            data = JSON.parse(data);
+            if (Object.keys(data).length > 0) {
+              tk.c("mde-separator", el.sm, "mde-mua-sep");
+              var label = tk.c("b", el.sm, "");
+              label.classList.add("mde-mua-label");
+              label.innerText = "Most Used";
+              label.style.textAlign = "left";
+              label.style.width = "100%";
+              label.style.display = "block";
+              label.style.marginBottom = "1rem";
+              label.style.marginLeft = "0.2em";
+              var sorted = Object.fromEntries(
+                Object.entries(data).sort(([, a], [, b]) => a - b)
+              );
+              console.log(sorted);
+              var c = 1;
+              var muAppsList = {};
+              Object.keys(sorted).forEach((a) => {
+                console.log(data[a]);
+                if (c < 5 || (c != Object.keys(data).length && c < 5)) {
+                  muAppsList[a] = app[a];
+                }
+                c++;
+              });
+              window.smappArea = tk.c("div", el.sm, "mde-appsGrid mde-muag");
+              muApps(muAppsList);
+            }
+            tk.c("mde-separator", el.sm, "");
+            var label = tk.c("b", el.sm, "");
+            label.innerText = "All Apps";
+            label.style.textAlign = "left";
+            label.style.width = "100%";
+            label.style.display = "block";
+            label.style.marginBottom = "1rem";
+            label.style.marginLeft = "0.2em";
+            window.smappArea = tk.c("div", el.sm, "mde-appsGrid");
+            smApps(app);
+          });
         } else {
           ui.dest(el.sm, 150);
           el.sm = undefined;
         }
       }
-      function desktopgo() {
-        tk.css("/assets/modernde.css")
-        setTimeout(function(){
+      async function desktopgo() {
+        window.resp = await fs.ls("/system/mde/fonts");
+        var resp = await fs.ls("/system/mde/")
+        console.log(resp.name)
+        if(resp.name == "NotFoundError"){
+          wm.wal("<b>Installing files...</b><br>novaOS will reboot automatically when done.",null,null,false)
+          document.querySelector(".window button").remove()
+          fetch("/assets/fonts/inter.woff2")
+          .then((response) => response.blob())
+          .then(async (myBlob) => {
+            await fs.mkdir("/system/mde", "opfs");
+            await fs.mkdir("/system/mde/fonts", "opfs");
+            await fs.write("/system/mde/fonts/inter.woff2", myBlob, "opfs");
+            fetch("/assets/modernde.css")
+            .then((response) => response.blob())
+            .then(async (myBlob) => {
+              await fs.write("/system/mde/styles.css", myBlob, "opfs");
+              window.location.reload()
+            })
+          });
+        }
+
+        setTimeout(async function () {
           el.topbar = tk.c("div", document.body, "modernde-topbar");
-          el.topbarLeft = tk.c("div", el.topbar, "")
-          el.topbarRight = tk.c("div", el.topbar, "")
+          el.topbarLeft = tk.c("div", el.topbar, "");
+          el.topbarRight = tk.c("div", el.topbar, "");
           el.taskbar = tk.c("div", document.body, "modernde-dock");
-          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
-          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
-          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
-          tk.img("./assets/img/systemicons/settings.svg", "", tk.c("div", el.taskbar, "modernde-dock-item"))
-          el.wp = tk.c("img", document.body, "modernde-wallpaper")
-          el.wp.src="/wallpaper/tricirc?4F46E5#581C87"
-          const start = tk.cb("modernde-start", "", () => startmenu(), el.topbarLeft);
-          var title = tk.c("span", el.topbarLeft, "modernde-title")
-          title.innerText = abt.product || "WebDesk or Derivative work (set abt/product in index.html please)"
+          el.wp = tk.c("img", document.body, "modernde-wallpaper");
+          el.wp.src = "/wallpaper/tricirc?4F46E5#581C87";
+          const start = tk.cb(
+            "modernde-start",
+            "",
+            () => startmenu(),
+            el.topbarLeft
+          );
+          var title = tk.c("span", el.topbarLeft, "modernde-title");
+          title.innerText =
+            abt.product ||
+            "WebDesk or Derivative work (set abt/product in index.html please)";
           start.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-command small-icon text-white opacity-80"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>`;
-          tk.cb("time modernde-time", "--:--", () => wd.controls.toggle(), el.topbarRight);
-          el.desktopCards = tk.c("div", document.body, "modernde-deskcardContainer")
-          el.sysstats = tk.c("div", el.desktopCards, "modernde-card mde-sysstatcard")
+          tk.cb(
+            "time modernde-time",
+            "--:--",
+            () => wd.controls.toggle(),
+            el.topbarRight
+          );
+          el.desktopCards = tk.c(
+            "div",
+            document.body,
+            "modernde-deskcardContainer"
+          );
+          el.sysstats = tk.c(
+            "div",
+            el.desktopCards,
+            "modernde-card mde-sysstatcard"
+          );
+          el.recentActivities = tk.c(
+            "div",
+            el.desktopCards,
+            "modernde-card mde-recentActivities"
+          );
+          el.recentActivities.innerHTML = `<h1>Recent Activities</h1>`;
           el.sysstats.innerHTML = `
           <h1>System Status</h1>
           <div class="statusline">
             <b>Battery</b>
-            <div class="mde-progress" vtxt="50%" style="--vw: 50%" subtitle="20min to full"></div>
+            <div class="mde-progress" id="battery" vtxt="50%" style="--vw: 50%"></div>
           </div>
           <div class="mde-statusline">
             <b>OPFS Storage</b>
-            <div class="mde-progress" vtxt="50%" style="--vw: 50%" subtitle="Healthy"></div>
-          </div>`
-        }, 200)
-      }
-      desktopgo()
-    },
-    desktopEvent: function( ev ){
-      if(ev.type == "windowAdded") {
+            <div class="mde-progress" id="storage" vtxt="50%" style="--vw: 50%" subtitle="Healthy"></div>
+          </div>`;
+          if ("getBattery" in navigator) {
+            navigator.getBattery().then((d) => {
+              document
+                .querySelector(".mde-progress#battery")
+                .setAttribute("vtxt", `${Math.round(d.level * 100)}%`);
+              document
+                .querySelector(".mde-progress#battery")
+                .setAttribute("style", `--vw: ${d.level * 100}%`);
+              d.onlevelchange = function () {
+                document
+                  .querySelector(".mde-progress#battery")
+                  .setAttribute("vtxt", `${Math.round(d.level * 100)}%`);
+                document
+                  .querySelector(".mde-progress#battery")
+                  .setAttribute("style", `--vw: ${d.level * 100}%`);
+              };
+            });
+          } else {
+            document.querySelector(".statusline:has(#battery)").remove();
+          }
+          var esti = await navigator.storage.estimate();
 
+          setInterval(async function () {
+            var esti = await navigator.storage.estimate();
+            try {
+              void esti.usageDetails.fileSystem;
+            } catch {
+              esti.usageDetails = {};
+              esti.usageDetails.fileSystem = esti.usage;
+              document.querySelector(
+                ".mde-statusline:has(#storage) b"
+              ).innerText = "Site Storage";
+            }
+            var storpercent = 0;
+            if (esti.hasOwnProperty("usageDetails")) {
+              storpercent = Math.ceil(
+                (esti.usageDetails.fileSystem / esti.quota) * 100
+              );
+            } else {
+              storpercent = Math.ceil((esti.usage / esti.quota) * 100);
+            }
+            document
+              .querySelector(".mde-progress#storage")
+              .setAttribute("vtxt", `${storpercent}%`);
+            document
+              .querySelector(".mde-progress#storage")
+              .setAttribute("style", `--vw: ${storpercent}%`);
+            var subt = "";
+            if (storpercent < 50) {
+              subt = "Very Healthy";
+            } else if (storpercent < 75) {
+              subt = "Healthy";
+            } else if (storpercent < 90) {
+              subt = "Unhealthy";
+            } else {
+              subt = "Storage Full";
+            }
+            document
+              .querySelector(".mde-progress#storage")
+              .setAttribute("subtitle", `${subt}`);
+          }, 200);
+        }, 200);
+        tk.mbw = function (
+          title,
+          wid,
+          hei,
+          full,
+          min = true,
+          quit = true,
+          id,
+          icon = "./assets/img/systemIcons/noicon.svg"
+        ) {
+          console.log(title, wid, hei, full, min, quit, id, icon);
+          var windowDiv = document.createElement("div");
+          windowDiv.classList.add("window");
+          windowDiv.classList.add("winf");
+          windowDiv.style.width = wid;
+          windowDiv.style.height = hei;
+          if (id) {
+            windowDiv.id = id;
+          }
+          var titlebarDiv = document.createElement("div");
+          titlebarDiv.classList.add("d");
+          titlebarDiv.classList.add("tb");
+          var winbtns = document.createElement("div");
+          winbtns.classList.add("tnav");
+          var closeButton = document.createElement("div");
+          closeButton.classList.add("winb");
+          const tbn = tk.c("div", el.taskbar, ["modernde-dock-item"]);
+          tbn.onclick = () => ui.show(windowDiv, 100);
+          tbn.innerHTML = `<img src="${icon}"/>`;
+          if (id) {
+            tbn.id = id + "tbn";
+          }
+          if (quit === true) {
+            closeButton.classList.add("red");
+            closeButton.addEventListener("click", function () {
+              ui.dest(windowDiv, 100);
+              ui.dest(tbn, 100);
+            });
+          }
+
+          var minimizeButton = document.createElement("div");
+          minimizeButton.classList.add("winb");
+          if (min === true) {
+            minimizeButton.classList.add("yel");
+            minimizeButton.addEventListener("mousedown", function () {
+              ui.hide(windowDiv, 100);
+            });
+          }
+          var maximizeButton = document.createElement("div");
+          maximizeButton.classList.add("winb");
+          if (full === true) {
+            maximizeButton.classList.add("gre");
+            maximizeButton.addEventListener("click", function () {
+              windowDiv.classList.toggle("winf");
+              console.log(windowDiv);
+            });
+          }
+
+          winbtns.appendChild(closeButton);
+          winbtns.appendChild(minimizeButton);
+          winbtns.appendChild(maximizeButton);
+          titlebarDiv.appendChild(winbtns);
+          var titleDiv = document.createElement("div");
+          titleDiv.classList.add("title");
+          titleDiv.innerHTML = `<img src="${icon}" height=24 class="icon"/> <span class="label">${title}</span>`;
+          titlebarDiv.appendChild(titleDiv);
+          windowDiv.appendChild(titlebarDiv);
+          var contentDiv = document.createElement("div");
+          contentDiv.classList.add("content");
+          windowDiv.appendChild(contentDiv);
+          document.body.appendChild(windowDiv);
+          wd.win();
+          $(windowDiv).fadeIn(130);
+          ui.center(windowDiv);
+          return { win: windowDiv, main: contentDiv, tbn, title: titlebarDiv };
+        };
       }
-    }
-  }
+      desktopgo();
+    },
+    desktopEvent: function (ev) {
+      if (ev.type == "windowAdded") {
+      }
+    },
+  },
 };
-window.installApp = function (appn, appid, appscripts, appico) {
-  var appc = {
-    runs: true,
-    name: appn,
-    icon: appico,
-  };
+window.installApp = function (meta, icon) {
+  var appc = meta;
+  appc.icon = `/system/apps/${appid}/icon.svg`;
   fs.mkdir(`/system/apps/${appid}`, "opfs");
-  fs.write(`/system/apps/${appid}/meta.json`, JSON.stringify(appc));
-  appscripts.forEach(async function (script) {
-    fs.write(`/system/apps/${appid}/${script.name}`, script.script);
-  });
+  fs.write(`/system/apps/${appid}/app.json`, JSON.stringify(appc));
+  fs.write(`/system/apps/${appid}/icon.svg`, icon);
 };
-// app.cast.connection(30012)
+// app.cast.connection(30012)`
 if (sys.isIOT) {
   try {
     app[sys.iotApp].iot();
@@ -1381,3 +1683,4 @@ if (sys.isIOT) {
     app[sys.iotApp].init();
   }
 }
+// app.files.init();

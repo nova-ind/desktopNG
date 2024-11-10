@@ -100,8 +100,7 @@ var wd = {
               .get(),
           );
           $window.css("z-index", highestZIndex + 1);
-          $(".window").removeClass("winf");
-          $window.addClass("winf");
+          
 
           if (event.type === "mousedown") {
             offsetX = event.clientX - $window.offset().left;

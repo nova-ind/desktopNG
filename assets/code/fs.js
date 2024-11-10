@@ -10,7 +10,7 @@ wfs.onmessage = function (event) {
     }
     delete pendingRequests[requestId];
   } else if (type === "db_ready") {
-    boot();
+    setTimeout(boot, 500);
   } else if (type === "reboot") {
     window.location.reload();
   } else {
