@@ -142,6 +142,66 @@ var wd = {
         }
       });
   },
+  makeDragzone: function (el) {
+    $(el)
+      .not(".dragged")
+      .on("mousedown touchstart", function (event) {
+        var $window = $(this).closest(".window");
+        if (!$window.hasClass("max")) {
+          var offsetX, offsetY;
+          var windows = $(".window");
+          highestZIndex = Math.max.apply(
+            null,
+            windows
+              .map(function () {
+                var zIndex = parseInt($(this).css("z-index")) || 0;
+                return zIndex;
+              })
+              .get(),
+          );
+          $window.css("z-index", highestZIndex + 1);
+          
+
+          if (event.type === "mousedown") {
+            offsetX = event.clientX - $window.offset().left;
+            offsetY = event.clientY - $window.offset().top;
+          } else if (event.type === "touchstart") {
+            var touch = event.originalEvent.touches[0];
+            offsetX = touch.clientX - $window.offset().left;
+            offsetY = touch.clientY - $window.offset().top;
+          }
+
+          $(document).on("mousemove touchmove", function (event) {
+            var newX, newY;
+            if (event.type === "mousemove") {
+              newX = event.clientX - offsetX;
+              newY = event.clientY - offsetY;
+              $window.addClass("dragging");
+            } else if (event.type === "touchmove") {
+              var touch = event.originalEvent.touches[0];
+              newX = touch.clientX - offsetX;
+              newY = touch.clientY - offsetY;
+              $window.addClass("dragging");
+            }
+
+            $window.offset({ top: newY, left: newX });
+          });
+
+          $(document).on("mouseup touchend", function () {
+            $(document).off("mousemove touchmove");
+            $window.removeClass("dragging");
+          });
+
+          document.body.addEventListener(
+            "touchmove",
+            function (event) {
+              event.preventDefault();
+            },
+            { passive: false },
+          );
+        }
+      });
+  },
   /**
    * The main function, responsible for the shell.
    * @param {String} name - the user's name

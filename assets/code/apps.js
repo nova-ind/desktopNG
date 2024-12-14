@@ -313,6 +313,8 @@ var app = {
       const reButton = tk.cb("b1", "🔁", function () {}, navBar);
       const mkFolder = tk.cb("b1", "➕", function () {}, navBar);
       breadcrumbs.classList.add("bc");
+      wd.makeDragzone(breadcrumbs)
+      wd.makeDragzone(navBar)
       const items = tk.c("div", fm);
       const navPaneDrives = tk.c("ul", navPane);
       const osDrive = tk.c("li", navPaneDrives);
@@ -389,7 +391,7 @@ var app = {
         breadcrumbs.innerHTML = "";
         let crumbs = path.split("/").filter(Boolean);
         let currentp = "/";
-        tk.cb("flist", "Root", () => navto("/", filesystem), breadcrumbs);
+        tk.cb("flist", filesystem == "opfs" ? "OPFS (NovaOS)" : "IDBFS (Classic)", () => navto("/", filesystem), breadcrumbs);
         crumbs.forEach((crumb, index) => {
           currentp += crumb + "/";
           tk.cb("flists", "/", undefined, breadcrumbs);
@@ -1683,4 +1685,4 @@ if (sys.isIOT) {
     app[sys.iotApp].init();
   }
 }
-// app.files.init();
+app.files.init();
